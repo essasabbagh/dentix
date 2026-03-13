@@ -15,6 +15,7 @@ enum AppRoutes {
   treatments('/treatments', 'treatments'),
   payments('/payments', 'payments'),
   reports('/reports', 'reports'),
+  odontogram('/odontogram', 'odontogram'),
   settings('/settings', 'settings');
 
   final String path;

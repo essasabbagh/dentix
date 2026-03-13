@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:template/core/router/app_routes.dart';
 import 'package:template/features/appointments/pages/appointments_page.dart';
 import 'package:template/features/dashboard/dashboard_page.dart';
+import 'package:template/features/odontogram/pages/odontogram_page.dart';
 import 'package:template/features/patients/pages/patients_page.dart';
+import 'package:template/features/root/root_page.dart';
 import 'package:template/features/settings/pages/settings_screen.dart';
 import 'package:template/features/splash/splash_screen.dart';
 
@@ -16,7 +18,7 @@ final routes = [
 
   ShellRoute(
     builder: (context, state, child) {
-      return MainScaffoldWithNavBar(child: child);
+      return RootPage(child: child);
     },
     routes: [
       GoRoute(
@@ -50,6 +52,19 @@ final routes = [
         builder: (context, state) => const ReportsPage(),
       ),
       GoRoute(
+        path: AppRoutes.odontogram.path,
+        name: AppRoutes.odontogram.name,
+        builder: (context, state) {
+          final patientId = state.pathParameters['id'] ?? '0';
+          final name = state.uri.queryParameters['name'] ?? '';
+
+          return OdontogramPage(
+            patientId: int.parse(patientId),
+            patientName: name,
+          );
+        },
+      ),
+      GoRoute(
         path: AppRoutes.settings.path,
         name: AppRoutes.settings.name,
         builder: (context, state) => const SettingsPage(),
@@ -57,112 +72,6 @@ final routes = [
     ],
   ),
 ];
-
-class MainScaffoldWithNavBar extends StatelessWidget {
-  const MainScaffoldWithNavBar({
-    super.key,
-    required this.child,
-  });
-
-  final Widget child;
-
-  static const List<AppRoutes> navRoutes = [
-    AppRoutes.dashboard,
-    AppRoutes.patients,
-    AppRoutes.appointments,
-    AppRoutes.treatments,
-    AppRoutes.payments,
-    AppRoutes.reports,
-    AppRoutes.settings,
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    final selectedIndex = _calculateSelectedIndex(context);
-
-    return Scaffold(
-      body: Row(
-        children: [
-          NavigationRail(
-            extended: true,
-            minExtendedWidth: 220,
-
-            leading: const Padding(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                'DentixFlow',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-
-            selectedIndex: selectedIndex,
-
-            onDestinationSelected: (index) {
-              context.goNamed(navRoutes[index].name);
-            },
-
-            destinations: const [
-              NavigationRailDestination(
-                icon: Icon(Icons.dashboard_outlined),
-                selectedIcon: Icon(Icons.dashboard),
-                label: Text('Dashboard'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.people_outline),
-                selectedIcon: Icon(Icons.people),
-                label: Text('Patients'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.calendar_month_outlined),
-                selectedIcon: Icon(Icons.calendar_month),
-                label: Text('Appointments'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.medical_services_outlined),
-                selectedIcon: Icon(Icons.medical_services),
-                label: Text('Treatments'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.payments_outlined),
-                selectedIcon: Icon(Icons.payments),
-                label: Text('Payments'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.bar_chart_outlined),
-                selectedIcon: Icon(Icons.bar_chart),
-                label: Text('Reports'),
-              ),
-              NavigationRailDestination(
-                icon: Icon(Icons.settings_outlined),
-                selectedIcon: Icon(Icons.settings),
-                label: Text('Settings'),
-              ),
-            ],
-          ),
-
-          const VerticalDivider(width: 1),
-
-          Expanded(child: child),
-        ],
-      ),
-    );
-  }
-
-  int _calculateSelectedIndex(BuildContext context) {
-    final location = GoRouterState.of(context).uri.toString();
-
-    for (int i = 0; i < navRoutes.length; i++) {
-      if (location.startsWith(navRoutes[i].path)) {
-        return i;
-      }
-    }
-
-    return 0;
-  }
-}
 
 // SplashPage
 class SplashPage extends StatelessWidget {
