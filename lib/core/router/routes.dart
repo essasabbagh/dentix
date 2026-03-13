@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:template/core/router/app_routes.dart';
+import 'package:template/features/appointments/pages/appointments_page.dart';
+import 'package:template/features/dashboard/dashboard_page.dart';
+import 'package:template/features/patients/pages/patients_page.dart';
+import 'package:template/features/settings/pages/settings_screen.dart';
 import 'package:template/features/splash/splash_screen.dart';
 
 final routes = [
@@ -160,38 +164,12 @@ class MainScaffoldWithNavBar extends StatelessWidget {
   }
 }
 
-class DashboardPage extends StatelessWidget {
-  const DashboardPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Dashboard'));
-  }
-}
-
-class PatientsPage extends StatelessWidget {
-  const PatientsPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Patients'));
-  }
-}
-
 // SplashPage
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
   @override
   Widget build(BuildContext context) {
     return const SplashScreen();
-  }
-}
-
-class AppointmentsPage extends StatelessWidget {
-  const AppointmentsPage({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Appointments'));
   }
 }
 
@@ -216,13 +194,5 @@ class ReportsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Center(child: Text('Reports'));
-  }
-}
-
-class SettingsPage extends StatelessWidget {
-  const SettingsPage({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Settings'));
   }
 }
