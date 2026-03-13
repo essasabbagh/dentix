@@ -3,10 +3,13 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:drift/drift.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get_storage/get_storage.dart';
 
 import 'package:template/core/data/storage_service.dart';
+import 'package:template/core/database/database_client.dart';
+import 'package:template/core/utils/app_log.dart';
 // import 'package:template/core/utils/file_utils.dart';
 
 GetIt locator = GetIt.instance;
@@ -67,4 +70,14 @@ Future<void> initializeApp() async {
   // locator.registerLazySingleton<SecureStorageService>(
   //   () => SecureStorageService(secureStorage),
   // );
+  final db = DatabaseClient.instance;
+
+  final List<QueryRow> result = await db
+      .customSelect('SELECT sqlite_version()')
+      .get();
+
+  AppLog.info(
+    result.first.data.keys.first,
+    result.first.data.values.first,
+  );
 }

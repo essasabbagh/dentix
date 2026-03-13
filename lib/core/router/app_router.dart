@@ -30,7 +30,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: AppRoutes.dashboard.path,
 
     /// Debug logs
-    debugLogDiagnostics: kDebugMode,
+    debugLogDiagnostics: false,
 
     /// Error screen
     errorBuilder: (context, state) => const NotFoundScreen(),
