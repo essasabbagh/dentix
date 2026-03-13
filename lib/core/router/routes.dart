@@ -2,21 +2,17 @@ import 'package:template/components/web/web.dart';
 import 'package:template/core/constants/keys.dart';
 import 'package:template/core/errors/error_handler_usage_examples.dart';
 import 'package:template/core/router/app_routes.dart';
-import 'package:template/features/auth/pages/confirm_password_screen.dart';
 import 'package:template/features/auth/pages/login_screen.dart';
 import 'package:template/features/auth/pages/password_reset_screen.dart';
-import 'package:template/features/auth/pages/register_confirm_screen.dart';
 import 'package:template/features/auth/pages/register_screen.dart';
 import 'package:template/features/auth/pages/update_password_screen.dart';
 import 'package:template/features/help/pages/help_screen.dart';
 import 'package:template/features/home/home.dart';
 import 'package:template/features/notification/screens/notifications_screen.dart';
-import 'package:template/features/onboarding/onboarding_screen.dart';
 import 'package:template/features/profile/pages/change_password_screen.dart';
 import 'package:template/features/profile/pages/profile_screen.dart';
 import 'package:template/features/profile/pages/update_profile_screen.dart';
 import 'package:template/features/root/root_screen.dart';
-import 'package:template/features/search/search_screen.dart';
 import 'package:template/features/settings/pages/settings_screen.dart';
 import 'package:template/features/splash/splash_screen.dart';
 import 'package:template/features/statics/about.dart';
@@ -28,11 +24,6 @@ List<RouteBase> routes = <RouteBase>[
     path: AppRoutes.splash.path,
     name: AppRoutes.splash.name,
     builder: (_, _) => const SplashScreen(),
-  ),
-  GoRoute(
-    path: AppRoutes.onboarding.path,
-    name: AppRoutes.onboarding.name,
-    builder: (context, state) => const OnboardingScreen(),
   ),
   GoRoute(
     path: AppRoutes.about.path,
@@ -53,16 +44,6 @@ List<RouteBase> routes = <RouteBase>[
     path: AppRoutes.register.path,
     name: AppRoutes.register.name,
     builder: (_, _) => const RegisterScreen(),
-    routes: [
-      GoRoute(
-        path: AppRoutes.registerConfirm.path,
-        name: AppRoutes.registerConfirm.name,
-        builder: (context, state) {
-          final email = state.uri.queryParameters['email'];
-          return RegisterConfirmScreen(email: email);
-        },
-      ),
-    ],
   ),
   GoRoute(
     path: AppRoutes.login.path,
@@ -74,14 +55,7 @@ List<RouteBase> routes = <RouteBase>[
         name: AppRoutes.resetPassword.name,
         builder: (_, _) => const PasswordResetScreen(),
       ),
-      GoRoute(
-        path: AppRoutes.resetPasswordConfirm.path,
-        name: AppRoutes.resetPasswordConfirm.name,
-        builder: (context, state) {
-          final email = state.uri.queryParameters['email'];
-          return ConfirmPasswordScreen(email: email);
-        },
-      ),
+
       GoRoute(
         path: AppRoutes.updatePassword.path,
         name: AppRoutes.updatePassword.name,
@@ -140,14 +114,7 @@ List<RouteBase> routes = <RouteBase>[
           // return const NoTransitionPage(child: CategoryScreen());
         },
       ),
-      GoRoute(
-        name: AppRoutes.search.name,
-        path: AppRoutes.search.path,
-        parentNavigatorKey: shellNavigatorKey,
-        pageBuilder: (context, state) {
-          return const NoTransitionPage(child: SearchScreen());
-        },
-      ),
+
       GoRoute(
         name: AppRoutes.notifications.name,
         path: AppRoutes.notifications.path,

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -11,11 +9,9 @@ import 'package:template/core/locale/generated/l10n.dart';
 import 'package:template/core/router/app_routes.dart';
 import 'package:template/core/themes/app_colors.dart';
 import 'package:template/core/utils/validators.dart';
-import 'package:template/features/auth/widgets/or_divider_widget.dart';
 import 'package:template/features/settings/widgets/locale_menu.dart';
 
 import '../providers/login_provider.dart';
-import '../services/social_login.dart';
 
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
@@ -168,15 +164,6 @@ class LoginScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 32),
 
-                if (Platform.isAndroid)
-                  Column(
-                    children: [
-                      OrDivider(text: S.of(context).orSignInWith),
-                      const SizedBox(height: 16),
-                      const Center(child: GoogleLoginWidget()),
-                      const SizedBox(height: 32),
-                    ],
-                  ),
                 RichText(
                   text: TextSpan(
                     children: [
