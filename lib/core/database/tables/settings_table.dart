@@ -1,9 +1,13 @@
 import 'package:drift/drift.dart';
 
-class Settings extends Table {
+class SettingsTable extends Table {
   TextColumn get key => text()();
+  TextColumn get value => text()();
+  DateTimeColumn get updatedAt =>
+      dateTime().named('updated_at').withDefault(currentDateAndTime)();
 
-  TextColumn get value => text().nullable()();
+  @override
+  String get tableName => 'settings';
 
   @override
   Set<Column> get primaryKey => {key};

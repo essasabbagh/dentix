@@ -1,15 +1,29 @@
 import 'package:drift/drift.dart';
+import 'patients_table.dart';
 
-class Appointments extends Table {
+class AppointmentsTable extends Table {
   IntColumn get id => integer().autoIncrement()();
-
-  IntColumn get patientId => integer()();
-
-  DateTimeColumn get appointmentDate => dateTime()();
-
-  TextColumn get status => text()();
-
+  IntColumn get patientId =>
+      integer().named('patient_id').references(PatientsTable, #id)();
+  DateTimeColumn get appointmentDate => dateTime().named('appointment_date')();
+  TextColumn get status => text().withDefault(const Constant('scheduled'))();
+  // status: scheduled | completed | cancelled | no_show
+  TextColumn get doctorName =>
+      text().named('doctor_name').withDefault(const Constant('الدكتور'))();
   TextColumn get notes => text().nullable()();
+  DateTimeColumn get createdAt =>
+      dateTime().named('created_at').withDefault(currentDateAndTime)();
+  DateTimeColumn get updatedAt =>
+      dateTime().named('updated_at').withDefault(currentDateAndTime)();
 
-  DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
+  @override
+  String get tableName => 'appointments';
+
+  @override
+  List<Index> get indexes => [
+        Index('appt_date_idx',
+            'CREATE INDEX appt_date_idx ON appointments(appointment_date)'),
+        Index('appt_patient_idx',
+            'CREATE INDEX appt_patient_idx ON appointments(patient_id)'),
+      ];
 }
