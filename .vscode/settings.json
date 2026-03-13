@@ -1,0 +1,116 @@
+{
+  "dart.flutterSdkPath": ".fvm/versions/3.35.7",
+  "explorer.compactFolders": false,
+  "explorer.confirmDragAndDrop": false,
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.expand": false,
+  "explorer.fileNesting.patterns": {
+    "pubspec.yaml": ".flutter-plugins, .packages, .dart_tool, .flutter-plugins-dependencies, .metadata, .packages, pubspec.lock, *.yaml, firebase.json, .fvmrc, *.sh, *.log, *.iml",
+    ".gitignore": ".gitattributes, .gitmodules, .gitmessage, .mailmap, .git-blame*",
+    "README.md": "authors, info.md, changelog*, citation*, codeowners, contributors, copying, credits, license*, maintainers, readme*",
+    "*.dart": "$(capture).g.dart, $(capture).freezed.dart"
+  },
+  "files.exclude": {
+    "**/.git": true,
+    "**/.fvm": true,
+    "**/.dart_tool": true,
+    "**/.idea": true,
+    "**/.crashlytics": true,
+    "**/build": false,
+    "lib/core/locale/generated": true
+  },
+  "search.exclude": {
+    "lib/core/locale/generated": true,
+    "env/": true,
+    "**.arb*": true,
+    "**/build": true
+  },
+  "editor.wordWrap": "on",
+  "editor.bracketPairColorization.enabled": true,
+  "editor.cursorSmoothCaretAnimation": "on",
+  "editor.guides.bracketPairs": "active",
+  "editor.stickyScroll.enabled": true,
+  "editor.inlineSuggest.enabled": true,
+  "editor.cursorBlinking": "smooth",
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "always"
+  },
+  "debug.internalConsoleOptions": "openOnSessionStart",
+  "[dart]": {
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "editor.rulers": [
+      80
+    ],
+    "editor.selectionHighlight": false,
+    "editor.tabCompletion": "onlySnippets",
+    "editor.wordBasedSuggestions": "off",
+    "editor.suggestSelection": "first",
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "always"
+    },
+    "editor.suggest.snippetsPreventQuickSuggestions": false
+  },
+  "dartimportsorter.sortOnSave": true,
+  "dartimportsorter.leaveEmptyLinesBetweenGroups": true,
+  "dartimportsorter.matchingRules": [
+    {
+      "label": "Dart",
+      "regex": "^dart:.*$",
+      "order": 1,
+      "regexFlags": [
+        "m"
+      ]
+    },
+    {
+      "label": "Flutter",
+      "regex": "^package:flutter/.*$",
+      "order": 10,
+      "regexFlags": [
+        "m"
+      ]
+    },
+    {
+      "label": "Package imports that are NOT your app (automatically detected)",
+      "regex": "^package:(?!<app_name>).*$",
+      "order": 100,
+      "regexFlags": [
+        "m"
+      ]
+    },
+    {
+      "label": "Package imports that ARE your app (automatically detected)",
+      "regex": "^package:<app_name>.*$",
+      "order": 101,
+      "regexFlags": [
+        "m"
+      ]
+    },
+    {
+      "label": "Relative",
+      "regex": "^\\..*$",
+      "order": 1000,
+      "regexFlags": [
+        "m"
+      ]
+    }
+  ],
+  "dart.debugExternalPackageLibraries": false,
+  "dart.debugSdkLibraries": false,
+  "dart.lineLength": 80,
+  "dart.analysisExcludedFolders": [
+    "lib/core/locale/generated",
+    "build"
+  ],
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "workbench.startupEditor": "none",
+  "workbench.editor.enablePreview": false,
+  "git.enableSmartCommit": true,
+  "git.confirmSync": false,
+  "git.autofetch": true,
+  "git.openRepositoryInParentFolders": "never"
+}

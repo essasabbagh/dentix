@@ -1,0 +1,144 @@
+name: template
+description: "A new Flutter project."
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.9.2
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `fvm flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_localizations:
+    sdk: flutter
+
+  intl: ^0.20.2
+
+  # UI
+  flutter_svg: ^2.2.3
+  google_fonts: ^8.0.1
+  cupertino_icons: ^1.0.8
+  intl_phone_number_input: ^0.7.5
+  flutter_widget_from_html: ^0.17.1
+
+  # state management
+  get_it: ^9.2.0
+  riverpod: ^2.6.1
+  hooks_riverpod: ^2.6.1
+  flutter_hooks: ^0.21.3
+
+  # Network
+  dio: ^5.9.1
+  dio_cache_interceptor: ^4.0.5
+  http_cache_hive_store: ^5.0.2
+  pretty_dio_logger: ^1.4.0
+
+  # Image
+  image_picker: ^1.2.1
+  file_picker: ^10.3.10
+  cached_network_image: ^3.4.1
+
+  # File
+  path_provider: ^2.1.5
+
+  # Permissions
+  permission_handler: ^12.0.1
+
+  # Storage
+  get_storage: ^2.1.1
+  flutter_secure_storage: ^10.0.0
+
+  # Database
+  # hive: ^2.2.3
+  # hive_flutter: ^1.1.0
+
+  # Router
+  go_router: ^17.1.0
+  go_transitions: ^0.8.3
+
+  # Tools
+  pinput: ^6.0.1
+  shimmer: ^3.0.0
+  share_plus: ^12.0.1
+  url_launcher: ^6.3.2
+  webview_flutter: ^4.13.1
+  connectivity_plus: ^7.0.0
+
+  # firebase
+  google_sign_in: ^7.2.0
+  firebase_core: ^4.4.0
+  firebase_messaging: ^16.1.1
+  firebase_analytics: ^12.1.2
+  firebase_crashlytics: ^5.0.7
+  flutter_local_notifications: ^20.1.0
+
+  webview_flutter_android: any
+  webview_flutter_wkwebview: any
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  custom_lint: ^0.7.6
+  riverpod_lint: ^2.6.5
+  flutter_lints: ^6.0.0
+
+  rename_app: ^1.6.5
+  # fvm dart run rename_app:main all="My App Name"
+
+  intl_utils: ^2.8.11
+  # fvm dart run intl_utils:generate
+
+  flutter_native_splash: ^2.4.7
+  # fvm dart run flutter_native_splash:create
+
+  dependency_validator: ^5.0.4
+  # https://pub.dev/packages/dependency_validator
+  # fvm dart run dependency_validator
+  # flutter pub outdated
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/icons/
+    - assets/images/
+    - assets/images/onboarding/
+    - assets/images/empty_state/
+
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: assets/fonts/Schyler-Regular.ttf
+  #       - asset: assets/fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: assets/fonts/TrajanPro.ttf
+  #       - asset: assets/fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+
+  # https://fonts.google.com/noto/specimen/Noto+Sans+Arabic
+
+flutter_assets:
+  assets_path: assets/
+  output_path: lib/core/constants/
+  filename: images.dart
+  classname: AppImages
+  ignore_comments: true
+  field_prefix:
+
+flutter_intl:
+  enabled: true # Required. Must be set to true to activate the package. Default: false
+  class_name: S # Optional. Sets the name for the generated localization class. Default: S
+  main_locale: ar # Optional. Sets the main locale used for generating localization files. Provided value should consist of language code and optional script and country codes separated with underscore (e.g. 'en', 'en_GB', 'zh_Hans', 'zh_Hans_CN'). Default: en
+  arb_dir: lib/core/locale # Optional. Sets the directory of your ARB resource files. Provided value should be a valid path on your system. Default: lib/l10n
+  output_dir: lib/core/locale/generated # Optional. Sets the directory of generated localization files. Provided value should be a valid path on your system. Default: lib/generated
+  use_deferred_loading: false # Optional. Must be set to true to generate localization code that is loaded with deferred loading. Default: false

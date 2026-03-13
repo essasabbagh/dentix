@@ -1,0 +1,10 @@
+# Exclude one or more paths from being scanned. Supports glob syntax.
+exclude:
+  - "app/**"
+
+# Ignore one or more packages.
+ignore:
+  - analyzer
+
+# Allow dependencies to be pinned to a specific version instead of a range
+allowPins: true
