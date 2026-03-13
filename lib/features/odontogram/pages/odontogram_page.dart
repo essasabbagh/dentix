@@ -264,8 +264,8 @@ class _ToothDetailPanelState extends ConsumerState<_ToothDetailPanel> {
                   ),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? c.color.withOpacity(0.9)
-                        : c.color.withOpacity(0.2),
+                        ? c.color.withValues(alpha: 0.9)
+                        : c.color.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
                       color: isSelected ? c.color : Colors.transparent,

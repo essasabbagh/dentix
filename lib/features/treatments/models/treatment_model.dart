@@ -45,17 +45,6 @@ enum TreatmentStatus {
 }
 
 class TreatmentModel {
-  final int id;
-  final int patientId;
-  final int? appointmentId;
-  final String treatmentType;
-  final int? toothNumber;
-  final double price;
-  final TreatmentStatus status;
-  final String? notes;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-
   const TreatmentModel({
     required this.id,
     required this.patientId,
@@ -68,6 +57,16 @@ class TreatmentModel {
     required this.createdAt,
     required this.updatedAt,
   });
+  final int id;
+  final int patientId;
+  final int? appointmentId;
+  final String treatmentType;
+  final int? toothNumber;
+  final double price;
+  final TreatmentStatus status;
+  final String? notes;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   TreatmentModel copyWith({
     int? id,
@@ -80,17 +79,16 @@ class TreatmentModel {
     String? notes,
     DateTime? createdAt,
     DateTime? updatedAt,
-  }) =>
-      TreatmentModel(
-        id: id ?? this.id,
-        patientId: patientId ?? this.patientId,
-        appointmentId: appointmentId ?? this.appointmentId,
-        treatmentType: treatmentType ?? this.treatmentType,
-        toothNumber: toothNumber ?? this.toothNumber,
-        price: price ?? this.price,
-        status: status ?? this.status,
-        notes: notes ?? this.notes,
-        createdAt: createdAt ?? this.createdAt,
-        updatedAt: updatedAt ?? this.updatedAt,
-      );
+  }) => TreatmentModel(
+    id: id ?? this.id,
+    patientId: patientId ?? this.patientId,
+    appointmentId: appointmentId ?? this.appointmentId,
+    treatmentType: treatmentType ?? this.treatmentType,
+    toothNumber: toothNumber ?? this.toothNumber,
+    price: price ?? this.price,
+    status: status ?? this.status,
+    notes: notes ?? this.notes,
+    createdAt: createdAt ?? this.createdAt,
+    updatedAt: updatedAt ?? this.updatedAt,
+  );
 }

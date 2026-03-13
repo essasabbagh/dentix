@@ -20,13 +20,18 @@ class PatientsTable extends Table {
 
   @override
   List<Set<Column>> get uniqueKeys => [
-        {phone}
-      ];
+    {phone},
+  ];
 
   @override
   List<Index> get indexes => [
-        Index('patients_phone_idx', 'CREATE INDEX patients_phone_idx ON patients(phone)'),
-        Index('patients_last_name_idx',
-            'CREATE INDEX patients_last_name_idx ON patients(last_name)'),
-      ];
+    Index(
+      'patients_phone_idx',
+      'CREATE INDEX patients_phone_idx ON patients(phone)',
+    ),
+    Index(
+      'patients_last_name_idx',
+      'CREATE INDEX patients_last_name_idx ON patients(last_name)',
+    ),
+  ];
 }

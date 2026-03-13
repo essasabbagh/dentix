@@ -1,7 +1,6 @@
 import 'package:drift/drift.dart';
 
 import '../../../core/database/app_database.dart';
-import '../../../core/database/daos/appointments_dao.dart';
 import '../../patients/models/patient_model.dart';
 import '../models/appointment_model.dart';
 

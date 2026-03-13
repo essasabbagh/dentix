@@ -1,20 +1,6 @@
-import 'package:drift/drift.dart';
-
 /// Domain model for Patient - wraps generated Drift data class
 /// with computed helpers for Arabic display
 class PatientModel {
-  final int id;
-  final String firstName;
-  final String lastName;
-  final String phone;
-  final String? email;
-  final String? gender;
-  final DateTime? birthDate;
-  final String? address;
-  final String? notes;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-
   const PatientModel({
     required this.id,
     required this.firstName,
@@ -28,6 +14,17 @@ class PatientModel {
     required this.createdAt,
     required this.updatedAt,
   });
+  final int id;
+  final String firstName;
+  final String lastName;
+  final String phone;
+  final String? email;
+  final String? gender;
+  final DateTime? birthDate;
+  final String? address;
+  final String? notes;
+  final DateTime createdAt;
+  final DateTime updatedAt;
 
   /// Full name Arabic display
   String get fullName => '$firstName $lastName';

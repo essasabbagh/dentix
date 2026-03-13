@@ -16,10 +16,9 @@ class LocaleButton extends ConsumerWidget {
 
     return GestureDetector(
       onTap: () {
-        final newLocale =
-            localeMode.languageCode == 'en'
-                ? const Locale('ar')
-                : const Locale('en');
+        final newLocale = localeMode.languageCode == 'en'
+            ? const Locale('ar')
+            : const Locale('en');
         localeNotifier.changeLocale(newLocale);
       },
       child: Container(

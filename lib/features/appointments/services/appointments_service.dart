@@ -2,9 +2,8 @@ import '../data/appointments_repository.dart';
 import '../models/appointment_model.dart';
 
 class AppointmentsService {
-  final AppointmentsRepository _repository;
-
   AppointmentsService(this._repository);
+  final AppointmentsRepository _repository;
 
   Stream<List<AppointmentModel>> watchAppointmentsForDate(DateTime date) =>
       _repository.watchAppointmentsForDate(date);
@@ -37,6 +36,5 @@ class AppointmentsService {
   Future<void> updateStatus(int id, AppointmentStatus status) =>
       _repository.updateStatus(id, status);
 
-  Future<int> deleteAppointment(int id) =>
-      _repository.deleteAppointment(id);
+  Future<int> deleteAppointment(int id) => _repository.deleteAppointment(id);
 }

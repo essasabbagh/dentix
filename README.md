@@ -365,7 +365,7 @@ To configure a named route, use the name parameter:
 GoRoute(
   path: AppRoutes.splash.path,
   name: AppRoutes.splash.name,
-  builder: (_, __) => const SplashScreen(),
+  builder: (_, _) => const SplashScreen(),
 ),
 ```
 

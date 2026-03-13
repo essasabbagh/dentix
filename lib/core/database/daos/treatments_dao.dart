@@ -1,15 +1,16 @@
 import 'package:drift/drift.dart';
+
 import '../app_database.dart';
-import '../tables/treatments_table.dart';
 import '../tables/patients_table.dart';
+import '../tables/treatments_table.dart';
 
 part 'treatments_dao.g.dart';
 
 /// Joined treatment + patient name for global list
 class TreatmentWithPatient {
+  const TreatmentWithPatient(this.treatment, this.patientFullName);
   final TreatmentsTableData treatment;
   final String patientFullName;
-  const TreatmentWithPatient(this.treatment, this.patientFullName);
 }
 
 @DriftAccessor(tables: [TreatmentsTable, PatientsTable])
@@ -19,34 +20,47 @@ class TreatmentsDao extends DatabaseAccessor<AppDatabase>
 
   /// All treatments joined with patient name, newest first
   Stream<List<TreatmentWithPatient>> watchAllTreatments() {
-    final query = select(treatmentsTable).join([
-      innerJoin(patientsTable,
-          patientsTable.id.equalsExp(treatmentsTable.patientId)),
-    ])
-      ..orderBy([
-        OrderingTerm(
-            expression: treatmentsTable.createdAt, mode: OrderingMode.desc)
-      ]);
-    return query.watch().map((rows) => rows
-        .map((r) => TreatmentWithPatient(
+    final query =
+        select(treatmentsTable).join([
+          innerJoin(
+            patientsTable,
+            patientsTable.id.equalsExp(treatmentsTable.patientId),
+          ),
+        ])..orderBy([
+          OrderingTerm(
+            expression: treatmentsTable.createdAt,
+            mode: OrderingMode.desc,
+          ),
+        ]);
+    return query.watch().map(
+      (rows) => rows
+          .map(
+            (r) => TreatmentWithPatient(
               r.readTable(treatmentsTable),
-              '${r.readTable(patientsTable).firstName} ${r.readTable(patientsTable).lastName}',
-            ))
-        .toList());
+              '${r.readTable(patientsTable).firstName} '
+              '${r.readTable(patientsTable).lastName}',
+            ),
+          )
+          .toList(),
+    );
   }
 
   Stream<List<TreatmentsTableData>> watchPatientTreatments(int patientId) =>
       (select(treatmentsTable)
             ..where((t) => t.patientId.equals(patientId))
-            ..orderBy([(t) => OrderingTerm(
-                expression: t.createdAt, mode: OrderingMode.desc)]))
+            ..orderBy([
+              (t) => OrderingTerm(
+                expression: t.createdAt,
+                mode: OrderingMode.desc,
+              ),
+            ]))
           .watch();
 
   Future<List<TreatmentsTableData>> getAppointmentTreatments(
-          int appointmentId) =>
-      (select(treatmentsTable)
-            ..where((t) => t.appointmentId.equals(appointmentId)))
-          .get();
+    int appointmentId,
+  ) => (select(
+    treatmentsTable,
+  )..where((t) => t.appointmentId.equals(appointmentId))).get();
 
   /// Monthly revenue
   Future<double> getMonthlyRevenue(int year, int month) async {
@@ -55,9 +69,11 @@ class TreatmentsDao extends DatabaseAccessor<AppDatabase>
     final sum = treatmentsTable.price.sum();
     final query = selectOnly(treatmentsTable)
       ..addColumns([sum])
-      ..where(treatmentsTable.status.equals('completed') &
-          treatmentsTable.createdAt.isBiggerOrEqualValue(start) &
-          treatmentsTable.createdAt.isSmallerThanValue(end));
+      ..where(
+        treatmentsTable.status.equals('completed') &
+            treatmentsTable.createdAt.isBiggerOrEqualValue(start) &
+            treatmentsTable.createdAt.isSmallerThanValue(end),
+      );
     final result = await query.getSingle();
     return result.read(sum) ?? 0.0;
   }
@@ -70,10 +86,11 @@ class TreatmentsDao extends DatabaseAccessor<AppDatabase>
 
   Future<void> completeTreatment(int id) =>
       (update(treatmentsTable)..where((t) => t.id.equals(id))).write(
-          TreatmentsTableCompanion(
-            status: const Value('completed'),
-            updatedAt: Value(DateTime.now()),
-          ));
+        TreatmentsTableCompanion(
+          status: const Value('completed'),
+          updatedAt: Value(DateTime.now()),
+        ),
+      );
 
   Future<int> deleteTreatment(int id) =>
       (delete(treatmentsTable)..where((t) => t.id.equals(id))).go();

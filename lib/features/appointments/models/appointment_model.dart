@@ -1,4 +1,3 @@
-import '../../../core/database/daos/appointments_dao.dart';
 import '../../patients/models/patient_model.dart';
 
 enum AppointmentStatus {
@@ -48,18 +47,6 @@ enum AppointmentStatus {
 }
 
 class AppointmentModel {
-  final int id;
-  final int patientId;
-  final DateTime appointmentDate;
-  final AppointmentStatus status;
-  final String doctorName;
-  final String? notes;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-
-  // Optionally joined patient
-  final PatientModel? patient;
-
   const AppointmentModel({
     required this.id,
     required this.patientId,
@@ -71,6 +58,17 @@ class AppointmentModel {
     required this.updatedAt,
     this.patient,
   });
+  final int id;
+  final int patientId;
+  final DateTime appointmentDate;
+  final AppointmentStatus status;
+  final String doctorName;
+  final String? notes;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  // Optionally joined patient
+  final PatientModel? patient;
 
   String get timeLabel {
     final h = appointmentDate.hour.toString().padLeft(2, '0');

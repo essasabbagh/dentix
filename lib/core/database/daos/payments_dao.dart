@@ -1,15 +1,16 @@
 import 'package:drift/drift.dart';
+
 import '../app_database.dart';
-import '../tables/payments_table.dart';
 import '../tables/patients_table.dart';
+import '../tables/payments_table.dart';
 
 part 'payments_dao.g.dart';
 
 /// Joined payment + patient name for global list
 class PaymentWithPatient {
+  const PaymentWithPatient(this.payment, this.patientFullName);
   final PaymentsTableData payment;
   final String patientFullName;
-  const PaymentWithPatient(this.payment, this.patientFullName);
 }
 
 @DriftAccessor(tables: [PaymentsTable, PatientsTable])
@@ -19,27 +20,40 @@ class PaymentsDao extends DatabaseAccessor<AppDatabase>
 
   /// All payments joined with patient name, newest first
   Stream<List<PaymentWithPatient>> watchAllPayments() {
-    final query = select(paymentsTable).join([
-      innerJoin(patientsTable,
-          patientsTable.id.equalsExp(paymentsTable.patientId)),
-    ])
-      ..orderBy([
-        OrderingTerm(
-            expression: paymentsTable.paymentDate, mode: OrderingMode.desc)
-      ]);
-    return query.watch().map((rows) => rows
-        .map((r) => PaymentWithPatient(
+    final query =
+        select(paymentsTable).join([
+          innerJoin(
+            patientsTable,
+            patientsTable.id.equalsExp(paymentsTable.patientId),
+          ),
+        ])..orderBy([
+          OrderingTerm(
+            expression: paymentsTable.paymentDate,
+            mode: OrderingMode.desc,
+          ),
+        ]);
+    return query.watch().map(
+      (rows) => rows
+          .map(
+            (r) => PaymentWithPatient(
               r.readTable(paymentsTable),
-              '${r.readTable(patientsTable).firstName} ${r.readTable(patientsTable).lastName}',
-            ))
-        .toList());
+              '${r.readTable(patientsTable).firstName} '
+              '${r.readTable(patientsTable).lastName}',
+            ),
+          )
+          .toList(),
+    );
   }
 
   Stream<List<PaymentsTableData>> watchPatientPayments(int patientId) =>
       (select(paymentsTable)
             ..where((t) => t.patientId.equals(patientId))
-            ..orderBy([(t) => OrderingTerm(
-                expression: t.paymentDate, mode: OrderingMode.desc)]))
+            ..orderBy([
+              (t) => OrderingTerm(
+                expression: t.paymentDate,
+                mode: OrderingMode.desc,
+              ),
+            ]))
           .watch();
 
   /// Monthly income
@@ -49,9 +63,11 @@ class PaymentsDao extends DatabaseAccessor<AppDatabase>
     final sum = paymentsTable.amount.sum();
     final query = selectOnly(paymentsTable)
       ..addColumns([sum])
-      ..where(paymentsTable.paymentStatus.equals('paid') &
-          paymentsTable.paymentDate.isBiggerOrEqualValue(start) &
-          paymentsTable.paymentDate.isSmallerThanValue(end));
+      ..where(
+        paymentsTable.paymentStatus.equals('paid') &
+            paymentsTable.paymentDate.isBiggerOrEqualValue(start) &
+            paymentsTable.paymentDate.isSmallerThanValue(end),
+      );
     final result = await query.getSingle();
     return result.read(sum) ?? 0.0;
   }

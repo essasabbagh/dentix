@@ -7,8 +7,7 @@ class OdontogramTable extends Table {
       integer().named('patient_id').references(PatientsTable, #id)();
   IntColumn get toothNumber => integer().named('tooth_number')();
   // 1-32
-  TextColumn get condition =>
-      text().withDefault(const Constant('healthy'))();
+  TextColumn get condition => text().withDefault(const Constant('healthy'))();
   // healthy | decay | missing | filled | crown | implant | root_canal
   TextColumn get treatmentType => text().named('treatment_type').nullable()();
   TextColumn get notes => text().nullable()();
@@ -20,6 +19,6 @@ class OdontogramTable extends Table {
 
   @override
   List<Set<Column>> get uniqueKeys => [
-        {patientId, toothNumber}
-      ];
+    {patientId, toothNumber},
+  ];
 }

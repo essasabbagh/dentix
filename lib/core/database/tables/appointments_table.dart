@@ -21,9 +21,13 @@ class AppointmentsTable extends Table {
 
   @override
   List<Index> get indexes => [
-        Index('appt_date_idx',
-            'CREATE INDEX appt_date_idx ON appointments(appointment_date)'),
-        Index('appt_patient_idx',
-            'CREATE INDEX appt_patient_idx ON appointments(patient_id)'),
-      ];
+    Index(
+      'appt_date_idx',
+      'CREATE INDEX appt_date_idx ON appointments(appointment_date)',
+    ),
+    Index(
+      'appt_patient_idx',
+      'CREATE INDEX appt_patient_idx ON appointments(patient_id)',
+    ),
+  ];
 }

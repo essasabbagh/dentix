@@ -41,22 +41,22 @@ part 'app_database.g.dart';
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
-  AppDatabase.forTesting(DatabaseConnection connection) : super(connection);
+  AppDatabase.forTesting(DatabaseConnection super.connection);
 
   @override
   int get schemaVersion => 1;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-        onCreate: (Migrator m) async {
-          await m.createAll();
-          // Seed default settings
-          await _seedDefaultSettings();
-        },
-        onUpgrade: (Migrator m, int from, int to) async {
-          // Future migrations here
-        },
-      );
+    onCreate: (Migrator m) async {
+      await m.createAll();
+      // Seed default settings
+      await _seedDefaultSettings();
+    },
+    onUpgrade: (Migrator m, int from, int to) async {
+      // Future migrations here
+    },
+  );
 
   Future<void> _seedDefaultSettings() async {
     final defaultSettings = {

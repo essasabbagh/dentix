@@ -12,31 +12,30 @@ class PatientsDao extends DatabaseAccessor<AppDatabase>
   // ─── Queries ───────────────────────────────────────────────
 
   /// All patients ordered by last name
-  Future<List<PatientsTableData>> getAllPatients() =>
-      (select(patientsTable)..orderBy([(t) => OrderingTerm(expression: t.lastName)])).get();
+  Future<List<PatientsTableData>> getAllPatients() => (select(
+    patientsTable,
+  )..orderBy([(t) => OrderingTerm(expression: t.lastName)])).get();
 
   /// Reactive stream of all patients
-  Stream<List<PatientsTableData>> watchAllPatients() =>
-      (select(patientsTable)..orderBy([(t) => OrderingTerm(expression: t.lastName)])).watch();
+  Stream<List<PatientsTableData>> watchAllPatients() => (select(
+    patientsTable,
+  )..orderBy([(t) => OrderingTerm(expression: t.lastName)])).watch();
 
   /// Search patients by name or phone
   Future<List<PatientsTableData>> searchPatients(String query) {
     final q = '%$query%';
-    return (select(patientsTable)
-          ..where((t) =>
-              t.firstName.like(q) |
-              t.lastName.like(q) |
-              t.phone.like(q)))
+    return (select(patientsTable)..where(
+          (t) => t.firstName.like(q) | t.lastName.like(q) | t.phone.like(q),
+        ))
         .get();
   }
 
   Stream<List<PatientsTableData>> watchSearchPatients(String query) {
     final q = '%$query%';
     return (select(patientsTable)
-          ..where((t) =>
-              t.firstName.like(q) |
-              t.lastName.like(q) |
-              t.phone.like(q))
+          ..where(
+            (t) => t.firstName.like(q) | t.lastName.like(q) | t.phone.like(q),
+          )
           ..orderBy([(t) => OrderingTerm(expression: t.lastName)]))
         .watch();
   }
@@ -45,8 +44,9 @@ class PatientsDao extends DatabaseAccessor<AppDatabase>
   Future<PatientsTableData?> getPatientById(int id) =>
       (select(patientsTable)..where((t) => t.id.equals(id))).getSingleOrNull();
 
-  Stream<PatientsTableData?> watchPatientById(int id) =>
-      (select(patientsTable)..where((t) => t.id.equals(id))).watchSingleOrNull();
+  Stream<PatientsTableData?> watchPatientById(int id) => (select(
+    patientsTable,
+  )..where((t) => t.id.equals(id))).watchSingleOrNull();
 
   /// Total patient count
   Future<int> getPatientsCount() async {

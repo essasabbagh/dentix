@@ -9,25 +9,26 @@ class OdontogramDao extends DatabaseAccessor<AppDatabase>
     with _$OdontogramDaoMixin {
   OdontogramDao(super.db);
 
-  Stream<List<OdontogramTableData>> watchPatientTeeth(int patientId) =>
-      (select(odontogramTable)
-            ..where((t) => t.patientId.equals(patientId)))
-          .watch();
+  Stream<List<OdontogramTableData>> watchPatientTeeth(int patientId) => (select(
+    odontogramTable,
+  )..where((t) => t.patientId.equals(patientId))).watch();
 
   Future<OdontogramTableData?> getTooth(int patientId, int toothNumber) =>
-      (select(odontogramTable)
-            ..where((t) =>
+      (select(odontogramTable)..where(
+            (t) =>
                 t.patientId.equals(patientId) &
-                t.toothNumber.equals(toothNumber)))
+                t.toothNumber.equals(toothNumber),
+          ))
           .getSingleOrNull();
 
   Future<int> upsertTooth(OdontogramTableCompanion tooth) =>
       into(odontogramTable).insertOnConflictUpdate(tooth);
 
   Future<int> deleteTooth(int patientId, int toothNumber) =>
-      (delete(odontogramTable)
-            ..where((t) =>
+      (delete(odontogramTable)..where(
+            (t) =>
                 t.patientId.equals(patientId) &
-                t.toothNumber.equals(toothNumber)))
+                t.toothNumber.equals(toothNumber),
+          ))
           .go();
 }

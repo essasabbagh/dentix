@@ -276,7 +276,6 @@ class _AddEditPatientPageState extends ConsumerState<AddEditPatientPage> {
     int maxLines = 1,
     String? Function(String?)? validator,
   }) {
-    final theme = Theme.of(context);
     return TextFormField(
       controller: controller,
       keyboardType: keyboardType,
@@ -368,7 +367,7 @@ class _GenderButton extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         decoration: BoxDecoration(
-          color: selected ? color.withOpacity(0.12) : Colors.transparent,
+          color: selected ? color.withValues(alpha: 0.12) : Colors.transparent,
           borderRadius: BorderRadius.circular(10),
           border: Border.all(
             color: selected ? color : theme.colorScheme.outlineVariant,

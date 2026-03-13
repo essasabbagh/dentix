@@ -42,7 +42,7 @@ final teethColorMapProvider = Provider.family<Map<String, Color>, int>((
         if (r.condition != ToothCondition.healthy) r.isoKey: r.condition.color,
     },
     loading: () => {},
-    error: (_, __) => {},
+    error: (_, _) => {},
   );
 });
 
@@ -60,7 +60,7 @@ final teethStrokeColorMapProvider = Provider.family<Map<String, Color>, int>((
           r.isoKey: r.condition.strokeColor,
     },
     loading: () => {},
-    error: (_, __) => {},
+    error: (_, _) => {},
   );
 });
 
@@ -74,7 +74,7 @@ final teethRecordMapProvider = Provider.family<Map<String, ToothRecord>, int>((
   return teethAsync.when(
     data: (records) => {for (final r in records) r.isoKey: r},
     loading: () => {},
-    error: (_, __) => {},
+    error: (_, _) => {},
   );
 });
 

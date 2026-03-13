@@ -10,9 +10,9 @@ class SettingsDao extends DatabaseAccessor<AppDatabase>
   SettingsDao(super.db);
 
   Future<String?> getValue(String key) async {
-    final row = await (select(settingsTable)
-          ..where((t) => t.key.equals(key)))
-        .getSingleOrNull();
+    final row = await (select(
+      settingsTable,
+    )..where((t) => t.key.equals(key))).getSingleOrNull();
     return row?.value;
   }
 

@@ -77,16 +77,6 @@ enum PaymentStatus {
 }
 
 class PaymentModel {
-  final int id;
-  final int patientId;
-  final int? treatmentId;
-  final double amount;
-  final PaymentMethod paymentMethod;
-  final PaymentStatus paymentStatus;
-  final DateTime paymentDate;
-  final String? notes;
-  final DateTime createdAt;
-
   const PaymentModel({
     required this.id,
     required this.patientId,
@@ -98,4 +88,13 @@ class PaymentModel {
     this.notes,
     required this.createdAt,
   });
+  final int id;
+  final int patientId;
+  final int? treatmentId;
+  final double amount;
+  final PaymentMethod paymentMethod;
+  final PaymentStatus paymentStatus;
+  final DateTime paymentDate;
+  final String? notes;
+  final DateTime createdAt;
 }

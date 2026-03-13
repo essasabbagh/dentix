@@ -13,7 +13,6 @@ const double bottomSheetBorderRadius = 12.0;
 
 class AppThemes {
   static ThemeData lightTheme = ThemeData(
-    
     colorScheme: const ColorScheme(
       brightness: Brightness.light,
       primary: AppColors.primaryColor,

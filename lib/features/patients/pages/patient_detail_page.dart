@@ -195,16 +195,16 @@ class _PatientHeader extends StatelessWidget {
                     Icon(
                       Icons.phone_outlined,
                       size: 13,
-                      color: theme.colorScheme.onPrimaryContainer.withOpacity(
-                        0.7,
+                      color: theme.colorScheme.onPrimaryContainer.withValues(
+                        alpha: 0.7,
                       ),
                     ),
                     const SizedBox(width: 4),
                     Text(
                       patient.phone,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onPrimaryContainer.withOpacity(
-                          0.8,
+                        color: theme.colorScheme.onPrimaryContainer.withValues(
+                          alpha: 0.8,
                         ),
                       ),
                     ),
@@ -214,7 +214,7 @@ class _PatientHeader extends StatelessWidget {
                         '${patient.age} سنة',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onPrimaryContainer
-                              .withOpacity(0.8),
+                              .withValues(alpha: 0.8),
                         ),
                       ),
                     ],
@@ -262,7 +262,8 @@ class _InfoTab extends StatelessWidget {
                 icon: Icons.cake_outlined,
                 label: 'تاريخ الميلاد',
                 value:
-                    '${DateFormat('yyyy/MM/dd').format(patient.birthDate!)} — ${patient.age} سنة',
+                    '${DateFormat('yyyy/MM/dd').format(patient.birthDate!)} — '
+                    '${patient.age} سنة',
               ),
             if (patient.email?.isNotEmpty == true)
               _InfoRow(
@@ -330,7 +331,7 @@ class _AppointmentsTab extends ConsumerWidget {
                 : ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: appointments.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    separatorBuilder: (_, _) => const SizedBox(height: 8),
                     itemBuilder: (_, i) =>
                         _AppointmentTile(appointment: appointments[i]),
                   ),
@@ -354,7 +355,10 @@ class _AppointmentTile extends ConsumerWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: statusColor.withOpacity(0.35), width: 1.5),
+        side: BorderSide(
+          color: statusColor.withValues(alpha: 0.35),
+          width: 1.5,
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -364,7 +368,7 @@ class _AppointmentTile extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               decoration: BoxDecoration(
-                color: statusColor.withOpacity(0.1),
+                color: statusColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
@@ -477,7 +481,7 @@ class _TreatmentsTab extends ConsumerWidget {
                 : ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: treatments.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    separatorBuilder: (_, _) => const SizedBox(height: 8),
                     itemBuilder: (_, i) =>
                         _TreatmentTile(treatment: treatments[i]),
                   ),
@@ -712,7 +716,7 @@ class _PaymentsTab extends ConsumerWidget {
                 : ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: payments.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    separatorBuilder: (_, _) => const SizedBox(height: 8),
                     itemBuilder: (_, i) => _PaymentTile(payment: payments[i]),
                   ),
           ),
@@ -932,8 +936,9 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
                           keyboard: TextInputType.number,
                           validator: (v) {
                             if (v?.isEmpty == true) return 'مطلوب';
-                            if (double.tryParse(v!) == null)
+                            if (double.tryParse(v!) == null) {
                               return 'أدخل رقماً';
+                            }
                             return null;
                           },
                         ),
@@ -1089,8 +1094,9 @@ class _AddPaymentDialogState extends ConsumerState<_AddPaymentDialog> {
                           ),
                           validator: (v) {
                             if (v?.isEmpty == true) return 'مطلوب';
-                            if (double.tryParse(v!) == null)
+                            if (double.tryParse(v!) == null) {
                               return 'أدخل رقماً';
+                            }
                             return null;
                           },
                         ),
@@ -1358,9 +1364,9 @@ class _StatusBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.4)),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
       child: Text(
         label,

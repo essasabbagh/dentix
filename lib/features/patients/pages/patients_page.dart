@@ -63,7 +63,7 @@ class PatientsPage extends ConsumerWidget {
                     vertical: 4,
                   ),
                   itemCount: patients.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 8),
+                  separatorBuilder: (_, _) => const SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     final patient = patients[index];
                     return PatientCard(
@@ -137,7 +137,7 @@ class _PatientsHeader extends ConsumerWidget {
                   ),
                 ),
                 loading: () => const SizedBox.shrink(),
-                error: (_, __) => const SizedBox.shrink(),
+                error: (_, _) => const SizedBox.shrink(),
               ),
             ],
           ),
