@@ -1,13 +1,39 @@
 import 'package:drift/drift.dart';
 import '../app_database.dart';
 import '../tables/treatments_table.dart';
+import '../tables/patients_table.dart';
 
 part 'treatments_dao.g.dart';
 
-@DriftAccessor(tables: [TreatmentsTable])
+/// Joined treatment + patient name for global list
+class TreatmentWithPatient {
+  final TreatmentsTableData treatment;
+  final String patientFullName;
+  const TreatmentWithPatient(this.treatment, this.patientFullName);
+}
+
+@DriftAccessor(tables: [TreatmentsTable, PatientsTable])
 class TreatmentsDao extends DatabaseAccessor<AppDatabase>
     with _$TreatmentsDaoMixin {
   TreatmentsDao(super.db);
+
+  /// All treatments joined with patient name, newest first
+  Stream<List<TreatmentWithPatient>> watchAllTreatments() {
+    final query = select(treatmentsTable).join([
+      innerJoin(patientsTable,
+          patientsTable.id.equalsExp(treatmentsTable.patientId)),
+    ])
+      ..orderBy([
+        OrderingTerm(
+            expression: treatmentsTable.createdAt, mode: OrderingMode.desc)
+      ]);
+    return query.watch().map((rows) => rows
+        .map((r) => TreatmentWithPatient(
+              r.readTable(treatmentsTable),
+              '${r.readTable(patientsTable).firstName} ${r.readTable(patientsTable).lastName}',
+            ))
+        .toList());
+  }
 
   Stream<List<TreatmentsTableData>> watchPatientTreatments(int patientId) =>
       (select(treatmentsTable)

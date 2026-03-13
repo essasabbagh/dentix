@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import '../models/patient_model.dart';
 
 class PatientCard extends StatelessWidget {
-  final PatientModel patient;
-  final VoidCallback onTap;
-
   const PatientCard({
     super.key,
     required this.patient,
     required this.onTap,
   });
+
+  final PatientModel patient;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -32,8 +32,7 @@ class PatientCard extends StatelessWidget {
               // Avatar
               CircleAvatar(
                 radius: 22,
-                backgroundColor:
-                    theme.colorScheme.primaryContainer,
+                backgroundColor: theme.colorScheme.primaryContainer,
                 child: Text(
                   _initials,
                   style: TextStyle(
@@ -51,31 +50,38 @@ class PatientCard extends StatelessWidget {
                   children: [
                     Text(
                       patient.fullName,
-                      style: theme.textTheme.titleSmall
-                          ?.copyWith(fontWeight: FontWeight.w600),
+                      style: theme.textTheme.titleSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     const SizedBox(height: 3),
                     Row(
                       children: [
-                        Icon(Icons.phone_outlined,
-                            size: 13,
-                            color: theme.colorScheme.outline),
+                        Icon(
+                          Icons.phone_outlined,
+                          size: 13,
+                          color: theme.colorScheme.outline,
+                        ),
                         const SizedBox(width: 4),
                         Text(
                           patient.phone,
-                          style: theme.textTheme.bodySmall
-                              ?.copyWith(color: theme.colorScheme.outline),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.outline,
+                          ),
                         ),
                         if (patient.age != null) ...[
                           const SizedBox(width: 12),
-                          Icon(Icons.cake_outlined,
-                              size: 13,
-                              color: theme.colorScheme.outline),
+                          Icon(
+                            Icons.cake_outlined,
+                            size: 13,
+                            color: theme.colorScheme.outline,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             '${patient.age} سنة',
-                            style: theme.textTheme.bodySmall
-                                ?.copyWith(color: theme.colorScheme.outline),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.outline,
+                            ),
                           ),
                         ],
                       ],
@@ -105,8 +111,8 @@ class PatientCard extends StatelessWidget {
 }
 
 class _GenderChip extends StatelessWidget {
-  final String gender;
   const _GenderChip({required this.gender});
+  final String gender;
 
   @override
   Widget build(BuildContext context) {

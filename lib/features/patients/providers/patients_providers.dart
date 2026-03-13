@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../core/database/app_database.dart';
+
+import 'package:template/core/database/app_database.dart';
+
 import '../data/patients_repository.dart';
 import '../models/patient_model.dart';
 import '../services/patients_service.dart';
@@ -32,8 +34,10 @@ final patientsListProvider = StreamProvider<List<PatientModel>>((ref) {
 });
 
 // ─── Single patient ───────────────────────────────────────────────────────
-final patientByIdProvider =
-    StreamProvider.family<PatientModel?, int>((ref, id) {
+final patientByIdProvider = StreamProvider.family<PatientModel?, int>((
+  ref,
+  id,
+) {
   return ref.watch(patientsServiceProvider).watchPatientById(id);
 });
 
@@ -46,9 +50,9 @@ final patientsCountProvider = FutureProvider<int>((ref) {
 
 // ─── Patient form notifier ────────────────────────────────────────────────
 class PatientFormNotifier extends StateNotifier<AsyncValue<void>> {
-  final PatientsService _service;
-
   PatientFormNotifier(this._service) : super(const AsyncValue.data(null));
+
+  final PatientsService _service;
 
   Future<bool> createPatient({
     required String firstName,
@@ -109,5 +113,5 @@ class PatientFormNotifier extends StateNotifier<AsyncValue<void>> {
 
 final patientFormProvider =
     StateNotifierProvider<PatientFormNotifier, AsyncValue<void>>((ref) {
-  return PatientFormNotifier(ref.watch(patientsServiceProvider));
-});
+      return PatientFormNotifier(ref.watch(patientsServiceProvider));
+    });

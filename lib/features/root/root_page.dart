@@ -57,7 +57,7 @@ class RootPage extends StatelessWidget {
                   Icons.dashboard,
                   color: Colors.white,
                 ),
-                label: Text(S.of(context).dashboard),
+                label: Text(S.of(context).home),
               ),
               NavigationRailDestination(
                 icon: const Icon(Icons.people_outline),

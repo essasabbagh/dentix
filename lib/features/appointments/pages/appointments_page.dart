@@ -62,8 +62,16 @@ class AppointmentsPage extends ConsumerWidget {
         ),
         floatingActionButton: FloatingActionButton.extended(
           onPressed: () => _openAdd(context, ref),
-          icon: const Icon(Icons.add),
-          label: const Text('موعد جديد'),
+          icon: const Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+          label: const Text(
+            'موعد جديد',
+            style: TextStyle(
+              color: Colors.white,
+            ),
+          ),
         ),
       ),
     );

@@ -5,9 +5,11 @@ import 'package:template/features/appointments/pages/appointments_page.dart';
 import 'package:template/features/dashboard/dashboard_page.dart';
 import 'package:template/features/odontogram/pages/odontogram_page.dart';
 import 'package:template/features/patients/pages/patients_page.dart';
+import 'package:template/features/payments/pages/payments_page.dart';
 import 'package:template/features/root/root_page.dart';
 import 'package:template/features/settings/pages/settings_screen.dart';
 import 'package:template/features/splash/splash_screen.dart';
+import 'package:template/features/treatments/pages/treatments_page.dart';
 
 final routes = [
   GoRoute(
@@ -79,22 +81,6 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SplashScreen();
-  }
-}
-
-class PaymentsPage extends StatelessWidget {
-  const PaymentsPage({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Payments'));
-  }
-}
-
-class TreatmentsPage extends StatelessWidget {
-  const TreatmentsPage({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Treatments'));
   }
 }
 

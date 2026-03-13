@@ -346,5 +346,10 @@
   "enterYourFirstName": "Enter your first name",
   "pleaseAcceptTermsAndConditions": "Please Accept Terms And Conditions",
   "updatePasswordSuccess": "Update Password successful!",
-  "updateProfileSuccessful": "Update profile successful!"
+  "updateProfileSuccessful": "Update profile successful!",
+  "patients": "Patients",
+  "appointments": "Appointments",
+  "treatments": "Treatments",
+  "payments": "Payments",
+  "reports": "Reports"
 }

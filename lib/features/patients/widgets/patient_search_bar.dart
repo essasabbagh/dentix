@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../providers/patients_providers.dart';
 
 class PatientSearchBar extends ConsumerStatefulWidget {
@@ -34,9 +36,7 @@ class _PatientSearchBarState extends ConsumerState<PatientSearchBar> {
                 icon: const Icon(Icons.clear),
                 onPressed: () {
                   _controller.clear();
-                  ref
-                      .read(patientSearchQueryProvider.notifier)
-                      .state = '';
+                  ref.read(patientSearchQueryProvider.notifier).state = '';
                 },
               )
             : null,
@@ -50,8 +50,10 @@ class _PatientSearchBarState extends ConsumerState<PatientSearchBar> {
         ),
         filled: true,
         fillColor: theme.colorScheme.surfaceContainerLowest,
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
       ),
       onChanged: (value) {
         setState(() {}); // rebuild for suffix icon

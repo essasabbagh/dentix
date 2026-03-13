@@ -346,5 +346,10 @@
   "enterYourFirstName": "أدخل اسمك الأول",
   "pleaseAcceptTermsAndConditions": "يرجى قبول الشروط والأحكام",
   "updatePasswordSuccess": "تم تحديث كلمة المرور بنجاح!",
-  "updateProfileSuccessful": "تم تحديث الملف الشخصي بنجاح!"
+  "updateProfileSuccessful": "تم تحديث الملف الشخصي بنجاح!",
+  "patients": "المرضى",
+  "appointments": "المواعيد",
+  "treatments": "العلاجات",
+  "payments": "المدفوعات",
+  "reports": "التقارير"
 }

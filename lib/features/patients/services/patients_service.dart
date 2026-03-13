@@ -2,9 +2,9 @@ import '../data/patients_repository.dart';
 import '../models/patient_model.dart';
 
 class PatientsService {
-  final PatientsRepository _repository;
-
   PatientsService(this._repository);
+
+  final PatientsRepository _repository;
 
   // ─── Streams ───────────────────────────────────────────────
 
@@ -38,8 +38,7 @@ class PatientsService {
     String? address,
     String? notes,
   }) async {
-    _validatePatient(
-        firstName: firstName, lastName: lastName, phone: phone);
+    _validatePatient(firstName: firstName, lastName: lastName, phone: phone);
     return _repository.createPatient(
       firstName: firstName.trim(),
       lastName: lastName.trim(),
@@ -54,9 +53,10 @@ class PatientsService {
 
   Future<bool> updatePatient(PatientModel patient) async {
     _validatePatient(
-        firstName: patient.firstName,
-        lastName: patient.lastName,
-        phone: patient.phone);
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      phone: patient.phone,
+    );
     return _repository.updatePatient(patient);
   }
 
