@@ -23,20 +23,21 @@ dependencies:
   intl: ^0.20.2
 
   # UI
-  flutter_svg: ^2.2.3
+  flutter_svg: ^2.2.4
+  path_drawing: ^1.0.1
   google_fonts: ^8.0.1
   cupertino_icons: ^1.0.8
   intl_phone_number_input: ^0.7.5
   flutter_widget_from_html: ^0.17.1
 
   # state management
-  get_it: ^9.2.0
+  get_it: ^9.2.1
   riverpod: ^2.6.1
   hooks_riverpod: ^2.6.1
   flutter_hooks: ^0.21.3
 
   # Network
-  dio: ^5.9.1
+  dio: ^5.9.2
   dio_cache_interceptor: ^4.0.5
   http_cache_hive_store: ^5.0.2
   pretty_dio_logger: ^1.4.0
@@ -65,23 +66,16 @@ dependencies:
   go_transitions: ^0.8.3
 
   # Tools
-  pinput: ^6.0.1
   shimmer: ^3.0.0
   share_plus: ^12.0.1
   url_launcher: ^6.3.2
   webview_flutter: ^4.13.1
-  connectivity_plus: ^7.0.0
 
-  # firebase
-  google_sign_in: ^7.2.0
-  firebase_core: ^4.4.0
-  firebase_messaging: ^16.1.1
-  firebase_analytics: ^12.1.2
-  firebase_crashlytics: ^5.0.7
   flutter_local_notifications: ^20.1.0
 
   webview_flutter_android: any
   webview_flutter_wkwebview: any
+  xml: ^6.6.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
