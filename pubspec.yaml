@@ -25,8 +25,6 @@ dependencies:
   # UI
   flutter_svg: ^2.2.4
   path_drawing: ^1.0.1
-  google_fonts: ^8.0.1
-  cupertino_icons: ^1.0.8
   intl_phone_number_input: ^0.7.5
   flutter_widget_from_html: ^0.17.1
 
@@ -35,12 +33,6 @@ dependencies:
   riverpod: ^2.6.1
   hooks_riverpod: ^2.6.1
   flutter_hooks: ^0.21.3
-
-  # Network
-  dio: ^5.9.2
-  dio_cache_interceptor: ^4.0.5
-  http_cache_hive_store: ^5.0.2
-  pretty_dio_logger: ^1.4.0
 
   # Image
   image_picker: ^1.2.1
@@ -55,7 +47,6 @@ dependencies:
 
   # Storage
   get_storage: ^2.1.1
-  flutter_secure_storage: ^10.0.0
 
   # Database
   # hive: ^2.2.3
@@ -66,6 +57,7 @@ dependencies:
   go_transitions: ^0.8.3
 
   # Tools
+  xml: ^6.6.1
   shimmer: ^3.0.0
   share_plus: ^12.0.1
   url_launcher: ^6.3.2
@@ -75,7 +67,6 @@ dependencies:
 
   webview_flutter_android: any
   webview_flutter_wkwebview: any
-  xml: ^6.6.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -107,17 +98,15 @@ flutter:
     - assets/images/onboarding/
     - assets/images/empty_state/
 
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: assets/fonts/Schyler-Regular.ttf
-  #       - asset: assets/fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: assets/fonts/TrajanPro.ttf
-  #       - asset: assets/fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Cairo-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Cairo-Light.ttf
+          weight: 300
 
   # https://fonts.google.com/noto/specimen/Noto+Sans+Arabic
 

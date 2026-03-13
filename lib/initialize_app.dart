@@ -3,16 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get_storage/get_storage.dart';
 
-import 'package:template/core/data/secure_storage_service.dart';
 import 'package:template/core/data/storage_service.dart';
-import 'package:template/core/utils/file_utils.dart';
-// import 'package:firebase_core/firebase_core.dart';
-// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-// import 'package:firebase_messaging/firebase_messaging.dart';
+// import 'package:template/core/utils/file_utils.dart';
 
 GetIt locator = GetIt.instance;
 
@@ -41,17 +36,17 @@ Future<void> initializeApp() async {
   // -------------------------------------------------------------
   //  Register and Initialize FileUtils
   // -------------------------------------------------------------
-  await FileUtils.init(); // MUST be awaited before using paths
-  locator.registerSingleton<FileUtils>(FileUtils.instance);
+  // await FileUtils.init(); // MUST be awaited before using paths
+  // locator.registerSingleton<FileUtils>(FileUtils.instance);
 
   // -------------------------------------------------------------
   // Initialize GetStorage using the support directory
   // -------------------------------------------------------------
-  final fileUtils = locator<FileUtils>();
+  // final fileUtils = locator<FileUtils>();
 
   final storage = GetStorage(
     'AppStorage',
-    fileUtils.supportPath,
+    // fileUtils.supportPath,
   );
 
   await storage.initStorage;
@@ -67,45 +62,9 @@ Future<void> initializeApp() async {
   // -------------------------------------------------------------
   // Initialize Secure Storage
   // -------------------------------------------------------------
-  const FlutterSecureStorage secureStorage = FlutterSecureStorage();
+  // const FlutterSecureStorage secureStorage = FlutterSecureStorage();
 
-  locator.registerLazySingleton<SecureStorageService>(
-    () => SecureStorageService(secureStorage),
-  );
-
-  // -------------------------------------------------------------
-  // Firebase Services (commented-out in your code)
-  // -------------------------------------------------------------
-  /*
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
-  await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
-    kReleaseMode,
-  );
-
-  FlutterError.onError = (FlutterErrorDetails errorDetails) {
-    FirebaseCrashlytics.instance.recordFlutterError(
-      errorDetails,
-      fatal: true,
-    );
-  };
-
-  PlatformDispatcher.instance.onError = (Object error, StackTrace stack) {
-    FirebaseCrashlytics.instance.recordError(
-      error,
-      stack,
-      fatal: true,
-    );
-    return true;
-  };
-
-  try {
-    await NotificationService.instance.initialize();
-  } catch (e) {
-    AppLog.error('Firebase Messaging initialize failed:');
-    AppLog.error('$e');
-  }
-  */
+  // locator.registerLazySingleton<SecureStorageService>(
+  //   () => SecureStorageService(secureStorage),
+  // );
 }

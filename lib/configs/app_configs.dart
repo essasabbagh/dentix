@@ -21,7 +21,7 @@ class AppConfigs {
   static const appleStoreUrl = 'https://apps.apple.com/';
 
   // font family
-  static const String fontFamily = 'Poppins';
+  static const String fontFamily = 'Cairo';
   static const defaultLocale = 'ar';
   static final supportedLocales = [
     {'locale': 'ar', 'name': 'عربي', 'icon': '🇵🇸'},

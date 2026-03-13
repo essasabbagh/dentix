@@ -13,6 +13,7 @@ const double bottomSheetBorderRadius = 12.0;
 
 class AppThemes {
   static ThemeData lightTheme = ThemeData(
+    
     colorScheme: const ColorScheme(
       brightness: Brightness.light,
       primary: AppColors.primaryColor,
@@ -41,7 +42,7 @@ class AppThemes {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(elevatedButtonBorderRadius),
         ),
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           fontSize: 16,
           fontFamily: AppFont.fontFamily,
           color: AppColors.primary700,
@@ -83,7 +84,7 @@ class AppThemes {
     appBarTheme: AppBarTheme(
       backgroundColor: AppColors.primary50,
       surfaceTintColor: AppColors.backgroundColor,
-      titleTextStyle: TextStyle(
+      titleTextStyle: const TextStyle(
         color: AppColors.gray900,
         fontSize: 16,
         fontFamily: AppFont.fontFamily,
@@ -219,7 +220,7 @@ class AppThemes {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(elevatedButtonBorderRadius),
         ),
-        textStyle: TextStyle(
+        textStyle: const TextStyle(
           fontSize: 16,
           fontFamily: AppFont.fontFamily,
           color: AppColors.primary50,
@@ -264,7 +265,7 @@ class AppThemes {
         systemNavigationBarContrastEnforced: true,
       ),
       iconTheme: const IconThemeData(color: AppColors.gray50),
-      titleTextStyle: TextStyle(
+      titleTextStyle: const TextStyle(
         fontSize: 16,
         fontFamily: AppFont.fontFamily,
         fontWeight: FontWeight.bold,

@@ -4,32 +4,18 @@ export 'package:go_router/go_router.dart';
 
 enum AppRoutes {
   splash('/', 'splash'),
-  onboarding('/onboarding', 'onboarding'),
-  login('/login', 'login'),
-  resetPassword('reset-password', 'resetPassword'),
-  resetPasswordDone('reset-password-done', 'resetPasswordDone'),
-  changePassword('change-password', 'changePassword'),
-  updateProfile('/update-profile', 'updateProfile'),
-  register('/register', 'register'),
-  resetPasswordConfirm('reset-password-confirm', 'resetPasswordConfirm'),
-  updatePassword('update-password', 'updatePassword'),
-  registerConfirm('confirm-register', 'registerConfirm'),
-
   root('/root', 'root'),
-  profile('/profile', 'profile'),
-  help('/help', 'help'),
-  about('/about', 'about'),
-  termsConditions('/terms-conditions', 'termsConditions'),
-  privacyPolicy('/privacy-policy', 'privacyPolicy'),
-  home('/home', 'home'),
-  web('/web', 'web'),
-  favorite('/favorite', 'favorite'),
-  posts('/posts', 'posts'),
-  postDetails('post-details', 'postDetails'),
-  notifications('/notifications', 'notifications'),
-  settings('/settings', 'settings'),
-  category('/category', 'category'),
-  search('/search', 'search');
+
+  dashboard('/dashboard', 'dashboard'),
+  patients('/patients', 'patients'),
+
+  patientDetails('/patients/:id', 'patientDetails'),
+
+  appointments('/appointments', 'appointments'),
+  treatments('/treatments', 'treatments'),
+  payments('/payments', 'payments'),
+  reports('/reports', 'reports'),
+  settings('/settings', 'settings');
 
   final String path;
   final String name;
@@ -38,7 +24,3 @@ enum AppRoutes {
 
   String get fullPath => AppRoutePathCache.instance.getFullPath(this);
 }
-
-// extension AppRoutesX on AppRoutes {
-//   String get fullPath => AppRoutePathCache.instance.getFullPath(this);
-// }
