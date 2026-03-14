@@ -53,7 +53,6 @@ class AppointmentFormNotifier extends StateNotifier<AsyncValue<void>> {
   Future<bool> createAppointment({
     required int patientId,
     required DateTime date,
-    required String doctorName,
     String? notes,
   }) async {
     state = const AsyncValue.loading();
@@ -61,7 +60,6 @@ class AppointmentFormNotifier extends StateNotifier<AsyncValue<void>> {
       await _service.createAppointment(
         patientId: patientId,
         date: date,
-        doctorName: doctorName,
         notes: notes,
       );
       state = const AsyncValue.data(null);

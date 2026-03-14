@@ -40,7 +40,6 @@ class AppointmentModel {
     required this.patientId,
     required this.appointmentDate,
     required this.status,
-    required this.doctorName,
     this.notes,
     required this.createdAt,
     required this.updatedAt,
@@ -50,7 +49,6 @@ class AppointmentModel {
   final int patientId;
   final DateTime appointmentDate;
   final AppointmentStatus status;
-  final String doctorName;
   final String? notes;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -69,7 +67,6 @@ class AppointmentModel {
     int? patientId,
     DateTime? appointmentDate,
     AppointmentStatus? status,
-    String? doctorName,
     String? notes,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -80,7 +77,6 @@ class AppointmentModel {
       patientId: patientId ?? this.patientId,
       appointmentDate: appointmentDate ?? this.appointmentDate,
       status: status ?? this.status,
-      doctorName: doctorName ?? this.doctorName,
       notes: notes ?? this.notes,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,

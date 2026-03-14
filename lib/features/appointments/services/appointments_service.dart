@@ -16,7 +16,6 @@ class AppointmentsService {
   Future<int> createAppointment({
     required int patientId,
     required DateTime date,
-    required String doctorName,
     String? notes,
   }) {
     if (date.isBefore(DateTime.now().subtract(const Duration(days: 1)))) {
@@ -25,7 +24,6 @@ class AppointmentsService {
     return _repository.createAppointment(
       patientId: patientId,
       date: date,
-      doctorName: doctorName,
       notes: notes,
     );
   }

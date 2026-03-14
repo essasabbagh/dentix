@@ -25,7 +25,6 @@ class AddAppointmentPage extends ConsumerStatefulWidget {
 class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
   final _formKey = GlobalKey<FormState>();
   final _notesController = TextEditingController();
-  final _doctorController = TextEditingController(text: 'الدكتور');
 
   late DateTime _selectedDate;
   late TimeOfDay _selectedTime;
@@ -41,7 +40,6 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
   @override
   void dispose() {
     _notesController.dispose();
-    _doctorController.dispose();
     super.dispose();
   }
 
@@ -173,25 +171,6 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                         onPressed: _pickTime,
                       ),
                       const SizedBox(height: 16),
-                      // Doctor name
-                      TextFormField(
-                        controller: _doctorController,
-                        textDirection: TextDirection.rtl,
-                        decoration: InputDecoration(
-                          labelText: 'اسم الطبيب',
-                          prefixIcon: const Icon(
-                            Icons.medical_services_outlined,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 14,
-                            vertical: 12,
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
                       // Notes
                       TextFormField(
                         controller: _notesController,
@@ -312,7 +291,6 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
         .createAppointment(
           patientId: _selectedPatient!.id,
           date: dateTime,
-          doctorName: _doctorController.text.trim(),
           notes: _notesController.text.trim().isEmpty
               ? null
               : _notesController.text.trim(),

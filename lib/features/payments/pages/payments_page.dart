@@ -169,7 +169,8 @@ class _PaymentsActiveFilterChips extends ConsumerWidget {
     if (filter.dateFrom != null) {
       chips.add(
         _RemovableChip(
-          label: 'من: ${DateHelper.format(filter.dateFrom!, pattern: 'd/M/yyyy')}',
+          label:
+              'من: ${DateHelper.format(filter.dateFrom!, pattern: 'd/M/yyyy')}',
           onRemove: () => ref
               .read(paymentsFilterProvider.notifier)
               .update((f) => f.copyWith(dateFrom: null)),
@@ -179,7 +180,8 @@ class _PaymentsActiveFilterChips extends ConsumerWidget {
     if (filter.dateTo != null) {
       chips.add(
         _RemovableChip(
-          label: 'إلى: ${DateHelper.format(filter.dateTo!, pattern: 'd/M/yyyy')}',
+          label:
+              'إلى: ${DateHelper.format(filter.dateTo!, pattern: 'd/M/yyyy')}',
           onRemove: () => ref
               .read(paymentsFilterProvider.notifier)
               .update((f) => f.copyWith(dateTo: null)),
@@ -351,7 +353,10 @@ class _PaymentCard extends ConsumerWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        DateHelper.format(item.payment.paymentDate, pattern: 'd/M/yyyy'),
+                        DateHelper.format(
+                          item.payment.paymentDate,
+                          pattern: 'd/M/yyyy',
+                        ),
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.outline,
                         ),

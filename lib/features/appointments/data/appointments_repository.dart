@@ -18,7 +18,6 @@ class AppointmentsRepository {
     patientId: d.patientId,
     appointmentDate: d.appointmentDate,
     status: AppointmentStatus.fromDb(d.status),
-    doctorName: d.doctorName,
     notes: d.notes,
     createdAt: d.createdAt,
     updatedAt: d.updatedAt,
@@ -78,14 +77,12 @@ class AppointmentsRepository {
     required int patientId,
     required DateTime date,
     String status = 'scheduled',
-    required String doctorName,
     String? notes,
   }) => _db.appointmentsDao.insertAppointment(
     AppointmentsTableCompanion.insert(
       patientId: patientId,
       appointmentDate: date,
       status: Value(status),
-      doctorName: Value(doctorName),
       notes: Value(notes),
     ),
   );
@@ -97,7 +94,6 @@ class AppointmentsRepository {
           patientId: Value(appt.patientId),
           appointmentDate: Value(appt.appointmentDate),
           status: Value(appt.status.dbValue),
-          doctorName: Value(appt.doctorName),
           notes: Value(appt.notes),
           updatedAt: Value(DateTime.now()),
         ),

@@ -300,7 +300,10 @@ class _InfoTab extends StatelessWidget {
             _InfoRow(
               icon: Icons.calendar_today_outlined,
               label: 'تاريخ التسجيل',
-              value: DateHelper.format(patient.createdAt, pattern: 'yyyy/MM/dd'),
+              value: DateHelper.format(
+                patient.createdAt,
+                pattern: 'yyyy/MM/dd',
+              ),
             ),
           ],
         ),
@@ -394,7 +397,10 @@ class _AppointmentTile extends ConsumerWidget {
               child: Column(
                 children: [
                   Text(
-                    DateHelper.format(appointment.appointmentDate, pattern: 'd/M'),
+                    DateHelper.format(
+                      appointment.appointmentDate,
+                      pattern: 'd/M',
+                    ),
                     style: theme.textTheme.labelLarge?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: statusColor,
@@ -414,12 +420,12 @@ class _AppointmentTile extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    appointment.doctorName,
-                    style: theme.textTheme.titleSmall?.copyWith(
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  // Text(
+                  //   appointment.doctorName,
+                  //   style: theme.textTheme.titleSmall?.copyWith(
+                  //     fontWeight: FontWeight.w600,
+                  //   ),
+                  // ),
                   if (appointment.notes?.isNotEmpty == true)
                     Text(
                       appointment.notes!,
@@ -592,7 +598,10 @@ class _TreatmentTile extends ConsumerWidget {
                         const SizedBox(width: 10),
                       ],
                       Text(
-                        DateHelper.format(treatment.createdAt, pattern: 'yyyy/MM/dd'),
+                        DateHelper.format(
+                          treatment.createdAt,
+                          pattern: 'yyyy/MM/dd',
+                        ),
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.outline,
                         ),
@@ -802,7 +811,10 @@ class _PaymentTile extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    DateHelper.format(payment.paymentDate, pattern: 'yyyy/MM/dd'),
+                    DateHelper.format(
+                      payment.paymentDate,
+                      pattern: 'yyyy/MM/dd',
+                    ),
                     style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
                     ),

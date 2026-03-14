@@ -8,8 +8,6 @@ class AppointmentsTable extends Table {
   DateTimeColumn get appointmentDate => dateTime().named('appointment_date')();
   TextColumn get status => text().withDefault(const Constant('scheduled'))();
   // status: scheduled | completed | cancelled | no_show
-  TextColumn get doctorName =>
-      text().named('doctor_name').withDefault(const Constant('الدكتور'))();
   TextColumn get notes => text().nullable()();
   DateTimeColumn get createdAt =>
       dateTime().named('created_at').withDefault(currentDateAndTime)();

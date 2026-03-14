@@ -71,23 +71,6 @@ class AppointmentCard extends StatelessWidget {
                       _StatusChip(status: appointment.status),
                     ],
                   ),
-                  const SizedBox(height: 4),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.person_outline,
-                        size: 14,
-                        color: theme.colorScheme.outline,
-                      ),
-                      const SizedBox(width: 4),
-                      Text(
-                        appointment.doctorName,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.outline,
-                        ),
-                      ),
-                    ],
-                  ),
                   if (appointment.notes != null &&
                       appointment.notes!.isNotEmpty) ...[
                     const SizedBox(height: 4),

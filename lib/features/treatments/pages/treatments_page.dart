@@ -189,7 +189,8 @@ class _ActiveFilterChips extends ConsumerWidget {
     if (filter.dateFrom != null) {
       chips.add(
         _FilterChip(
-          label: 'من: ${DateHelper.format(filter.dateFrom!, pattern: 'd/M/yyyy')}',
+          label:
+              'من: ${DateHelper.format(filter.dateFrom!, pattern: 'd/M/yyyy')}',
           onRemove: () => ref
               .read(treatmentsFilterProvider.notifier)
               .update((f) => f.copyWith(dateFrom: null)),
@@ -199,7 +200,8 @@ class _ActiveFilterChips extends ConsumerWidget {
     if (filter.dateTo != null) {
       chips.add(
         _FilterChip(
-          label: 'إلى: ${DateHelper.format(filter.dateTo!, pattern: 'd/M/yyyy')}',
+          label:
+              'إلى: ${DateHelper.format(filter.dateTo!, pattern: 'd/M/yyyy')}',
           onRemove: () => ref
               .read(treatmentsFilterProvider.notifier)
               .update((f) => f.copyWith(dateTo: null)),
@@ -399,7 +401,10 @@ class _TreatmentCard extends ConsumerWidget {
                       ],
                       const Spacer(),
                       Text(
-                        DateHelper.format(item.treatment.createdAt, pattern: 'd/M/yyyy'),
+                        DateHelper.format(
+                          item.treatment.createdAt,
+                          pattern: 'd/M/yyyy',
+                        ),
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.outline,
                         ),
