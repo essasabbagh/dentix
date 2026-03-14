@@ -223,7 +223,7 @@ class _PaymentsSummaryBar extends ConsumerWidget {
           children: [
             _StatPill(
               label: 'إجمالي المدفوع',
-              value: '${s.totalPaid.toStringAsFixed(0)} ر.س',
+              value: '${s.totalPaid.toStringAsFixed(0)} ₺',
               color: Colors.green,
             ),
           ],
@@ -335,7 +335,7 @@ class _PaymentCard extends ConsumerWidget {
                       ),
                       // Amount
                       Text(
-                        '${item.payment.amount.toStringAsFixed(0)} ر.س',
+                        '${item.payment.amount.toStringAsFixed(0)} ₺',
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Colors.green.shade700,

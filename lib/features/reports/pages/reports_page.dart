@@ -180,11 +180,11 @@ class _KpiRow extends ConsumerWidget {
               Expanded(
                 child: _KpiCard(
                   label: 'الإيراد الشهري',
-                  value: '${s.income.toStringAsFixed(0)} ر.س',
+                  value: '${s.income.toStringAsFixed(0)} ₺',
                   icon: Icons.payments_outlined,
                   color: Colors.green,
                   sub: yearTotalAsync.maybeWhen(
-                    data: (t) => 'سنوي: ${t.toStringAsFixed(0)} ر.س',
+                    data: (t) => 'سنوي: ${t.toStringAsFixed(0)} ₺',
                     orElse: () => '',
                   ),
                 ),
@@ -610,7 +610,7 @@ class _TopTreatmentsCard extends ConsumerWidget {
                         ),
                         Text(
                           '${stat.count} — '
-                          '${stat.revenue.toStringAsFixed(0)} ر.س',
+                          '${stat.revenue.toStringAsFixed(0)} ₺',
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.outline,
                           ),

@@ -40,7 +40,7 @@ final currencyProvider = StreamProvider<String>((ref) {
       .watch(appDatabaseProvider)
       .settingsDao
       .watchValue('currency')
-      .map((v) => v ?? 'ر.س');
+      .map((v) => v ?? '₺');
 });
 
 final doctorNameProvider = StreamProvider<String>((ref) {

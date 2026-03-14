@@ -56,7 +56,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
       text: widget.initial['clinic_address'] ?? '',
     );
     _currency = TextEditingController(
-      text: widget.initial['currency'] ?? 'ر.س',
+      text: widget.initial['currency'] ?? '₺',
     );
     _doctorName = TextEditingController(
       text: widget.initial['doctor_name'] ?? 'الدكتور',

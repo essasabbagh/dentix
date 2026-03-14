@@ -70,7 +70,7 @@ class AppDatabase extends _$AppDatabase {
       'clinic_name': 'عيادة الأسنان',
       'clinic_phone': '',
       'clinic_address': '',
-      'currency': 'ر.س',
+      'currency': '₺',
       'theme_mode': 'light',
       'language': 'ar',
       'doctor_name': 'الدكتور',

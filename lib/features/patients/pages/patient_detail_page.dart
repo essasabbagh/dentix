@@ -276,7 +276,7 @@ class _InfoTab extends StatelessWidget {
                 icon: Icons.cake_outlined,
                 label: 'تاريخ الميلاد',
                 value:
-                    '${DateHelper.format(patient.birthDate!, pattern: 'yyyy/MM/dd')} — '
+                    '${DateHelper.format(patient.birthDate!)} — '
                     '${patient.age} سنة',
               ),
             if (patient.email?.isNotEmpty == true)
@@ -300,10 +300,14 @@ class _InfoTab extends StatelessWidget {
             _InfoRow(
               icon: Icons.calendar_today_outlined,
               label: 'تاريخ التسجيل',
-              value: DateHelper.format(
-                patient.createdAt,
-                pattern: 'yyyy/MM/dd',
-              ),
+              value:
+                  '${DateHelper.format(
+                    patient.createdAt,
+                  )} ${DateHelper.format(
+                    patient.createdAt,
+                    pattern: 'EEEE, MMMM',
+                    locale: 'tr',
+                  )}',
             ),
           ],
         ),
@@ -627,7 +631,7 @@ class _TreatmentTile extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  '${treatment.price.toStringAsFixed(0)} ر.س',
+                  '${treatment.price.toStringAsFixed(0)} ₺',
                   style: theme.textTheme.titleSmall?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: theme.colorScheme.primary,
@@ -835,7 +839,7 @@ class _PaymentTile extends ConsumerWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 Text(
-                  '${payment.amount.toStringAsFixed(0)} ر.س',
+                  '${payment.amount.toStringAsFixed(0)} ₺',
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: Colors.green.shade700,
@@ -917,7 +921,7 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
                       const SizedBox(height: 14),
                       _field(
                         controller: _priceController,
-                        label: 'السعر (ر.س) *',
+                        label: 'السعر (₺) *',
                         icon: Icons.attach_money,
                         keyboard: TextInputType.number,
                         validator: (v) {
@@ -1057,7 +1061,7 @@ class _AddPaymentDialogState extends ConsumerState<_AddPaymentDialog> {
                           controller: _amountController,
                           keyboardType: TextInputType.number,
                           decoration: InputDecoration(
-                            labelText: 'المبلغ (ر.س) *',
+                            labelText: 'المبلغ (₺) *',
                             prefixIcon: const Icon(
                               Icons.attach_money,
                               size: 18,
@@ -1340,7 +1344,7 @@ class _MiniStat extends StatelessWidget {
           ),
         ),
         Text(
-          '${value.toStringAsFixed(0)} ر.س',
+          '${value.toStringAsFixed(0)} ₺',
           style: Theme.of(context).textTheme.labelLarge?.copyWith(
             color: color,
             fontWeight: FontWeight.bold,

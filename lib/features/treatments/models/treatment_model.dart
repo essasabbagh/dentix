@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 enum TreatmentStatus {
   planned,
   inProgress,
@@ -5,42 +7,39 @@ enum TreatmentStatus {
   cancelled;
 
   String get arabicLabel {
-    switch (this) {
-      case TreatmentStatus.planned:
-        return 'مخطط';
-      case TreatmentStatus.inProgress:
-        return 'جارٍ';
-      case TreatmentStatus.completed:
-        return 'مكتمل';
-      case TreatmentStatus.cancelled:
-        return 'ملغي';
-    }
+    return switch (this) {
+      TreatmentStatus.planned => 'مخطط',
+      TreatmentStatus.inProgress => 'جارٍ',
+      TreatmentStatus.completed => 'مكتمل',
+      TreatmentStatus.cancelled => 'ملغي',
+    };
+  }
+
+  Color statusColor(ThemeData t) {
+    return switch (this) {
+      TreatmentStatus.planned => t.colorScheme.primary,
+      TreatmentStatus.inProgress => Colors.orange,
+      TreatmentStatus.completed => Colors.green,
+      TreatmentStatus.cancelled => Colors.red,
+    };
   }
 
   String get dbValue {
-    switch (this) {
-      case TreatmentStatus.planned:
-        return 'planned';
-      case TreatmentStatus.inProgress:
-        return 'in_progress';
-      case TreatmentStatus.completed:
-        return 'completed';
-      case TreatmentStatus.cancelled:
-        return 'cancelled';
-    }
+    return switch (this) {
+      TreatmentStatus.planned => 'planned',
+      TreatmentStatus.inProgress => 'in_progress',
+      TreatmentStatus.completed => 'completed',
+      TreatmentStatus.cancelled => 'cancelled',
+    };
   }
 
   static TreatmentStatus fromDb(String value) {
-    switch (value) {
-      case 'in_progress':
-        return TreatmentStatus.inProgress;
-      case 'completed':
-        return TreatmentStatus.completed;
-      case 'cancelled':
-        return TreatmentStatus.cancelled;
-      default:
-        return TreatmentStatus.planned;
-    }
+    return switch (value) {
+      'in_progress' => TreatmentStatus.inProgress,
+      'completed' => TreatmentStatus.completed,
+      'cancelled' => TreatmentStatus.cancelled,
+      _ => TreatmentStatus.planned,
+    };
   }
 }
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:template/components/loading/loading_widget.dart';
+import 'package:template/core/utils/date_helper.dart';
 
 import '../appointments/providers/appointments_providers.dart';
 import '../patients/providers/patients_providers.dart';
@@ -32,30 +33,20 @@ class DashboardPage extends ConsumerWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          Row(
-            children: [
-              Text(
-                _formatToday(now),
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  color: theme.colorScheme.outline,
-                ),
-              ),
-              const SizedBox(width: 8),
-              clinicName.maybeWhen(
-                data: (name) => name.isNotEmpty
-                    ? Text(
-                        '— $name',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: theme.colorScheme.primary,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      )
-                    : const SizedBox.shrink(),
-                orElse: () => const SizedBox.shrink(),
-              ),
-            ],
+          const SizedBox(height: 12),
+
+          Text(
+            // _formatToday(now),
+            '${DateHelper.format(now)} ${DateHelper.format(
+              now,
+              pattern: 'EEEE, MMMM',
+              locale: 'tr',
+            )}',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.outline,
+            ),
           ),
-          const SizedBox(height: 28),
+          const SizedBox(height: 16),
 
           // ── Stats row ──────────────────────────────────────
           Row(
@@ -143,23 +134,23 @@ class DashboardPage extends ConsumerWidget {
     return 'مساء الخير 🌙';
   }
 
-  String _formatToday(DateTime d) {
-    const months = [
-      'يناير',
-      'فبراير',
-      'مارس',
-      'أبريل',
-      'مايو',
-      'يونيو',
-      'يوليو',
-      'أغسطس',
-      'سبتمبر',
-      'أكتوبر',
-      'نوفمبر',
-      'ديسمبر',
-    ];
-    return '${d.day} ${months[d.month - 1]} ${d.year}';
-  }
+  // String _formatToday(DateTime d) {
+  //   const months = [
+  //     'يناير',
+  //     'فبراير',
+  //     'مارس',
+  //     'أبريل',
+  //     'مايو',
+  //     'يونيو',
+  //     'يوليو',
+  //     'أغسطس',
+  //     'سبتمبر',
+  //     'أكتوبر',
+  //     'نوفمبر',
+  //     'ديسمبر',
+  //   ];
+  //   return '${d.day} ${months[d.month - 1]} ${d.year}';
+  // }
 }
 
 class _StatCard extends StatelessWidget {

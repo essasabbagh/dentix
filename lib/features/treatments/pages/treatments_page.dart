@@ -245,19 +245,19 @@ class _SummaryBar extends ConsumerWidget {
           children: [
             _StatPill(
               label: 'الإجمالي',
-              value: '${s.total.toStringAsFixed(0)} ر.س',
+              value: '${s.total.toStringAsFixed(0)} ₺',
               color: theme.colorScheme.primary,
             ),
             const SizedBox(width: 20),
             _StatPill(
               label: 'مكتمل',
-              value: '${s.completed.toStringAsFixed(0)} ر.س',
+              value: '${s.completed.toStringAsFixed(0)} ₺',
               color: Colors.green,
             ),
             const SizedBox(width: 20),
             _StatPill(
               label: 'متبقي',
-              value: '${(s.total - s.completed).toStringAsFixed(0)} ر.س',
+              value: '${(s.total - s.completed).toStringAsFixed(0)} ₺',
               color: Colors.orange,
             ),
           ],
@@ -323,7 +323,7 @@ class _TreatmentCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final status = TreatmentStatus.fromDb(item.treatment.status);
-    final statusColor = _statusColor(status, theme);
+    final statusColor = status.statusColor(theme);
 
     return Card(
       elevation: 0,
@@ -361,7 +361,7 @@ class _TreatmentCard extends ConsumerWidget {
                         ),
                       ),
                       Text(
-                        '${item.treatment.price.toStringAsFixed(0)} ر.س',
+                        '${item.treatment.price.toStringAsFixed(0)} ₺',
                         style: theme.textTheme.titleSmall?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: theme.colorScheme.primary,
@@ -400,14 +400,28 @@ class _TreatmentCard extends ConsumerWidget {
                         ),
                       ],
                       const Spacer(),
-                      Text(
-                        DateHelper.format(
-                          item.treatment.createdAt,
-                          pattern: 'd/M/yyyy',
-                        ),
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.outline,
-                        ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          Text(
+                            DateHelper.format(
+                              item.treatment.createdAt,
+                            ),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.outline,
+                            ),
+                          ),
+                          Text(
+                            DateHelper.format(
+                              item.treatment.createdAt,
+                              pattern: 'EEEE, MMMM',
+                              locale: 'tr',
+                            ),
+                            style: theme.textTheme.bodySmall?.copyWith(
+                              color: theme.colorScheme.outline,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -484,15 +498,6 @@ class _TreatmentCard extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  Color _statusColor(TreatmentStatus s, ThemeData t) {
-    return switch (s) {
-      TreatmentStatus.planned => t.colorScheme.primary,
-      TreatmentStatus.inProgress => Colors.orange,
-      TreatmentStatus.completed => Colors.green,
-      TreatmentStatus.cancelled => Colors.red,
-    };
   }
 }
 

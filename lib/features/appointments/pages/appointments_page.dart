@@ -160,7 +160,7 @@ class _DateNavigator extends ConsumerWidget {
               Text(
                 DateHelper.format(
                   selectedDate,
-                  pattern: 'EEEE, dd MMMM yyyy',
+                  pattern: 'EEEE, MMMM',
                   locale: 'tr',
                 ),
                 style: theme.textTheme.bodySmall?.copyWith(
