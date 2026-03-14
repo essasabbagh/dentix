@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
+import 'package:template/components/loading/loading_widget.dart';
+
 import '../../../../core/database/daos/payments_dao.dart';
 import '../models/payment_model.dart';
 import '../providers/payments_providers.dart';
@@ -361,7 +363,7 @@ class _PaymentsList extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return dataAsync.maybeWhen(
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: LoadingWidget.new,
       orElse: () => const Center(child: Text('حدث خطأ')),
       data: (items) {
         if (items.isEmpty) {
@@ -519,36 +521,27 @@ class _PaymentCard extends ConsumerWidget {
   }
 
   Color _statusColor(PaymentStatus s, ThemeData t) {
-    switch (s) {
-      case PaymentStatus.paid:
-        return Colors.green;
-      case PaymentStatus.pending:
-        return Colors.orange;
-      case PaymentStatus.partial:
-        return t.colorScheme.primary;
-    }
+    return switch (s) {
+      PaymentStatus.paid => Colors.green,
+      PaymentStatus.pending => Colors.orange,
+      PaymentStatus.partial => t.colorScheme.primary,
+    };
   }
 
   Color _methodColor(PaymentMethod m) {
-    switch (m) {
-      case PaymentMethod.cash:
-        return Colors.teal;
-      case PaymentMethod.card:
-        return Colors.blue;
-      case PaymentMethod.transfer:
-        return Colors.purple;
-    }
+    return switch (m) {
+      PaymentMethod.cash => Colors.teal,
+      PaymentMethod.card => Colors.blue,
+      PaymentMethod.transfer => Colors.purple,
+    };
   }
 
   IconData _methodIcon(PaymentMethod m) {
-    switch (m) {
-      case PaymentMethod.cash:
-        return Icons.money_outlined;
-      case PaymentMethod.card:
-        return Icons.credit_card_outlined;
-      case PaymentMethod.transfer:
-        return Icons.account_balance_outlined;
-    }
+    return switch (m) {
+      PaymentMethod.cash => Icons.money_outlined,
+      PaymentMethod.card => Icons.credit_card_outlined,
+      PaymentMethod.transfer => Icons.account_balance_outlined,
+    };
   }
 }
 
@@ -772,25 +765,19 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
   }
 
   Color _payStatusColor(PaymentStatus s) {
-    switch (s) {
-      case PaymentStatus.paid:
-        return Colors.green;
-      case PaymentStatus.pending:
-        return Colors.orange;
-      case PaymentStatus.partial:
-        return Colors.blue;
-    }
+    return switch (s) {
+      PaymentStatus.paid => Colors.green,
+      PaymentStatus.pending => Colors.orange,
+      PaymentStatus.partial => Colors.blue
+    };
   }
 
   Color _methodColor(PaymentMethod m) {
-    switch (m) {
-      case PaymentMethod.cash:
-        return Colors.teal;
-      case PaymentMethod.card:
-        return Colors.blue;
-      case PaymentMethod.transfer:
-        return Colors.purple;
-    }
+    return switch (m) {
+      PaymentMethod.cash => Colors.teal,
+      PaymentMethod.card => Colors.blue,
+      PaymentMethod.transfer => Colors.purple
+    };
   }
 }
 

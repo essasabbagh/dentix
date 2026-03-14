@@ -7,6 +7,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:open_file/open_file.dart';
 
+import 'package:template/core/utils/snackbars.dart';
+
 import '../models/asset_model.dart';
 import '../providers/assets_providers.dart';
 
@@ -117,7 +119,7 @@ class AssetsSection extends ConsumerWidget {
                 physics: const NeverScrollableScrollPhysics(),
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 itemCount: assets.length,
-                separatorBuilder: (_, __) =>
+                separatorBuilder: (_, _) =>
                     const Divider(height: 1, indent: 60, endIndent: 12),
                 itemBuilder: (_, i) => _AssetTile(
                   asset: assets[i],
@@ -181,16 +183,10 @@ class AssetsSection extends ConsumerWidget {
     }
 
     if (context.mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            result.files.length == 1
-                ? 'تمت إضافة المرفق'
-                : 'تمت إضافة ${result.files.length} مرفقات',
-          ),
-          backgroundColor: Colors.green,
-          duration: const Duration(seconds: 2),
-        ),
+      AppSnackBar.success(
+        result.files.length == 1
+            ? 'تمت إضافة المرفق'
+            : 'تمت إضافة ${result.files.length} مرفقات',
       );
     }
   }
@@ -236,25 +232,22 @@ class AssetsSection extends ConsumerWidget {
   ) async {
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (_) => Directionality(
-        textDirection: TextDirection.rtl,
-        child: AlertDialog(
-          title: const Text('حذف المرفق'),
-          content: Text('هل تريد حذف "${asset.displayName}" نهائياً؟'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('إلغاء'),
+      builder: (_) => AlertDialog(
+        title: const Text('حذف المرفق'),
+        content: Text('هل تريد حذف "${asset.displayName}" نهائياً؟'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('إلغاء'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.error,
             ),
-            FilledButton(
-              style: FilledButton.styleFrom(
-                backgroundColor: Theme.of(context).colorScheme.error,
-              ),
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('حذف'),
-            ),
-          ],
-        ),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('حذف'),
+          ),
+        ],
       ),
     );
     if (confirmed == true) {
@@ -335,7 +328,7 @@ class _AssetTile extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
             decoration: BoxDecoration(
-              color: fileType.color.withOpacity(0.1),
+              color: fileType.color.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(4),
             ),
             child: Text(
@@ -388,12 +381,7 @@ class _AssetTile extends StatelessWidget {
     final file = File(asset.filePath);
     if (!await file.exists()) {
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('الملف غير موجود على الجهاز'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        AppSnackBar.error('الملف غير موجود على الجهاز');
       }
       return;
     }
@@ -439,9 +427,9 @@ class _IconBox extends StatelessWidget {
       width: 44,
       height: 44,
       decoration: BoxDecoration(
-        color: fileType.color.withOpacity(0.1),
+        color: fileType.color.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: fileType.color.withOpacity(0.3)),
+        border: Border.all(color: fileType.color.withValues(alpha: 0.3)),
       ),
       alignment: Alignment.center,
       child: Icon(fileType.icon, size: 22, color: fileType.color),

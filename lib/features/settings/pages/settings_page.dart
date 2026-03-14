@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:template/components/loading/loading_widget.dart';
+import 'package:template/core/utils/snackbars.dart';
+
 import '../providers/settings_providers.dart';
 
 class SettingsPage extends ConsumerWidget {
@@ -14,7 +17,7 @@ class SettingsPage extends ConsumerWidget {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: settingsAsync.when(
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: LoadingWidget.new,
         error: (e, _) => Center(child: Text('خطأ: $e')),
         data: (settings) => _SettingsBody(initial: settings),
       ),
@@ -88,12 +91,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
 
     ref.listen(settingsNotifierProvider, (_, next) {
       if (next.hasError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('خطأ: ${next.error}'),
-            backgroundColor: theme.colorScheme.error,
-          ),
-        );
+        AppSnackBar.error('خطأ: ${next.error}');
       }
     });
 
@@ -259,13 +257,7 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
     });
     setState(() => _dirty = false);
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تم حفظ الإعدادات'),
-          backgroundColor: Colors.green,
-          duration: Duration(seconds: 2),
-        ),
-      );
+      AppSnackBar.success('تم حفظ الإعدادات');
     }
   }
 }

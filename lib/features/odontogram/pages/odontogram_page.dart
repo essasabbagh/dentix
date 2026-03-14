@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:template/core/teeth_selector/teeth_selector.dart';
+import 'package:template/core/utils/snackbars.dart';
 
 import '../models/tooth_record.dart';
 import '../providers/odontogram_providers.dart';
@@ -400,13 +401,7 @@ class _ToothDetailPanelState extends ConsumerState<_ToothDetailPanel> {
         );
 
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تم حفظ حالة السن'),
-          duration: Duration(seconds: 1),
-          backgroundColor: Colors.green,
-        ),
-      );
+      AppSnackBar.success('تم حفظ حالة السن');
     }
   }
 }

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
+import 'package:template/core/utils/snackbars.dart';
+
 import '../models/patient_model.dart';
 import '../providers/patients_providers.dart';
 
@@ -64,12 +66,7 @@ class _AddEditPatientPageState extends ConsumerState<AddEditPatientPage> {
 
     ref.listen(patientFormProvider, (_, next) {
       if (next.hasError) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(next.error.toString()),
-            backgroundColor: theme.colorScheme.error,
-          ),
-        );
+        AppSnackBar.error(next.error.toString());
       }
     });
 
@@ -328,13 +325,8 @@ class _AddEditPatientPageState extends ConsumerState<AddEditPatientPage> {
 
     if (success && mounted) {
       Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(
-            _isEditMode ? 'تم تحديث بيانات المريض' : 'تمت إضافة المريض',
-          ),
-          backgroundColor: Colors.green,
-        ),
+      AppSnackBar.success(
+        _isEditMode ? 'تم تحديث بيانات المريض' : 'تمت إضافة المريض',
       );
     }
   }

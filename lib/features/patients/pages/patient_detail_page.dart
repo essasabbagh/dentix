@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
+import 'package:template/components/loading/loading_widget.dart';
+import 'package:template/core/utils/snackbars.dart';
 import 'package:template/features/appointments/models/appointment_model.dart';
 import 'package:template/features/appointments/pages/add_appointment_page.dart';
 import 'package:template/features/appointments/providers/appointments_providers.dart';
@@ -196,16 +198,16 @@ class _PatientHeader extends StatelessWidget {
                     Icon(
                       Icons.phone_outlined,
                       size: 13,
-                      color: theme.colorScheme.onPrimaryContainer.withOpacity(
-                        0.7,
+                      color: theme.colorScheme.onPrimaryContainer.withValues(
+                        alpha: 0.7,
                       ),
                     ),
                     const SizedBox(width: 4),
                     Text(
                       patient.phone,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onPrimaryContainer.withOpacity(
-                          0.8,
+                        color: theme.colorScheme.onPrimaryContainer.withValues(
+                          alpha: 0.8,
                         ),
                       ),
                     ),
@@ -215,7 +217,7 @@ class _PatientHeader extends StatelessWidget {
                         '${patient.age} سنة',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onPrimaryContainer
-                              .withOpacity(0.8),
+                              .withValues(alpha: 0.8),
                         ),
                       ),
                     ],
@@ -263,7 +265,8 @@ class _InfoTab extends StatelessWidget {
                 icon: Icons.cake_outlined,
                 label: 'تاريخ الميلاد',
                 value:
-                    '${DateFormat('yyyy/MM/dd').format(patient.birthDate!)} — ${patient.age} سنة',
+                    '${DateFormat('yyyy/MM/dd').format(patient.birthDate!)} — '
+                    '${patient.age} سنة',
               ),
             if (patient.email?.isNotEmpty == true)
               _InfoRow(
@@ -313,7 +316,7 @@ class _AppointmentsTab extends ConsumerWidget {
     final apptAsync = ref.watch(patientAppointmentsProvider(patient.id));
 
     return apptAsync.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: LoadingWidget.new,
       error: (e, _) => Center(child: Text('خطأ: $e')),
       data: (appointments) => Column(
         children: [
@@ -336,7 +339,7 @@ class _AppointmentsTab extends ConsumerWidget {
                 : ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: appointments.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    separatorBuilder: (_, _) => const SizedBox(height: 8),
                     itemBuilder: (_, i) =>
                         _AppointmentTile(appointment: appointments[i]),
                   ),
@@ -360,7 +363,10 @@ class _AppointmentTile extends ConsumerWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: statusColor.withOpacity(0.35), width: 1.5),
+        side: BorderSide(
+          color: statusColor.withValues(alpha: 0.35),
+          width: 1.5,
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -370,7 +376,7 @@ class _AppointmentTile extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               decoration: BoxDecoration(
-                color: statusColor.withOpacity(0.1),
+                color: statusColor.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
@@ -435,16 +441,12 @@ class _AppointmentTile extends ConsumerWidget {
   }
 
   Color _statusColor(AppointmentStatus s, ThemeData t) {
-    switch (s) {
-      case AppointmentStatus.scheduled:
-        return t.colorScheme.primary;
-      case AppointmentStatus.completed:
-        return Colors.green;
-      case AppointmentStatus.cancelled:
-        return Colors.red;
-      case AppointmentStatus.noShow:
-        return Colors.orange;
-    }
+    return switch (s) {
+      AppointmentStatus.scheduled => t.colorScheme.primary,
+      AppointmentStatus.completed => Colors.green,
+      AppointmentStatus.cancelled => Colors.red,
+      AppointmentStatus.noShow => Colors.orange,
+    };
   }
 }
 
@@ -461,7 +463,7 @@ class _TreatmentsTab extends ConsumerWidget {
     final treatmentsAsync = ref.watch(patientTreatmentsProvider(patient.id));
 
     return treatmentsAsync.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: LoadingWidget.new,
       error: (e, _) => Center(child: Text('خطأ: $e')),
       data: (treatments) => Column(
         children: [
@@ -483,7 +485,7 @@ class _TreatmentsTab extends ConsumerWidget {
                 : ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: treatments.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    separatorBuilder: (_, _) => const SizedBox(height: 8),
                     itemBuilder: (_, i) =>
                         _TreatmentTile(treatment: treatments[i]),
                   ),
@@ -690,7 +692,7 @@ class _PaymentsTab extends ConsumerWidget {
     final totalPaid = ref.watch(patientTotalPaidProvider(patient.id));
 
     return paymentsAsync.when(
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: LoadingWidget.new,
       error: (e, _) => Center(child: Text('خطأ: $e')),
       data: (payments) => Column(
         children: [
@@ -718,7 +720,7 @@ class _PaymentsTab extends ConsumerWidget {
                 : ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: payments.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: 8),
+                    separatorBuilder: (_, _) => const SizedBox(height: 8),
                     itemBuilder: (_, i) => _PaymentTile(payment: payments[i]),
                   ),
           ),
@@ -1016,12 +1018,7 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
         );
     if (ok && mounted) {
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تمت إضافة العلاج'),
-          backgroundColor: Colors.green,
-        ),
-      );
+      AppSnackBar.success('تمت إضافة العلاج');
     }
   }
 }
@@ -1202,12 +1199,7 @@ class _AddPaymentDialogState extends ConsumerState<_AddPaymentDialog> {
         );
     if (ok && mounted) {
       Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تمت إضافة الدفعة'),
-          backgroundColor: Colors.green,
-        ),
-      );
+      AppSnackBar.success('تمت إضافة الدفعة');
     }
   }
 }
@@ -1366,9 +1358,9 @@ class _StatusBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.12),
+        color: color.withValues(alpha: 0.12),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withOpacity(0.4)),
+        border: Border.all(color: color.withValues(alpha: 0.4)),
       ),
       child: Text(
         label,

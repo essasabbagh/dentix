@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
+import 'package:template/core/utils/snackbars.dart';
 import 'package:template/features/patients/models/patient_model.dart';
 import 'package:template/features/patients/providers/patients_providers.dart';
 
@@ -306,12 +307,7 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
 
     if (success && mounted) {
       Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('تمت إضافة الموعد بنجاح'),
-          backgroundColor: Colors.green,
-        ),
-      );
+      AppSnackBar.success('تمت إضافة الموعد بنجاح');
     }
   }
 }

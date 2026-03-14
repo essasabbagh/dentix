@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/features/patients/providers/patients_providers.dart';
+import 'package:template/core/database/app_database_provider.dart';
 
 import '../data/appointments_repository.dart';
 import '../models/appointment_model.dart';

@@ -1,7 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:template/core/database/app_database.dart';
-import 'package:template/features/patients/providers/patients_providers.dart';
+import 'package:template/core/database/app_database_provider.dart';
 
 // ─── All settings map ─────────────────────────────────────────────────────
 

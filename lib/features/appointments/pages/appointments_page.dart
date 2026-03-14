@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:template/components/loading/loading_widget.dart';
+
 import '../models/appointment_model.dart';
 import '../providers/appointments_providers.dart';
 import '../widgets/appointment_card.dart';
@@ -29,7 +31,7 @@ class AppointmentsPage extends ConsumerWidget {
           // ── Appointments list ────────────────────────────
           Expanded(
             child: appointmentsAsync.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: LoadingWidget.new,
               error: (e, _) => Center(child: Text('خطأ: $e')),
               data: (appointments) {
                 if (appointments.isEmpty) {

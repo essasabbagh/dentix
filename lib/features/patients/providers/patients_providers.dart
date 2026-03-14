@@ -1,17 +1,10 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/core/database/app_database.dart';
+import 'package:template/core/database/app_database_provider.dart';
 
 import '../data/patients_repository.dart';
 import '../models/patient_model.dart';
 import '../services/patients_service.dart';
-
-// ─── Database provider (global singleton) ─────────────────────────────────
-final appDatabaseProvider = Provider<AppDatabase>((ref) {
-  final db = AppDatabase();
-  ref.onDispose(db.close);
-  return db;
-});
 
 // ─── Repository ───────────────────────────────────────────────────────────
 final patientsRepositoryProvider = Provider<PatientsRepository>((ref) {

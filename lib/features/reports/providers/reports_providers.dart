@@ -1,8 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/features/patients/providers/patients_providers.dart';
-
-import '../../../core/database/daos/reports_dao.dart';
+import 'package:template/core/database/app_database_provider.dart';
+import 'package:template/core/database/daos/reports_dao.dart';
 
 // ─── Selected period state ────────────────────────────────────────────────
 

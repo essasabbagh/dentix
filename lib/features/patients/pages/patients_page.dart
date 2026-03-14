@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:template/components/loading/loading_widget.dart';
+
 import '../providers/patients_providers.dart';
 import '../widgets/patient_card.dart';
 import '../widgets/patient_search_bar.dart';
@@ -31,7 +33,7 @@ class PatientsPage extends ConsumerWidget {
           // ── List ────────────────────────────────────────────
           Expanded(
             child: patientsAsync.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: LoadingWidget.new,
               error: (e, _) => Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,

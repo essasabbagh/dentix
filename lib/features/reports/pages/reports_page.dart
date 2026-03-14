@@ -81,7 +81,6 @@ class _PeriodSelector extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final period = ref.watch(reportPeriodProvider);
-    final theme = Theme.of(context);
 
     const months = [
       'يناير',
@@ -252,9 +251,9 @@ class _KpiCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.07),
+        color: color.withValues(alpha: 0.07),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -396,7 +395,9 @@ class _IncomeBarChart extends ConsumerWidget {
                           decoration: BoxDecoration(
                             color: isCurrent
                                 ? theme.colorScheme.primary
-                                : theme.colorScheme.primary.withOpacity(0.3),
+                                : theme.colorScheme.primary.withValues(
+                                    alpha: 0.3,
+                                  ),
                             borderRadius: const BorderRadius.vertical(
                               top: Radius.circular(4),
                             ),
@@ -608,7 +609,8 @@ class _TopTreatmentsCard extends ConsumerWidget {
                           ),
                         ),
                         Text(
-                          '${stat.count} — ${stat.revenue.toStringAsFixed(0)} ر.س',
+                          '${stat.count} — '
+                          '${stat.revenue.toStringAsFixed(0)} ر.س',
                           style: theme.textTheme.bodySmall?.copyWith(
                             color: theme.colorScheme.outline,
                           ),
@@ -622,7 +624,7 @@ class _TopTreatmentsCard extends ConsumerWidget {
                         value: ratio,
                         minHeight: 7,
                         backgroundColor: theme.colorScheme.outlineVariant
-                            .withOpacity(0.3),
+                            .withValues(alpha: 0.3),
                         valueColor: AlwaysStoppedAnimation(color),
                       ),
                     ),

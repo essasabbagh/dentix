@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:template/components/loading/loading_widget.dart';
+
 import '../appointments/providers/appointments_providers.dart';
 import '../patients/providers/patients_providers.dart';
 import '../settings/providers/settings_providers.dart';
@@ -88,7 +90,7 @@ class DashboardPage extends ConsumerWidget {
           ),
           const SizedBox(height: 12),
           todayList.when(
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: LoadingWidget.new,
             error: (e, _) => Text('خطأ: $e'),
             data: (appointments) {
               if (appointments.isEmpty) {
@@ -178,9 +180,9 @@ class _StatCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: color.withOpacity(0.08),
+        color: color.withValues(alpha: 0.08),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withOpacity(0.2)),
+        border: Border.all(color: color.withValues(alpha: 0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -197,7 +199,7 @@ class _StatCard extends StatelessWidget {
             ),
             loading: () =>
                 const SizedBox(height: 36, child: CircularProgressIndicator()),
-            error: (_, __) => const Text('—'),
+            error: (_, _) => const Text('—'),
           ),
           const SizedBox(height: 4),
           Text(

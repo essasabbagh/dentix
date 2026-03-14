@@ -1,8 +1,8 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/features/patients/providers/patients_providers.dart';
+import 'package:template/core/database/app_database_provider.dart';
+import 'package:template/core/database/daos/treatments_dao.dart';
 
-import '../../../../core/database/daos/treatments_dao.dart';
 import '../data/treatments_repository.dart';
 import '../models/treatment_model.dart';
 

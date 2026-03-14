@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/features/patients/providers/patients_providers.dart';
+import 'package:template/core/database/app_database_provider.dart';
 
 import '../../../../core/database/daos/payments_dao.dart';
 import '../data/payments_repository.dart';

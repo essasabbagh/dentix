@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
-import '../../../../core/database/daos/treatments_dao.dart';
+import 'package:template/components/loading/loading_widget.dart';
+import 'package:template/core/database/daos/treatments_dao.dart';
+
 import '../models/treatment_model.dart';
 import '../providers/treatments_providers.dart';
 
@@ -275,7 +277,7 @@ class _TreatmentsList extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return dataAsync.maybeWhen(
-      loading: () => const Center(child: CircularProgressIndicator()),
+      loading: LoadingWidget.new,
       orElse: () => const Center(child: Text('حدث خطأ')),
       data: (items) {
         if (items.isEmpty) {
@@ -480,16 +482,12 @@ class _TreatmentCard extends ConsumerWidget {
   }
 
   Color _statusColor(TreatmentStatus s, ThemeData t) {
-    switch (s) {
-      case TreatmentStatus.planned:
-        return t.colorScheme.primary;
-      case TreatmentStatus.inProgress:
-        return Colors.orange;
-      case TreatmentStatus.completed:
-        return Colors.green;
-      case TreatmentStatus.cancelled:
-        return Colors.red;
-    }
+    return switch (s) {
+      TreatmentStatus.planned => t.colorScheme.primary,
+      TreatmentStatus.inProgress => Colors.orange,
+      TreatmentStatus.completed => Colors.green,
+      TreatmentStatus.cancelled => Colors.red,
+    };
   }
 }
 
@@ -684,16 +682,12 @@ class _TreatmentsFilterSheetState
   }
 
   Color _statusColor(TreatmentStatus s) {
-    switch (s) {
-      case TreatmentStatus.planned:
-        return Colors.blue;
-      case TreatmentStatus.inProgress:
-        return Colors.orange;
-      case TreatmentStatus.completed:
-        return Colors.green;
-      case TreatmentStatus.cancelled:
-        return Colors.red;
-    }
+    return switch (s) {
+      TreatmentStatus.planned => Colors.blue,
+      TreatmentStatus.inProgress => Colors.orange,
+      TreatmentStatus.completed => Colors.green,
+      TreatmentStatus.cancelled => Colors.red,
+    };
   }
 }
 
@@ -702,7 +696,11 @@ class _TreatmentsFilterSheetState
 // ═════════════════════════════════════════════════════════════════════════════
 
 class _FilterButton extends StatelessWidget {
-  const _FilterButton({required this.active, required this.onTap});
+  const _FilterButton({
+    required this.active,
+    required this.onTap,
+  });
+
   final bool active;
   final VoidCallback onTap;
 
@@ -741,7 +739,11 @@ class _FilterButton extends StatelessWidget {
 }
 
 class _FilterChip extends StatelessWidget {
-  const _FilterChip({required this.label, required this.onRemove});
+  const _FilterChip({
+    required this.label,
+    required this.onRemove,
+  });
+
   final String label;
   final VoidCallback onRemove;
 
@@ -779,7 +781,11 @@ class _FilterChip extends StatelessWidget {
 }
 
 class _StatusBadge extends StatelessWidget {
-  const _StatusBadge({required this.label, required this.color});
+  const _StatusBadge({
+    required this.label,
+    required this.color,
+  });
+
   final String label;
   final Color color;
 

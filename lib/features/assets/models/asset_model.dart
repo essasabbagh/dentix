@@ -14,36 +14,27 @@ enum AssetFileType {
   }
 
   IconData get icon {
-    switch (this) {
-      case AssetFileType.image:
-        return Icons.image_outlined;
-      case AssetFileType.pdf:
-        return Icons.picture_as_pdf_outlined;
-      case AssetFileType.other:
-        return Icons.insert_drive_file_outlined;
-    }
+    return switch (this) {
+      AssetFileType.image => Icons.image_outlined,
+      AssetFileType.pdf => Icons.picture_as_pdf_outlined,
+      AssetFileType.other => Icons.insert_drive_file_outlined,
+    };
   }
 
   Color get color {
-    switch (this) {
-      case AssetFileType.image:
-        return Colors.teal;
-      case AssetFileType.pdf:
-        return Colors.red;
-      case AssetFileType.other:
-        return Colors.blueGrey;
-    }
+    return switch (this) {
+      AssetFileType.image => Colors.teal,
+      AssetFileType.pdf => Colors.red,
+      AssetFileType.other => Colors.blueGrey,
+    };
   }
 
   String get arabicLabel {
-    switch (this) {
-      case AssetFileType.image:
-        return 'صورة';
-      case AssetFileType.pdf:
-        return 'PDF';
-      case AssetFileType.other:
-        return 'ملف';
-    }
+    return switch (this) {
+      AssetFileType.image => 'صورة',
+      AssetFileType.pdf => 'PDF',
+      AssetFileType.other => 'ملف',
+    };
   }
 }
 
