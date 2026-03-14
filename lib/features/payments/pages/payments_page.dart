@@ -4,9 +4,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
 import 'package:template/components/loading/loading_widget.dart';
+import 'package:template/core/database/daos/payments_dao.dart';
 
-import '../../../../core/database/daos/payments_dao.dart';
-import '../models/payment_model.dart';
 import '../providers/payments_providers.dart';
 
 class PaymentsPage extends ConsumerWidget {
@@ -143,9 +142,7 @@ class _PaymentsSearchAndFilterBarState
           ),
           const SizedBox(width: 8),
           _FilterIconButton(
-            active:
-                filter.dateFrom != null ||
-                filter.dateTo != null,
+            active: filter.dateFrom != null || filter.dateTo != null,
             onTap: () => showModalBottomSheet(
               context: context,
               isScrollControlled: true,
@@ -303,12 +300,20 @@ class _PaymentCard extends ConsumerWidget {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: theme.colorScheme.primaryContainer.withValues(alpha: 0.12),
+                color: theme.colorScheme.primaryContainer.withValues(
+                  alpha: 0.12,
+                ),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.3)),
+                border: Border.all(
+                  color: theme.colorScheme.primary.withValues(alpha: 0.3),
+                ),
               ),
               alignment: Alignment.center,
-              child: Icon(Icons.payments_outlined, size: 20, color: theme.colorScheme.primary),
+              child: Icon(
+                Icons.payments_outlined,
+                size: 20,
+                color: theme.colorScheme.primary,
+              ),
             ),
             const SizedBox(width: 14),
             // Main info
@@ -652,47 +657,6 @@ class _StatPill extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _SheetChip extends StatelessWidget {
-  const _SheetChip({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-    this.color,
-  });
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-  final Color? color;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final c = color ?? theme.colorScheme.primary;
-    return GestureDetector(
-      onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
-        decoration: BoxDecoration(
-          color: selected ? c.withValues(alpha: 0.12) : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(
-            color: selected ? c : theme.colorScheme.outlineVariant,
-            width: selected ? 1.5 : 1,
-          ),
-        ),
-        child: Text(
-          label,
-          style: theme.textTheme.labelMedium?.copyWith(
-            color: selected ? c : theme.colorScheme.outline,
-            fontWeight: selected ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-      ),
     );
   }
 }

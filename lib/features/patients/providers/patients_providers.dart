@@ -27,12 +27,9 @@ final patientsListProvider = StreamProvider<List<PatientModel>>((ref) {
 });
 
 // ─── Single patient ───────────────────────────────────────────────────────
-final patientByIdProvider = StreamProvider.family<PatientModel?, int>((
-  ref,
-  id,
-) {
-  return ref.watch(patientsServiceProvider).watchPatientById(id);
-});
+final patientByIdProvider = StreamProvider.family<PatientModel?, int>(
+  (ref, id) => ref.watch(patientsServiceProvider).watchPatientById(id),
+);
 
 // ─── Patients count ───────────────────────────────────────────────────────
 final patientsCountProvider = FutureProvider<int>((ref) {
@@ -105,6 +102,6 @@ class PatientFormNotifier extends StateNotifier<AsyncValue<void>> {
 }
 
 final patientFormProvider =
-    StateNotifierProvider<PatientFormNotifier, AsyncValue<void>>((ref) {
-      return PatientFormNotifier(ref.watch(patientsServiceProvider));
-    });
+    StateNotifierProvider<PatientFormNotifier, AsyncValue<void>>(
+      (ref) => PatientFormNotifier(ref.watch(patientsServiceProvider)),
+    );

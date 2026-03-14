@@ -32,8 +32,7 @@ final patientTotalPaidProvider = Provider.family<AsyncValue<double>, int>((
   return ref
       .watch(patientPaymentsProvider(patientId))
       .whenData(
-        (payments) => payments
-            .fold(0.0, (sum, p) => sum + p.amount),
+        (payments) => payments.fold(0.0, (sum, p) => sum + p.amount),
       );
 });
 
@@ -59,9 +58,7 @@ class PaymentsFilter {
   );
 
   bool get hasActiveFilters =>
-      query.isNotEmpty ||
-      dateFrom != null ||
-      dateTo != null;
+      query.isNotEmpty || dateFrom != null || dateTo != null;
 }
 
 const _sentinel = Object();
@@ -116,8 +113,7 @@ final paymentsSummaryProvider = Provider<AsyncValue<_PaymentsSummary>>(
   (ref) {
     final filtered = ref.watch(filteredPaymentsProvider);
     return filtered.whenData((list) {
-      final totalPaid = list
-          .fold<double>(0, (s, p) => s + p.payment.amount);
+      final totalPaid = list.fold<double>(0, (s, p) => s + p.payment.amount);
       return _PaymentsSummary(
         count: list.length,
         totalPaid: totalPaid,

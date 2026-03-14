@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:template/components/loading/loading_widget.dart';
@@ -12,7 +11,6 @@ import '../widgets/patient_card.dart';
 import '../widgets/patient_search_bar.dart';
 
 import 'add_edit_patient_page.dart';
-import 'patient_detail_page.dart';
 
 class PatientsPage extends ConsumerWidget {
   const PatientsPage({super.key});
@@ -108,14 +106,6 @@ class PatientsPage extends ConsumerWidget {
       builder: (_) => const AddEditPatientPage(),
     );
   }
-
-  // void _openPatientDetail(BuildContext context, int patientId) {
-  //   Navigator.of(context).push(
-  //     MaterialPageRoute(
-  //       builder: (_) => PatientDetailPage(patientId: patientId),
-  //     ),
-  //   );
-  // }
 }
 
 // ── Header ────────────────────────────────────────────────────────────────

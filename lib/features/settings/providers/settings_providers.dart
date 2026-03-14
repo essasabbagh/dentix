@@ -89,6 +89,6 @@ class SettingsNotifier extends StateNotifier<AsyncValue<void>> {
 }
 
 final settingsNotifierProvider =
-    StateNotifierProvider<SettingsNotifier, AsyncValue<void>>((ref) {
-      return SettingsNotifier(ref.watch(appDatabaseProvider));
-    });
+    StateNotifierProvider<SettingsNotifier, AsyncValue<void>>(
+      (ref) => SettingsNotifier(ref.watch(appDatabaseProvider)),
+    );

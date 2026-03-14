@@ -1,4 +1,5 @@
 import 'package:drift/drift.dart';
+
 import 'patients_table.dart';
 import 'treatments_table.dart';
 
