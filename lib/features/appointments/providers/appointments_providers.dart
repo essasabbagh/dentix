@@ -1,4 +1,4 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:template/features/patients/providers/patients_providers.dart';
 
@@ -100,6 +100,6 @@ class AppointmentFormNotifier extends StateNotifier<AsyncValue<void>> {
 }
 
 final appointmentFormProvider =
-    StateNotifierProvider<AppointmentFormNotifier, AsyncValue<void>>((ref) {
-      return AppointmentFormNotifier(ref.watch(appointmentsServiceProvider));
-    });
+    StateNotifierProvider<AppointmentFormNotifier, AsyncValue<void>>(
+      (ref) => AppointmentFormNotifier(ref.watch(appointmentsServiceProvider)),
+    );

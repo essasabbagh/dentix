@@ -22,7 +22,10 @@ class AppointmentCard extends StatelessWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
-        side: BorderSide(color: statusColor.withValues(alpha: 0.4), width: 1.5),
+        side: BorderSide(
+          color: statusColor.withValues(alpha: 0.4),
+          width: 1.5,
+        ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(14),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:template/features/patients/providers/patients_providers.dart';
 
@@ -123,12 +123,9 @@ class OdontogramNotifier extends StateNotifier<AsyncValue<void>> {
 }
 
 final odontogramNotifierProvider =
-    StateNotifierProvider.family<OdontogramNotifier, AsyncValue<void>, int>((
-      ref,
-      patientId,
-    ) {
-      return OdontogramNotifier(
+    StateNotifierProvider.family<OdontogramNotifier, AsyncValue<void>, int>(
+      (ref, patientId) => OdontogramNotifier(
         ref.watch(odontogramServiceProvider),
         patientId,
-      );
-    });
+      ),
+    );

@@ -7,42 +7,30 @@ enum AppointmentStatus {
   noShow;
 
   String get arabicLabel {
-    switch (this) {
-      case AppointmentStatus.scheduled:
-        return 'مجدول';
-      case AppointmentStatus.completed:
-        return 'مكتمل';
-      case AppointmentStatus.cancelled:
-        return 'ملغي';
-      case AppointmentStatus.noShow:
-        return 'لم يحضر';
-    }
+    return switch (this) {
+      AppointmentStatus.scheduled => 'مجدول',
+      AppointmentStatus.completed => 'مكتمل',
+      AppointmentStatus.cancelled => 'ملغي',
+      AppointmentStatus.noShow => 'لم يحضر',
+    };
   }
 
   String get dbValue {
-    switch (this) {
-      case AppointmentStatus.scheduled:
-        return 'scheduled';
-      case AppointmentStatus.completed:
-        return 'completed';
-      case AppointmentStatus.cancelled:
-        return 'cancelled';
-      case AppointmentStatus.noShow:
-        return 'no_show';
-    }
+    return switch (this) {
+      AppointmentStatus.scheduled => 'scheduled',
+      AppointmentStatus.completed => 'completed',
+      AppointmentStatus.cancelled => 'cancelled',
+      AppointmentStatus.noShow => 'no_show',
+    };
   }
 
   static AppointmentStatus fromDb(String value) {
-    switch (value) {
-      case 'completed':
-        return AppointmentStatus.completed;
-      case 'cancelled':
-        return AppointmentStatus.cancelled;
-      case 'no_show':
-        return AppointmentStatus.noShow;
-      default:
-        return AppointmentStatus.scheduled;
-    }
+    return switch (value) {
+      'completed' => AppointmentStatus.completed,
+      'cancelled' => AppointmentStatus.cancelled,
+      'no_show' => AppointmentStatus.noShow,
+      _ => AppointmentStatus.scheduled,
+    };
   }
 }
 

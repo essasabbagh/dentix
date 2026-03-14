@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:template/core/teeth_selector/teeth_selector.dart';
 
@@ -13,6 +13,7 @@ class OdontogramPage extends ConsumerWidget {
     required this.patientId,
     required this.patientName,
   });
+
   final int patientId;
   final String patientName;
 
