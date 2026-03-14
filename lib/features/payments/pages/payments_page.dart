@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart' show DateFormat;
 
 import 'package:template/components/loading/loading_widget.dart';
 import 'package:template/core/database/daos/payments_dao.dart';
+import 'package:template/core/utils/date_helper.dart';
 
 import '../providers/payments_providers.dart';
 
@@ -169,7 +169,7 @@ class _PaymentsActiveFilterChips extends ConsumerWidget {
     if (filter.dateFrom != null) {
       chips.add(
         _RemovableChip(
-          label: 'من: ${DateFormat('d/M/yyyy').format(filter.dateFrom!)}',
+          label: 'من: ${DateHelper.format(filter.dateFrom!, pattern: 'd/M/yyyy')}',
           onRemove: () => ref
               .read(paymentsFilterProvider.notifier)
               .update((f) => f.copyWith(dateFrom: null)),
@@ -179,7 +179,7 @@ class _PaymentsActiveFilterChips extends ConsumerWidget {
     if (filter.dateTo != null) {
       chips.add(
         _RemovableChip(
-          label: 'إلى: ${DateFormat('d/M/yyyy').format(filter.dateTo!)}',
+          label: 'إلى: ${DateHelper.format(filter.dateTo!, pattern: 'd/M/yyyy')}',
           onRemove: () => ref
               .read(paymentsFilterProvider.notifier)
               .update((f) => f.copyWith(dateTo: null)),
@@ -351,7 +351,7 @@ class _PaymentCard extends ConsumerWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        DateFormat('d/M/yyyy').format(item.payment.paymentDate),
+                        DateHelper.format(item.payment.paymentDate, pattern: 'd/M/yyyy'),
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.outline,
                         ),
@@ -460,7 +460,7 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
                 Expanded(
                   child: _DatePickerButton(
                     label: _dateFrom != null
-                        ? DateFormat('d/M/yyyy').format(_dateFrom!)
+                        ? DateHelper.format(_dateFrom!, pattern: 'd/M/yyyy')
                         : 'من تاريخ',
                     onTap: () async {
                       final d = await showDatePicker(
@@ -481,7 +481,7 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
                 Expanded(
                   child: _DatePickerButton(
                     label: _dateTo != null
-                        ? DateFormat('d/M/yyyy').format(_dateTo!)
+                        ? DateHelper.format(_dateTo!, pattern: 'd/M/yyyy')
                         : 'إلى تاريخ',
                     onTap: () async {
                       final d = await showDatePicker(

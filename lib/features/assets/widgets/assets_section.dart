@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart' show DateFormat;
 import 'package:open_file/open_file.dart';
 
+import 'package:template/core/utils/date_helper.dart';
 import 'package:template/core/utils/snackbars.dart';
 
 import '../models/asset_model.dart';
@@ -342,7 +342,7 @@ class _AssetTile extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Text(
-            DateFormat('d/M/yyyy').format(asset.createdAt),
+            DateHelper.format(asset.createdAt, pattern: 'd/M/yyyy'),
             style: theme.textTheme.bodySmall?.copyWith(
               color: theme.colorScheme.outlineVariant,
             ),

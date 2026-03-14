@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart' show DateFormat;
 
+import 'package:template/core/utils/date_helper.dart';
 import 'package:template/core/utils/snackbars.dart';
 import 'package:template/features/patients/models/patient_model.dart';
 import 'package:template/features/patients/providers/patients_providers.dart';
@@ -53,7 +53,9 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
     final theme = Theme.of(context);
 
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 500, maxHeight: 620),
         child: Column(
@@ -150,7 +152,10 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                           size: 18,
                         ),
                         label: Text(
-                          DateFormat('yyyy/MM/dd').format(_selectedDate),
+                          DateHelper.format(
+                            _selectedDate,
+                            pattern: 'yyyy/MM/dd',
+                          ),
                         ),
                         onPressed: _pickDate,
                       ),

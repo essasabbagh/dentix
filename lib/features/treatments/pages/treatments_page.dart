@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart' show DateFormat;
 
 import 'package:template/components/loading/loading_widget.dart';
 import 'package:template/core/database/daos/treatments_dao.dart';
+import 'package:template/core/utils/date_helper.dart';
 
 import '../models/treatment_model.dart';
 import '../providers/treatments_providers.dart';
@@ -189,7 +189,7 @@ class _ActiveFilterChips extends ConsumerWidget {
     if (filter.dateFrom != null) {
       chips.add(
         _FilterChip(
-          label: 'من: ${DateFormat('d/M/yyyy').format(filter.dateFrom!)}',
+          label: 'من: ${DateHelper.format(filter.dateFrom!, pattern: 'd/M/yyyy')}',
           onRemove: () => ref
               .read(treatmentsFilterProvider.notifier)
               .update((f) => f.copyWith(dateFrom: null)),
@@ -199,7 +199,7 @@ class _ActiveFilterChips extends ConsumerWidget {
     if (filter.dateTo != null) {
       chips.add(
         _FilterChip(
-          label: 'إلى: ${DateFormat('d/M/yyyy').format(filter.dateTo!)}',
+          label: 'إلى: ${DateHelper.format(filter.dateTo!, pattern: 'd/M/yyyy')}',
           onRemove: () => ref
               .read(treatmentsFilterProvider.notifier)
               .update((f) => f.copyWith(dateTo: null)),
@@ -399,7 +399,7 @@ class _TreatmentCard extends ConsumerWidget {
                       ],
                       const Spacer(),
                       Text(
-                        DateFormat('d/M/yyyy').format(item.treatment.createdAt),
+                        DateHelper.format(item.treatment.createdAt, pattern: 'd/M/yyyy'),
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.outline,
                         ),
@@ -591,7 +591,7 @@ class _TreatmentsFilterSheetState
                 Expanded(
                   child: _DatePickerButton(
                     label: _dateFrom != null
-                        ? DateFormat('d/M/yyyy').format(_dateFrom!)
+                        ? DateHelper.format(_dateFrom!, pattern: 'd/M/yyyy')
                         : 'من تاريخ',
                     icon: Icons.calendar_today_outlined,
                     onTap: () async {
@@ -613,7 +613,7 @@ class _TreatmentsFilterSheetState
                 Expanded(
                   child: _DatePickerButton(
                     label: _dateTo != null
-                        ? DateFormat('d/M/yyyy').format(_dateTo!)
+                        ? DateHelper.format(_dateTo!, pattern: 'd/M/yyyy')
                         : 'إلى تاريخ',
                     icon: Icons.calendar_today_outlined,
                     onTap: () async {

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:intl/intl.dart' show DateFormat;
 
+import 'package:template/core/utils/date_helper.dart';
 import 'package:template/core/utils/snackbars.dart';
 
 import '../models/patient_model.dart';
@@ -412,7 +412,7 @@ class _BirthDatePicker extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final label = value != null
-        ? DateFormat('yyyy/MM/dd').format(value!)
+        ? DateHelper.format(value!, pattern: 'yyyy/MM/dd')
         : 'اختر تاريخ الميلاد';
 
     return OutlinedButton.icon(
