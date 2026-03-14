@@ -10,6 +10,7 @@ class DateHelper {
     DateTime? date, {
     String pattern = 'EEE, MMMM - dd/MM/y',
     bool useEnglishNumbers = true,
+    String locale = 'ar',
   }) {
     if (date == null) return 'No Date';
     // Replace with S.current.noDate if using localization
@@ -30,7 +31,7 @@ class DateHelper {
       12: 'كانون الأول',
     };
 
-    String formattedDate = DateFormat(pattern).format(date);
+    String formattedDate = DateFormat(pattern, locale).format(date);
 
     if (pattern.contains('MMMM')) {
       // Replace standard Arabic month with Syrian month name

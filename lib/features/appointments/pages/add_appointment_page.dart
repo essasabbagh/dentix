@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:template/core/utils/date_helper.dart';
 import 'package:template/core/utils/snackbars.dart';
 import 'package:template/features/patients/models/patient_model.dart';
-import 'package:template/features/patients/providers/patients_providers.dart';
+import 'package:template/features/patients/widgets/patient_selector_field.dart';
 
 import '../providers/appointments_providers.dart';
 
@@ -16,6 +16,9 @@ class AddAppointmentPage extends ConsumerStatefulWidget {
     this.preselectedPatientId,
   });
   final DateTime initialDate;
+
+  /// When non-null the patient field is pre-filled and locked.
+  /// Pass [PatientModel.id] when opening from PatientDetailPage.
   final int? preselectedPatientId;
 
   @override
@@ -45,25 +48,19 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
 
   @override
   Widget build(BuildContext context) {
-    final patientsAsync = ref.watch(patientsListProvider);
     final formState = ref.watch(appointmentFormProvider);
     final isLoading = formState.isLoading;
     final theme = Theme.of(context);
 
     return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 500, maxHeight: 620),
         child: Column(
           children: [
-            // Header
+            // ── Header ───────────────────────────────────────
             Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 18,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
               decoration: BoxDecoration(
                 color: theme.colorScheme.primaryContainer,
                 borderRadius: const BorderRadius.vertical(
@@ -93,7 +90,7 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                 ],
               ),
             ),
-            // Body
+            // ── Body ─────────────────────────────────────────
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(24),
@@ -102,42 +99,15 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Patient selector
+                      // Patient selector — searchable, auto-locked when
+                      // preselectedPatientId is provided
                       _buildLabel('المريض *'),
                       const SizedBox(height: 8),
-                      patientsAsync.when(
-                        loading: () => const CircularProgressIndicator(),
-                        error: (e, _) => Text('خطأ: $e'),
-                        data: (patients) =>
-                            DropdownButtonFormField<PatientModel>(
-                              initialValue: _selectedPatient,
-                              hint: const Text('اختر المريض'),
-                              isExpanded: true,
-                              decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 14,
-                                  vertical: 12,
-                                ),
-                                prefixIcon: const Icon(Icons.person_outline),
-                              ),
-                              items: patients
-                                  .map(
-                                    (p) => DropdownMenuItem(
-                                      value: p,
-                                      child: Text(
-                                        '${p.fullName} — ${p.phone}',
-                                      ),
-                                    ),
-                                  )
-                                  .toList(),
-                              onChanged: (p) =>
-                                  setState(() => _selectedPatient = p),
-                              validator: (v) =>
-                                  v == null ? 'يرجى اختيار المريض' : null,
-                            ),
+                      PatientSelectorField(
+                        initialPatientId: widget.preselectedPatientId,
+                        onChanged: (p) => setState(() => _selectedPatient = p),
+                        validator: (p) =>
+                            p == null ? 'يرجى اختيار المريض' : null,
                       ),
                       const SizedBox(height: 16),
                       // Date picker
@@ -152,7 +122,7 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                         label: Text(
                           DateHelper.format(
                             _selectedDate,
-                            pattern: 'yyyy/MM/dd',
+                            pattern: 'EEEE، dd MMMM yyyy',
                           ),
                         ),
                         onPressed: _pickDate,
@@ -163,11 +133,18 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                       const SizedBox(height: 8),
                       OutlinedButton.icon(
                         style: _pickerStyle(theme),
-                        icon: const Icon(
-                          Icons.access_time_outlined,
-                          size: 18,
+                        icon: const Icon(Icons.access_time_outlined, size: 18),
+                        label: Text(
+                          DateHelper.time(
+                            DateTime(
+                              0,
+                              0,
+                              0,
+                              _selectedTime.hour,
+                              _selectedTime.minute,
+                            ),
+                          ),
                         ),
-                        label: Text(_selectedTime.format(context)),
                         onPressed: _pickTime,
                       ),
                       const SizedBox(height: 16),
@@ -193,12 +170,9 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                 ),
               ),
             ),
-            // Footer
+            // ── Footer ───────────────────────────────────────
             Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 24,
-                vertical: 16,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -206,12 +180,7 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                     onPressed: isLoading
                         ? null
                         : () => Navigator.of(context).pop(),
-                    child: Text(
-                      'إلغاء',
-                      style: theme.textTheme.bodyMedium?.copyWith(
-                        color: Colors.white,
-                      ),
-                    ),
+                    child: Text('إلغاء', style: theme.textTheme.bodyMedium),
                   ),
                   const SizedBox(width: 12),
                   FilledButton.icon(
@@ -220,12 +189,12 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                         ? const SizedBox(
                             width: 16,
                             height: 16,
-                            child: CircularProgressIndicator(strokeWidth: 2),
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
                           )
-                        : const Icon(
-                            Icons.check,
-                            color: Colors.white,
-                          ),
+                        : const Icon(Icons.check, color: Colors.white),
                     label: const Text(
                       'حفظ الموعد',
                       style: TextStyle(color: Colors.white),

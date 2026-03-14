@@ -138,6 +138,7 @@ class _DateNavigator extends ConsumerWidget {
           ),
           const SizedBox(width: 12),
           Column(
+            spacing: 4,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
@@ -151,6 +152,16 @@ class _DateNavigator extends ConsumerWidget {
                 DateHelper.format(
                   selectedDate,
                   pattern: 'EEEE، dd MMMM yyyy',
+                ),
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.outline,
+                ),
+              ),
+              Text(
+                DateHelper.format(
+                  selectedDate,
+                  pattern: 'EEEE, dd MMMM yyyy',
+                  locale: 'tr',
                 ),
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.outline,
