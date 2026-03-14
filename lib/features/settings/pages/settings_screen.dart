@@ -7,8 +7,8 @@ import 'package:template/core/locale/generated/l10n.dart';
 import '../widgets/locale_menu.dart';
 import '../widgets/theme_menu.dart';
 
-class SettingsPage extends ConsumerWidget {
-  const SettingsPage({super.key});
+class SettingsScreen extends ConsumerWidget {
+  const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

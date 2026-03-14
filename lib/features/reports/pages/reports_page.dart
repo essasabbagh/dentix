@@ -1,38 +1,36 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import '../providers/reports_providers.dart';
-import '../../../core/database/daos/reports_dao.dart';
 
 class ReportsPage extends ConsumerWidget {
   const ReportsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        body: CustomScrollView(
-          slivers: [
-            _ReportsAppBar(),
-            SliverPadding(
-              padding: const EdgeInsets.all(20),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  _PeriodSelector(),
-                  const SizedBox(height: 20),
-                  _KpiRow(),
-                  const SizedBox(height: 20),
-                  _IncomeBarChart(),
-                  const SizedBox(height: 20),
-                  _AppointmentsBreakdown(),
-                  const SizedBox(height: 20),
-                  _TopTreatmentsCard(),
-                ]),
-              ),
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: CustomScrollView(
+        slivers: [
+          _ReportsAppBar(),
+          SliverPadding(
+            padding: const EdgeInsets.all(20),
+            sliver: SliverList(
+              delegate: SliverChildListDelegate([
+                _PeriodSelector(),
+                const SizedBox(height: 20),
+                _KpiRow(),
+                const SizedBox(height: 20),
+                _IncomeBarChart(),
+                const SizedBox(height: 20),
+                _AppointmentsBreakdown(),
+                const SizedBox(height: 20),
+                _TopTreatmentsCard(),
+              ]),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -50,18 +48,24 @@ class _ReportsAppBar extends ConsumerWidget {
       floating: true,
       title: Row(
         children: [
-          Icon(Icons.bar_chart_outlined,
-              color: theme.colorScheme.primary, size: 26),
+          Icon(
+            Icons.bar_chart_outlined,
+            color: theme.colorScheme.primary,
+            size: 26,
+          ),
           const SizedBox(width: 10),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text('التقارير',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+              const Text(
+                'التقارير',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               Text(
                 '${period.monthName} ${period.year}',
-                style: theme.textTheme.bodySmall
-                    ?.copyWith(color: theme.colorScheme.outline),
+                style: theme.textTheme.bodySmall?.copyWith(
+                  color: theme.colorScheme.outline,
+                ),
               ),
             ],
           ),
@@ -80,31 +84,42 @@ class _PeriodSelector extends ConsumerWidget {
     final theme = Theme.of(context);
 
     const months = [
-      'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-      'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر',
+      'يناير',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر',
     ];
 
     final currentYear = DateTime.now().year;
-    final years =
-        List.generate(5, (i) => currentYear - i); // last 5 years
+    final years = List.generate(5, (i) => currentYear - i); // last 5 years
 
     return Row(
       children: [
         // Month dropdown
         Expanded(
           child: DropdownButtonFormField<int>(
-            value: period.month,
+            initialValue: period.month,
             decoration: InputDecoration(
               labelText: 'الشهر',
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(10),
+              ),
               contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 14, vertical: 10),
+                horizontal: 14,
+                vertical: 10,
+              ),
             ),
             items: List.generate(
               12,
-              (i) => DropdownMenuItem(
-                  value: i + 1, child: Text(months[i])),
+              (i) => DropdownMenuItem(value: i + 1, child: Text(months[i])),
             ),
             onChanged: (m) {
               if (m != null) {
@@ -119,17 +134,19 @@ class _PeriodSelector extends ConsumerWidget {
         // Year dropdown
         Expanded(
           child: DropdownButtonFormField<int>(
-            value: period.year,
+            initialValue: period.year,
             decoration: InputDecoration(
               labelText: 'السنة',
               border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10)),
+                borderRadius: BorderRadius.circular(10),
+              ),
               contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 14, vertical: 10),
+                horizontal: 14,
+                vertical: 10,
+              ),
             ),
             items: years
-                .map((y) =>
-                    DropdownMenuItem(value: y, child: Text('$y')))
+                .map((y) => DropdownMenuItem(value: y, child: Text('$y')))
                 .toList(),
             onChanged: (y) {
               if (y != null) {
@@ -168,8 +185,7 @@ class _KpiRow extends ConsumerWidget {
                   icon: Icons.payments_outlined,
                   color: Colors.green,
                   sub: yearTotalAsync.maybeWhen(
-                    data: (t) =>
-                        'سنوي: ${t.toStringAsFixed(0)} ر.س',
+                    data: (t) => 'سنوي: ${t.toStringAsFixed(0)} ر.س',
                     orElse: () => '',
                   ),
                 ),
@@ -248,19 +264,29 @@ class _KpiCard extends StatelessWidget {
               Icon(icon, color: color, size: 22),
               const Spacer(),
               if (sub.isNotEmpty)
-                Text(sub,
-                    style: theme.textTheme.labelSmall
-                        ?.copyWith(color: theme.colorScheme.outline)),
+                Text(
+                  sub,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.outline,
+                  ),
+                ),
             ],
           ),
           const SizedBox(height: 10),
-          Text(value,
-              style: theme.textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold, color: color)),
+          Text(
+            value,
+            style: theme.textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+              color: color,
+            ),
+          ),
           const SizedBox(height: 4),
-          Text(label,
-              style: theme.textTheme.bodySmall
-                  ?.copyWith(color: theme.colorScheme.outline)),
+          Text(
+            label,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: theme.colorScheme.outline,
+            ),
+          ),
         ],
       ),
     );
@@ -293,25 +319,42 @@ class _IncomeBarChart extends ConsumerWidget {
       icon: Icons.bar_chart_outlined,
       child: dataAsync.when(
         loading: () => const SizedBox(
-            height: 160, child: Center(child: CircularProgressIndicator())),
+          height: 160,
+          child: Center(child: CircularProgressIndicator()),
+        ),
         error: (e, _) => Text('خطأ: $e'),
         data: (months) {
-          final maxVal =
-              months.fold<double>(0, (m, e) => e.total > m ? e.total : m);
+          final maxVal = months.fold<double>(
+            0,
+            (m, e) => e.total > m ? e.total : m,
+          );
           if (maxVal == 0) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 24),
               child: Center(
-                child: Text('لا توجد بيانات لهذه السنة',
-                    style: theme.textTheme.bodyMedium
-                        ?.copyWith(color: theme.colorScheme.outline)),
+                child: Text(
+                  'لا توجد بيانات لهذه السنة',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.outline,
+                  ),
+                ),
               ),
             );
           }
 
           const shortMonths = [
-            'ين', 'فب', 'مر', 'أب', 'مي', 'يو',
-            'يل', 'أغ', 'سب', 'أك', 'نو', 'دي',
+            'ين',
+            'فب',
+            'مر',
+            'أب',
+            'مي',
+            'يو',
+            'يل',
+            'أغ',
+            'سب',
+            'أك',
+            'نو',
+            'دي',
           ];
 
           return SizedBox(
@@ -335,7 +378,7 @@ class _IncomeBarChart extends ConsumerWidget {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 4),
                             child: Text(
-                              '${m.total.toStringAsFixed(0)}',
+                              m.total.toStringAsFixed(0),
                               style: theme.textTheme.labelSmall?.copyWith(
                                 color: theme.colorScheme.primary,
                                 fontWeight: FontWeight.bold,
@@ -353,10 +396,10 @@ class _IncomeBarChart extends ConsumerWidget {
                           decoration: BoxDecoration(
                             color: isCurrent
                                 ? theme.colorScheme.primary
-                                : theme.colorScheme.primary
-                                    .withOpacity(0.3),
+                                : theme.colorScheme.primary.withOpacity(0.3),
                             borderRadius: const BorderRadius.vertical(
-                                top: Radius.circular(4)),
+                              top: Radius.circular(4),
+                            ),
                           ),
                         ),
                         const SizedBox(height: 4),
@@ -399,7 +442,9 @@ class _AppointmentsBreakdown extends ConsumerWidget {
       icon: Icons.pie_chart_outline,
       child: summaryAsync.when(
         loading: () => const SizedBox(
-            height: 80, child: Center(child: CircularProgressIndicator())),
+          height: 80,
+          child: Center(child: CircularProgressIndicator()),
+        ),
         error: (e, _) => Text('خطأ: $e'),
         data: (s) {
           final map = s.appointmentsByStatus;
@@ -409,16 +454,22 @@ class _AppointmentsBreakdown extends ConsumerWidget {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Center(
-                child: Text('لا توجد مواعيد هذا الشهر',
-                    style: theme.textTheme.bodyMedium
-                        ?.copyWith(color: theme.colorScheme.outline)),
+                child: Text(
+                  'لا توجد مواعيد هذا الشهر',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.outline,
+                  ),
+                ),
               ),
             );
           }
 
           final items = [
-            _ApptStatItem('مجدول', map['scheduled'] ?? 0,
-                theme.colorScheme.primary),
+            _ApptStatItem(
+              'مجدول',
+              map['scheduled'] ?? 0,
+              theme.colorScheme.primary,
+            ),
             _ApptStatItem('مكتمل', map['completed'] ?? 0, Colors.green),
             _ApptStatItem('ملغي', map['cancelled'] ?? 0, Colors.red),
             _ApptStatItem('لم يحضر', map['no_show'] ?? 0, Colors.orange),
@@ -448,24 +499,26 @@ class _AppointmentsBreakdown extends ConsumerWidget {
                 spacing: 20,
                 runSpacing: 10,
                 children: items
-                    .map((item) => Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Container(
-                              width: 10,
-                              height: 10,
-                              decoration: BoxDecoration(
-                                color: item.color,
-                                shape: BoxShape.circle,
-                              ),
+                    .map(
+                      (item) => Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              color: item.color,
+                              shape: BoxShape.circle,
                             ),
-                            const SizedBox(width: 6),
-                            Text(
-                              '${item.label}: ${item.count}',
-                              style: theme.textTheme.bodySmall,
-                            ),
-                          ],
-                        ))
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            '${item.label}: ${item.count}',
+                            style: theme.textTheme.bodySmall,
+                          ),
+                        ],
+                      ),
+                    )
                     .toList(),
               ),
             ],
@@ -477,10 +530,10 @@ class _AppointmentsBreakdown extends ConsumerWidget {
 }
 
 class _ApptStatItem {
+  const _ApptStatItem(this.label, this.count, this.color);
   final String label;
   final int count;
   final Color color;
-  const _ApptStatItem(this.label, this.count, this.color);
 }
 
 // ── Top treatments ────────────────────────────────────────────────────────
@@ -496,29 +549,35 @@ class _TopTreatmentsCard extends ConsumerWidget {
       icon: Icons.healing_outlined,
       child: dataAsync.when(
         loading: () => const SizedBox(
-            height: 80, child: Center(child: CircularProgressIndicator())),
+          height: 80,
+          child: Center(child: CircularProgressIndicator()),
+        ),
         error: (e, _) => Text('خطأ: $e'),
         data: (stats) {
           if (stats.isEmpty) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Center(
-                child: Text('لا توجد علاجات مكتملة هذا الشهر',
-                    style: theme.textTheme.bodyMedium
-                        ?.copyWith(color: theme.colorScheme.outline)),
+                child: Text(
+                  'لا توجد علاجات مكتملة هذا الشهر',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.outline,
+                  ),
+                ),
               ),
             );
           }
 
-          final maxCount =
-              stats.fold<int>(0, (m, s) => s.count > m ? s.count : m);
+          final maxCount = stats.fold<int>(
+            0,
+            (m, s) => s.count > m ? s.count : m,
+          );
 
           return Column(
             children: stats.asMap().entries.map((entry) {
               final i = entry.key;
               final stat = entry.value;
-              final ratio =
-                  maxCount > 0 ? stat.count / maxCount : 0.0;
+              final ratio = maxCount > 0 ? stat.count / maxCount : 0.0;
               final colors = [
                 theme.colorScheme.primary,
                 Colors.teal,
@@ -539,16 +598,20 @@ class _TopTreatmentsCard extends ConsumerWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: Text(stat.treatmentType,
-                              style: theme.textTheme.bodyMedium
-                                  ?.copyWith(fontWeight: FontWeight.w500),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis),
+                          child: Text(
+                            stat.treatmentType,
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                         Text(
                           '${stat.count} — ${stat.revenue.toStringAsFixed(0)} ر.س',
                           style: theme.textTheme.bodySmall?.copyWith(
-                              color: theme.colorScheme.outline),
+                            color: theme.colorScheme.outline,
+                          ),
                         ),
                       ],
                     ),
@@ -558,8 +621,8 @@ class _TopTreatmentsCard extends ConsumerWidget {
                       child: LinearProgressIndicator(
                         value: ratio,
                         minHeight: 7,
-                        backgroundColor:
-                            theme.colorScheme.outlineVariant.withOpacity(0.3),
+                        backgroundColor: theme.colorScheme.outlineVariant
+                            .withOpacity(0.3),
                         valueColor: AlwaysStoppedAnimation(color),
                       ),
                     ),
@@ -600,13 +663,18 @@ class _SectionCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(children: [
-              Icon(icon, size: 18, color: theme.colorScheme.primary),
-              const SizedBox(width: 8),
-              Text(title,
-                  style: theme.textTheme.titleSmall
-                      ?.copyWith(fontWeight: FontWeight.bold)),
-            ]),
+            Row(
+              children: [
+                Icon(icon, size: 18, color: theme.colorScheme.primary),
+                const SizedBox(width: 8),
+                Text(
+                  title,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
             const Divider(height: 20),
             child,
           ],

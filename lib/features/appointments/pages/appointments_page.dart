@@ -17,60 +17,57 @@ class AppointmentsPage extends ConsumerWidget {
     final selectedDate = ref.watch(selectedDateProvider);
     final theme = Theme.of(context);
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: theme.colorScheme.surface,
-        body: Column(
-          children: [
-            // ── Header + date navigator ──────────────────────
-            _DateNavigator(selectedDate: selectedDate),
-            // ── Week strip ───────────────────────────────────
-            _WeekStrip(selectedDate: selectedDate),
-            const Divider(height: 1),
-            // ── Appointments list ────────────────────────────
-            Expanded(
-              child: appointmentsAsync.when(
-                loading: () => const Center(child: CircularProgressIndicator()),
-                error: (e, _) => Center(child: Text('خطأ: $e')),
-                data: (appointments) {
-                  if (appointments.isEmpty) {
-                    return _EmptyDay(
-                      date: selectedDate,
-                      onAdd: () => _openAdd(context, ref),
-                    );
-                  }
-                  return ListView.separated(
-                    padding: const EdgeInsets.all(20),
-                    itemCount: appointments.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 10),
-                    itemBuilder: (context, index) {
-                      return AppointmentCard(
-                        appointment: appointments[index],
-                        onStatusChange: (status) => ref
-                            .read(appointmentFormProvider.notifier)
-                            .updateStatus(appointments[index].id, status),
-                        onDelete: () =>
-                            _confirmDelete(context, ref, appointments[index]),
-                      );
-                    },
+    return Scaffold(
+      backgroundColor: theme.colorScheme.surface,
+      body: Column(
+        children: [
+          // ── Header + date navigator ──────────────────────
+          _DateNavigator(selectedDate: selectedDate),
+          // ── Week strip ───────────────────────────────────
+          _WeekStrip(selectedDate: selectedDate),
+          const Divider(height: 1),
+          // ── Appointments list ────────────────────────────
+          Expanded(
+            child: appointmentsAsync.when(
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) => Center(child: Text('خطأ: $e')),
+              data: (appointments) {
+                if (appointments.isEmpty) {
+                  return _EmptyDay(
+                    date: selectedDate,
+                    onAdd: () => _openAdd(context, ref),
                   );
-                },
-              ),
+                }
+                return ListView.separated(
+                  padding: const EdgeInsets.all(20),
+                  itemCount: appointments.length,
+                  separatorBuilder: (_, _) => const SizedBox(height: 10),
+                  itemBuilder: (context, index) {
+                    return AppointmentCard(
+                      appointment: appointments[index],
+                      onStatusChange: (status) => ref
+                          .read(appointmentFormProvider.notifier)
+                          .updateStatus(appointments[index].id, status),
+                      onDelete: () =>
+                          _confirmDelete(context, ref, appointments[index]),
+                    );
+                  },
+                );
+              },
             ),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () => _openAdd(context, ref),
-          icon: const Icon(
-            Icons.add,
-            color: Colors.white,
           ),
-          label: const Text(
-            'موعد جديد',
-            style: TextStyle(
-              color: Colors.white,
-            ),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => _openAdd(context, ref),
+        icon: const Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
+        label: const Text(
+          'موعد جديد',
+          style: TextStyle(
+            color: Colors.white,
           ),
         ),
       ),

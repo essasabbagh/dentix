@@ -12,30 +12,46 @@ class AssetsDao extends DatabaseAccessor<AppDatabase> with _$AssetsDaoMixin {
   Stream<List<AssetsTableData>> watchPatientAssets(int patientId) =>
       (select(assetsTable)
             ..where((a) => a.patientId.equals(patientId))
-            ..orderBy([(a) => OrderingTerm(
-                expression: a.createdAt, mode: OrderingMode.desc)]))
+            ..orderBy([
+              (a) => OrderingTerm(
+                expression: a.createdAt,
+                mode: OrderingMode.desc,
+              ),
+            ]))
           .watch();
 
   Future<List<AssetsTableData>> getPatientAssets(int patientId) =>
       (select(assetsTable)
             ..where((a) => a.patientId.equals(patientId))
-            ..orderBy([(a) => OrderingTerm(
-                expression: a.createdAt, mode: OrderingMode.desc)]))
+            ..orderBy([
+              (a) => OrderingTerm(
+                expression: a.createdAt,
+                mode: OrderingMode.desc,
+              ),
+            ]))
           .get();
 
   // ─── Treatment assets ──────────────────────────────────────────────
   Stream<List<AssetsTableData>> watchTreatmentAssets(int treatmentId) =>
       (select(assetsTable)
             ..where((a) => a.treatmentId.equals(treatmentId))
-            ..orderBy([(a) => OrderingTerm(
-                expression: a.createdAt, mode: OrderingMode.desc)]))
+            ..orderBy([
+              (a) => OrderingTerm(
+                expression: a.createdAt,
+                mode: OrderingMode.desc,
+              ),
+            ]))
           .watch();
 
   Future<List<AssetsTableData>> getTreatmentAssets(int treatmentId) =>
       (select(assetsTable)
             ..where((a) => a.treatmentId.equals(treatmentId))
-            ..orderBy([(a) => OrderingTerm(
-                expression: a.createdAt, mode: OrderingMode.desc)]))
+            ..orderBy([
+              (a) => OrderingTerm(
+                expression: a.createdAt,
+                mode: OrderingMode.desc,
+              ),
+            ]))
           .get();
 
   // ─── Mutations ─────────────────────────────────────────────────────
@@ -53,8 +69,7 @@ class AssetsDao extends DatabaseAccessor<AppDatabase> with _$AssetsDaoMixin {
       (delete(assetsTable)..where((a) => a.patientId.equals(patientId))).go();
 
   /// Delete all assets for a treatment
-  Future<int> deleteTreatmentAssets(int treatmentId) =>
-      (delete(assetsTable)
-            ..where((a) => a.treatmentId.equals(treatmentId)))
-          .go();
+  Future<int> deleteTreatmentAssets(int treatmentId) => (delete(
+    assetsTable,
+  )..where((a) => a.treatmentId.equals(treatmentId))).go();
 }

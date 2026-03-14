@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
 import 'package:template/features/appointments/models/appointment_model.dart';
@@ -22,28 +22,25 @@ class PatientDetailPage extends ConsumerWidget {
     super.key,
     required this.patientId,
   });
-  
+
   final int patientId;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final patientAsync = ref.watch(patientByIdProvider(patientId));
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: patientAsync.when(
-        loading: () =>
-            const Scaffold(body: Center(child: CircularProgressIndicator())),
-        error: (e, _) => Scaffold(body: Center(child: Text('خطأ: $e'))),
-        data: (patient) {
-          if (patient == null) {
-            return const Scaffold(
-              body: Center(child: Text('المريض غير موجود')),
-            );
-          }
-          return _PatientDetailScaffold(patient: patient);
-        },
-      ),
+    return patientAsync.when(
+      loading: () =>
+          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (e, _) => Scaffold(body: Center(child: Text('خطأ: $e'))),
+      data: (patient) {
+        if (patient == null) {
+          return const Scaffold(
+            body: Center(child: Text('المريض غير موجود')),
+          );
+        }
+        return _PatientDetailScaffold(patient: patient);
+      },
     );
   }
 }
@@ -941,8 +938,9 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
                           keyboard: TextInputType.number,
                           validator: (v) {
                             if (v?.isEmpty == true) return 'مطلوب';
-                            if (double.tryParse(v!) == null)
+                            if (double.tryParse(v!) == null) {
                               return 'أدخل رقماً';
+                            }
                             return null;
                           },
                         ),
@@ -1098,8 +1096,9 @@ class _AddPaymentDialogState extends ConsumerState<_AddPaymentDialog> {
                           ),
                           validator: (v) {
                             if (v?.isEmpty == true) return 'مطلوب';
-                            if (double.tryParse(v!) == null)
+                            if (double.tryParse(v!) == null) {
                               return 'أدخل رقماً';
+                            }
                             return null;
                           },
                         ),

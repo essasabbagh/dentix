@@ -48,16 +48,6 @@ enum AssetFileType {
 }
 
 class AssetModel {
-  final int id;
-  final int? patientId;
-  final int? treatmentId;
-  final String fileName;
-  final String filePath;
-  final String mimeType;
-  final int sizeBytes;
-  final String? label;
-  final DateTime createdAt;
-
   const AssetModel({
     required this.id,
     this.patientId,
@@ -69,6 +59,15 @@ class AssetModel {
     this.label,
     required this.createdAt,
   });
+  final int id;
+  final int? patientId;
+  final int? treatmentId;
+  final String fileName;
+  final String filePath;
+  final String mimeType;
+  final int sizeBytes;
+  final String? label;
+  final DateTime createdAt;
 
   AssetFileType get fileType => AssetFileType.fromMime(mimeType);
 

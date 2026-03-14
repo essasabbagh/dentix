@@ -25,72 +25,66 @@ class OdontogramPage extends ConsumerWidget {
     final selectedTooth = ref.watch(selectedToothProvider);
     final theme = Theme.of(context);
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text('رسم الأسنان — $patientName'),
-        ),
-        body: Row(
-          children: [
-            // ── Left panel: TeethSelector ──────────────────────
-            Expanded(
-              flex: 3,
-              child: Column(
-                children: [
-                  // Legend
-                  _ConditionLegend(),
-                  const Divider(height: 1),
-                  // The actual SVG teeth widget
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: TeethSelector(
-                        multiSelect: false,
-                        unselectedColor: Colors.grey.shade200,
-                        selectedColor: theme.colorScheme.primary,
-                        colorized: colorMap,
-                        strokedColorized: strokeMap,
-                        defaultStrokeColor: Colors.grey.shade400,
-                        defaultStrokeWidth: 1,
-                        showPermanent: true,
-                        showPrimary: false,
-                        leftString: 'يسار',
-                        rightString: 'يمين',
-                        notation: _isoToArabic,
-                        onChange: (selected) {
-                          // TeethSelector returns selected list.
-                          // We only care about the last tapped tooth.
-                          final tapped = selected.isEmpty
-                              ? null
-                              : selected.last;
-                          ref.read(selectedToothProvider.notifier).state =
-                              tapped;
-                        },
-                      ),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('رسم الأسنان — $patientName'),
+      ),
+      body: Row(
+        children: [
+          // ── Left panel: TeethSelector ──────────────────────
+          Expanded(
+            flex: 3,
+            child: Column(
+              children: [
+                // Legend
+                _ConditionLegend(),
+                const Divider(height: 1),
+                // The actual SVG teeth widget
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: TeethSelector(
+                      multiSelect: false,
+                      unselectedColor: Colors.grey.shade200,
+                      selectedColor: theme.colorScheme.primary,
+                      colorized: colorMap,
+                      strokedColorized: strokeMap,
+                      defaultStrokeColor: Colors.grey.shade400,
+                      defaultStrokeWidth: 1,
+                      showPermanent: true,
+                      showPrimary: false,
+                      leftString: 'يسار',
+                      rightString: 'يمين',
+                      notation: _isoToArabic,
+                      onChange: (selected) {
+                        // TeethSelector returns selected list.
+                        // We only care about the last tapped tooth.
+                        final tapped = selected.isEmpty ? null : selected.last;
+                        ref.read(selectedToothProvider.notifier).state = tapped;
+                      },
                     ),
                   ),
-                ],
-              ),
-            ),
-            // ── Right panel: tooth detail / condition picker ───
-            Container(
-              width: 300,
-              decoration: BoxDecoration(
-                border: Border(
-                  right: BorderSide(color: theme.colorScheme.outlineVariant),
                 ),
-              ),
-              child: selectedTooth == null
-                  ? _NoSelectionPanel()
-                  : _ToothDetailPanel(
-                      isoKey: selectedTooth,
-                      patientId: patientId,
-                      existing: recordMap[selectedTooth],
-                    ),
+              ],
             ),
-          ],
-        ),
+          ),
+          // ── Right panel: tooth detail / condition picker ───
+          Container(
+            width: 300,
+            decoration: BoxDecoration(
+              border: Border(
+                right: BorderSide(color: theme.colorScheme.outlineVariant),
+              ),
+            ),
+            child: selectedTooth == null
+                ? _NoSelectionPanel()
+                : _ToothDetailPanel(
+                    isoKey: selectedTooth,
+                    patientId: patientId,
+                    existing: recordMap[selectedTooth],
+                  ),
+          ),
+        ],
       ),
     );
   }

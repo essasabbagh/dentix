@@ -12,20 +12,17 @@ class PaymentsPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        body: Column(
-          children: [
-            _PaymentsHeader(),
-            _PaymentsSearchAndFilterBar(),
-            _PaymentsActiveFilterChips(),
-            _PaymentsSummaryBar(),
-            const Divider(height: 1),
-            const Expanded(child: _PaymentsList()),
-          ],
-        ),
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: Column(
+        children: [
+          _PaymentsHeader(),
+          _PaymentsSearchAndFilterBar(),
+          _PaymentsActiveFilterChips(),
+          _PaymentsSummaryBar(),
+          const Divider(height: 1),
+          const Expanded(child: _PaymentsList()),
+        ],
       ),
     );
   }
@@ -585,193 +582,190 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(context).viewInsets.bottom,
-        ),
-        child: Container(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Handle
-              Center(
-                child: Container(
-                  width: 36,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: theme.colorScheme.outlineVariant,
-                    borderRadius: BorderRadius.circular(2),
-                  ),
+    return Padding(
+      padding: EdgeInsets.only(
+        bottom: MediaQuery.of(context).viewInsets.bottom,
+      ),
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Handle
+            Center(
+              child: Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.outlineVariant,
+                  borderRadius: BorderRadius.circular(2),
                 ),
               ),
-              const SizedBox(height: 20),
-              Text(
-                'تصفية المدفوعات',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            ),
+            const SizedBox(height: 20),
+            Text(
+              'تصفية المدفوعات',
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
               ),
-              const SizedBox(height: 20),
+            ),
+            const SizedBox(height: 20),
 
-              // Payment status
-              Text(
-                'حالة الدفع',
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: theme.colorScheme.outline,
+            // Payment status
+            Text(
+              'حالة الدفع',
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: theme.colorScheme.outline,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              children: [
+                _SheetChip(
+                  label: 'الكل',
+                  selected: _status == null,
+                  onTap: () => setState(() => _status = null),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 8,
-                children: [
-                  _SheetChip(
-                    label: 'الكل',
-                    selected: _status == null,
-                    onTap: () => setState(() => _status = null),
+                ...PaymentStatus.values.map(
+                  (s) => _SheetChip(
+                    label: s.arabicLabel,
+                    selected: _status == s,
+                    onTap: () => setState(() => _status = s),
+                    color: _payStatusColor(s),
                   ),
-                  ...PaymentStatus.values.map(
-                    (s) => _SheetChip(
-                      label: s.arabicLabel,
-                      selected: _status == s,
-                      onTap: () => setState(() => _status = s),
-                      color: _payStatusColor(s),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              // Payment method
-              Text(
-                'طريقة الدفع',
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: theme.colorScheme.outline,
                 ),
-              ),
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 8,
-                children: [
-                  _SheetChip(
-                    label: 'الكل',
-                    selected: _method == null,
-                    onTap: () => setState(() => _method = null),
-                  ),
-                  ...PaymentMethod.values.map(
-                    (m) => _SheetChip(
-                      label: m.arabicLabel,
-                      selected: _method == m,
-                      onTap: () => setState(() => _method = m),
-                      color: _methodColor(m),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
+              ],
+            ),
+            const SizedBox(height: 16),
 
-              // Date range
-              Text(
-                'نطاق التاريخ',
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: theme.colorScheme.outline,
+            // Payment method
+            Text(
+              'طريقة الدفع',
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: theme.colorScheme.outline,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Wrap(
+              spacing: 8,
+              children: [
+                _SheetChip(
+                  label: 'الكل',
+                  selected: _method == null,
+                  onTap: () => setState(() => _method = null),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Row(
-                children: [
-                  Expanded(
-                    child: _DatePickerButton(
-                      label: _dateFrom != null
-                          ? DateFormat('d/M/yyyy').format(_dateFrom!)
-                          : 'من تاريخ',
-                      onTap: () async {
-                        final d = await showDatePicker(
-                          context: context,
-                          initialDate: _dateFrom ?? DateTime.now(),
-                          firstDate: DateTime(2020),
-                          lastDate: DateTime(2030),
-                          locale: const Locale('ar'),
-                        );
-                        if (d != null) setState(() => _dateFrom = d);
-                      },
-                      onClear: _dateFrom != null
-                          ? () => setState(() => _dateFrom = null)
-                          : null,
-                    ),
+                ...PaymentMethod.values.map(
+                  (m) => _SheetChip(
+                    label: m.arabicLabel,
+                    selected: _method == m,
+                    onTap: () => setState(() => _method = m),
+                    color: _methodColor(m),
                   ),
-                  const SizedBox(width: 10),
-                  Expanded(
-                    child: _DatePickerButton(
-                      label: _dateTo != null
-                          ? DateFormat('d/M/yyyy').format(_dateTo!)
-                          : 'إلى تاريخ',
-                      onTap: () async {
-                        final d = await showDatePicker(
-                          context: context,
-                          initialDate: _dateTo ?? DateTime.now(),
-                          firstDate: DateTime(2020),
-                          lastDate: DateTime(2030),
-                          locale: const Locale('ar'),
-                        );
-                        if (d != null) setState(() => _dateTo = d);
-                      },
-                      onClear: _dateTo != null
-                          ? () => setState(() => _dateTo = null)
-                          : null,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
 
-              // Buttons
-              Row(
-                children: [
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () {
-                        ref
-                            .read(paymentsFilterProvider.notifier)
-                            .update(
-                              (f) => f.copyWith(
-                                status: null,
-                                method: null,
-                                dateFrom: null,
-                                dateTo: null,
-                              ),
-                            );
-                        Navigator.pop(context);
-                      },
-                      child: const Text('إعادة تعيين'),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: FilledButton(
-                      onPressed: () {
-                        ref
-                            .read(paymentsFilterProvider.notifier)
-                            .update(
-                              (f) => f.copyWith(
-                                status: _status,
-                                method: _method,
-                                dateFrom: _dateFrom,
-                                dateTo: _dateTo,
-                              ),
-                            );
-                        Navigator.pop(context);
-                      },
-                      child: const Text('تطبيق'),
-                    ),
-                  ),
-                ],
+            // Date range
+            Text(
+              'نطاق التاريخ',
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: theme.colorScheme.outline,
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                Expanded(
+                  child: _DatePickerButton(
+                    label: _dateFrom != null
+                        ? DateFormat('d/M/yyyy').format(_dateFrom!)
+                        : 'من تاريخ',
+                    onTap: () async {
+                      final d = await showDatePicker(
+                        context: context,
+                        initialDate: _dateFrom ?? DateTime.now(),
+                        firstDate: DateTime(2020),
+                        lastDate: DateTime(2030),
+                        locale: const Locale('ar'),
+                      );
+                      if (d != null) setState(() => _dateFrom = d);
+                    },
+                    onClear: _dateFrom != null
+                        ? () => setState(() => _dateFrom = null)
+                        : null,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: _DatePickerButton(
+                    label: _dateTo != null
+                        ? DateFormat('d/M/yyyy').format(_dateTo!)
+                        : 'إلى تاريخ',
+                    onTap: () async {
+                      final d = await showDatePicker(
+                        context: context,
+                        initialDate: _dateTo ?? DateTime.now(),
+                        firstDate: DateTime(2020),
+                        lastDate: DateTime(2030),
+                        locale: const Locale('ar'),
+                      );
+                      if (d != null) setState(() => _dateTo = d);
+                    },
+                    onClear: _dateTo != null
+                        ? () => setState(() => _dateTo = null)
+                        : null,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 24),
+
+            // Buttons
+            Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton(
+                    onPressed: () {
+                      ref
+                          .read(paymentsFilterProvider.notifier)
+                          .update(
+                            (f) => f.copyWith(
+                              status: null,
+                              method: null,
+                              dateFrom: null,
+                              dateTo: null,
+                            ),
+                          );
+                      Navigator.pop(context);
+                    },
+                    child: const Text('إعادة تعيين'),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: FilledButton(
+                    onPressed: () {
+                      ref
+                          .read(paymentsFilterProvider.notifier)
+                          .update(
+                            (f) => f.copyWith(
+                              status: _status,
+                              method: _method,
+                              dateFrom: _dateFrom,
+                              dateTo: _dateTo,
+                            ),
+                          );
+                      Navigator.pop(context);
+                    },
+                    child: const Text('تطبيق'),
+                  ),
+                ),
+              ],
+            ),
+          ],
         ),
       ),
     );

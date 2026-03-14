@@ -7,23 +7,22 @@ import '../../../core/database/app_database.dart';
 import '../models/asset_model.dart';
 
 class AssetsRepository {
-  final AppDatabase _db;
-
   AssetsRepository(this._db);
+  final AppDatabase _db;
 
   // ─── Mapper ────────────────────────────────────────────────
 
   AssetModel _fromData(AssetsTableData d) => AssetModel(
-        id: d.id,
-        patientId: d.patientId,
-        treatmentId: d.treatmentId,
-        fileName: d.fileName,
-        filePath: d.filePath,
-        mimeType: d.mimeType,
-        sizeBytes: d.sizeBytes,
-        label: d.label,
-        createdAt: d.createdAt,
-      );
+    id: d.id,
+    patientId: d.patientId,
+    treatmentId: d.treatmentId,
+    fileName: d.fileName,
+    filePath: d.filePath,
+    mimeType: d.mimeType,
+    sizeBytes: d.sizeBytes,
+    label: d.label,
+    createdAt: d.createdAt,
+  );
 
   // ─── Storage directory ─────────────────────────────────────
 
@@ -36,15 +35,14 @@ class AssetsRepository {
 
   // ─── Streams ───────────────────────────────────────────────
 
-  Stream<List<AssetModel>> watchPatientAssets(int patientId) =>
-      _db.assetsDao
-          .watchPatientAssets(patientId)
-          .map((rows) => rows.map(_fromData).toList());
+  Stream<List<AssetModel>> watchPatientAssets(int patientId) => _db.assetsDao
+      .watchPatientAssets(patientId)
+      .map((rows) => rows.map(_fromData).toList());
 
-  Stream<List<AssetModel>> watchTreatmentAssets(int treatmentId) =>
-      _db.assetsDao
-          .watchTreatmentAssets(treatmentId)
-          .map((rows) => rows.map(_fromData).toList());
+  Stream<List<AssetModel>> watchTreatmentAssets(int treatmentId) => _db
+      .assetsDao
+      .watchTreatmentAssets(treatmentId)
+      .map((rows) => rows.map(_fromData).toList());
 
   // ─── Write ─────────────────────────────────────────────────
 
@@ -57,8 +55,10 @@ class AssetsRepository {
     required String mimeType,
     String? label,
   }) async {
-    assert(patientId != null || treatmentId != null,
-        'Asset must belong to a patient or treatment');
+    assert(
+      patientId != null || treatmentId != null,
+      'Asset must belong to a patient or treatment',
+    );
 
     final dir = await _assetsDir();
     final ext = p.extension(sourceFile.path);

@@ -8,23 +8,23 @@ import '../tables/patients_table.dart';
 part 'reports_dao.g.dart';
 
 class MonthlyIncome {
+  const MonthlyIncome(this.year, this.month, this.total);
   final int year;
   final int month;
   final double total;
-  const MonthlyIncome(this.year, this.month, this.total);
 }
 
 class TreatmentTypeStat {
+  const TreatmentTypeStat(this.treatmentType, this.count, this.revenue);
   final String treatmentType;
   final int count;
   final double revenue;
-  const TreatmentTypeStat(this.treatmentType, this.count, this.revenue);
 }
 
 @DriftAccessor(
-    tables: [PaymentsTable, TreatmentsTable, AppointmentsTable, PatientsTable])
-class ReportsDao extends DatabaseAccessor<AppDatabase>
-    with _$ReportsDaoMixin {
+  tables: [PaymentsTable, TreatmentsTable, AppointmentsTable, PatientsTable],
+)
+class ReportsDao extends DatabaseAccessor<AppDatabase> with _$ReportsDaoMixin {
   ReportsDao(super.db);
 
   // ─── Income ────────────────────────────────────────────────
@@ -36,9 +36,11 @@ class ReportsDao extends DatabaseAccessor<AppDatabase>
     final sum = paymentsTable.amount.sum();
     final q = selectOnly(paymentsTable)
       ..addColumns([sum])
-      ..where(paymentsTable.paymentStatus.equals('paid') &
-          paymentsTable.paymentDate.isBiggerOrEqualValue(start) &
-          paymentsTable.paymentDate.isSmallerThanValue(end));
+      ..where(
+        paymentsTable.paymentStatus.equals('paid') &
+            paymentsTable.paymentDate.isBiggerOrEqualValue(start) &
+            paymentsTable.paymentDate.isSmallerThanValue(end),
+      );
     final result = await q.getSingle();
     return result.read(sum) ?? 0.0;
   }
@@ -50,9 +52,11 @@ class ReportsDao extends DatabaseAccessor<AppDatabase>
     final sum = paymentsTable.amount.sum();
     final q = selectOnly(paymentsTable)
       ..addColumns([sum])
-      ..where(paymentsTable.paymentStatus.equals('paid') &
-          paymentsTable.paymentDate.isBiggerOrEqualValue(start) &
-          paymentsTable.paymentDate.isSmallerThanValue(end));
+      ..where(
+        paymentsTable.paymentStatus.equals('paid') &
+            paymentsTable.paymentDate.isBiggerOrEqualValue(start) &
+            paymentsTable.paymentDate.isSmallerThanValue(end),
+      );
     final result = await q.getSingle();
     return result.read(sum) ?? 0.0;
   }
@@ -78,17 +82,17 @@ class ReportsDao extends DatabaseAccessor<AppDatabase>
     // Raw SQL via customSelect for GROUP BY
     String where = "status = 'completed'";
     if (year != null && month != null) {
-      final start =
-          DateTime(year, month, 1).toIso8601String().substring(0, 10);
-      final end =
-          DateTime(year, month + 1, 1).toIso8601String().substring(0, 10);
-      where +=
-          " AND created_at >= '$start' AND created_at < '$end'";
+      final start = DateTime(year, month, 1).toIso8601String().substring(0, 10);
+      final end = DateTime(
+        year,
+        month + 1,
+        1,
+      ).toIso8601String().substring(0, 10);
+      where += " AND created_at >= '$start' AND created_at < '$end'";
     } else if (year != null) {
       final start = DateTime(year, 1, 1).toIso8601String().substring(0, 10);
       final end = DateTime(year + 1, 1, 1).toIso8601String().substring(0, 10);
-      where +=
-          " AND created_at >= '$start' AND created_at < '$end'";
+      where += " AND created_at >= '$start' AND created_at < '$end'";
     }
 
     final rows = await customSelect(
@@ -106,11 +110,13 @@ class ReportsDao extends DatabaseAccessor<AppDatabase>
     ).get();
 
     return rows
-        .map((r) => TreatmentTypeStat(
-              r.read<String>('treatment_type'),
-              r.read<int>('cnt'),
-              r.read<double>('rev'),
-            ))
+        .map(
+          (r) => TreatmentTypeStat(
+            r.read<String>('treatment_type'),
+            r.read<int>('cnt'),
+            r.read<double>('rev'),
+          ),
+        )
         .toList();
   }
 
@@ -124,13 +130,17 @@ class ReportsDao extends DatabaseAccessor<AppDatabase>
     if (year != null && month != null) {
       final start = DateTime(year, month, 1);
       final end = DateTime(year, month + 1, 1);
-      q.where(treatmentsTable.createdAt.isBiggerOrEqualValue(start) &
-          treatmentsTable.createdAt.isSmallerThanValue(end));
+      q.where(
+        treatmentsTable.createdAt.isBiggerOrEqualValue(start) &
+            treatmentsTable.createdAt.isSmallerThanValue(end),
+      );
     } else if (year != null) {
       final start = DateTime(year, 1, 1);
       final end = DateTime(year + 1, 1, 1);
-      q.where(treatmentsTable.createdAt.isBiggerOrEqualValue(start) &
-          treatmentsTable.createdAt.isSmallerThanValue(end));
+      q.where(
+        treatmentsTable.createdAt.isBiggerOrEqualValue(start) &
+            treatmentsTable.createdAt.isSmallerThanValue(end),
+      );
     }
 
     return (await q.getSingle()).read(count) ?? 0;
@@ -140,7 +150,9 @@ class ReportsDao extends DatabaseAccessor<AppDatabase>
 
   /// Appointment counts by status for a given month
   Future<Map<String, int>> getAppointmentStatusBreakdown(
-      int year, int month) async {
+    int year,
+    int month,
+  ) async {
     final start = DateTime(year, month, 1);
     final end = DateTime(year, month + 1, 1);
 
@@ -168,8 +180,10 @@ class ReportsDao extends DatabaseAccessor<AppDatabase>
     final count = appointmentsTable.id.count();
     final q = selectOnly(appointmentsTable)
       ..addColumns([count])
-      ..where(appointmentsTable.appointmentDate.isBiggerOrEqualValue(start) &
-          appointmentsTable.appointmentDate.isSmallerThanValue(end));
+      ..where(
+        appointmentsTable.appointmentDate.isBiggerOrEqualValue(start) &
+            appointmentsTable.appointmentDate.isSmallerThanValue(end),
+      );
     return (await q.getSingle()).read(count) ?? 0;
   }
 
@@ -182,8 +196,10 @@ class ReportsDao extends DatabaseAccessor<AppDatabase>
     final count = patientsTable.id.count();
     final q = selectOnly(patientsTable)
       ..addColumns([count])
-      ..where(patientsTable.createdAt.isBiggerOrEqualValue(start) &
-          patientsTable.createdAt.isSmallerThanValue(end));
+      ..where(
+        patientsTable.createdAt.isBiggerOrEqualValue(start) &
+            patientsTable.createdAt.isSmallerThanValue(end),
+      );
     return (await q.getSingle()).read(count) ?? 0;
   }
 

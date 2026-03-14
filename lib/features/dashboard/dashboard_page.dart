@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import '../appointments/providers/appointments_providers.dart';
 import '../patients/providers/patients_providers.dart';
@@ -18,121 +18,118 @@ class DashboardPage extends ConsumerWidget {
     final clinicName = ref.watch(clinicNameProvider);
     final now = DateTime.now();
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(24),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // ── Greeting ──────────────────────────────────────
-            Text(
-              _greeting(),
-              style: theme.textTheme.headlineMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // ── Greeting ──────────────────────────────────────
+          Text(
+            _greeting(),
+            style: theme.textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          Row(
+            children: [
+              Text(
+                _formatToday(now),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: theme.colorScheme.outline,
+                ),
               ),
-            ),
-            Row(
-              children: [
-                Text(
-                  _formatToday(now),
-                  style: theme.textTheme.bodyMedium?.copyWith(
-                    color: theme.colorScheme.outline,
-                  ),
-                ),
-                const SizedBox(width: 8),
-                clinicName.maybeWhen(
-                  data: (name) => name.isNotEmpty
-                      ? Text(
-                          '— $name',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.primary,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                  orElse: () => const SizedBox.shrink(),
-                ),
-              ],
-            ),
-            const SizedBox(height: 28),
-
-            // ── Stats row ──────────────────────────────────────
-            Row(
-              children: [
-                Expanded(
-                  child: _StatCard(
-                    icon: Icons.calendar_today_outlined,
-                    label: 'مواعيد اليوم',
-                    valueAsync: todayAppts,
-                    color: theme.colorScheme.primary,
-                  ),
-                ),
-                const SizedBox(width: 14),
-                Expanded(
-                  child: _StatCard(
-                    icon: Icons.people_outline,
-                    label: 'إجمالي المرضى',
-                    valueAsync: totalPatients,
-                    color: Colors.teal,
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 28),
-
-            // ── Today's appointments ───────────────────────────
-            Text(
-              'مواعيد اليوم',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
+              const SizedBox(width: 8),
+              clinicName.maybeWhen(
+                data: (name) => name.isNotEmpty
+                    ? Text(
+                        '— $name',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+                orElse: () => const SizedBox.shrink(),
               ),
+            ],
+          ),
+          const SizedBox(height: 28),
+
+          // ── Stats row ──────────────────────────────────────
+          Row(
+            children: [
+              Expanded(
+                child: _StatCard(
+                  icon: Icons.calendar_today_outlined,
+                  label: 'مواعيد اليوم',
+                  valueAsync: todayAppts,
+                  color: theme.colorScheme.primary,
+                ),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: _StatCard(
+                  icon: Icons.people_outline,
+                  label: 'إجمالي المرضى',
+                  valueAsync: totalPatients,
+                  color: Colors.teal,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 28),
+
+          // ── Today's appointments ───────────────────────────
+          Text(
+            'مواعيد اليوم',
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontWeight: FontWeight.bold,
             ),
-            const SizedBox(height: 12),
-            todayList.when(
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Text('خطأ: $e'),
-              data: (appointments) {
-                if (appointments.isEmpty) {
-                  return Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(24),
-                    decoration: BoxDecoration(
-                      color: theme.colorScheme.surfaceContainerLowest,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(
+          ),
+          const SizedBox(height: 12),
+          todayList.when(
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (e, _) => Text('خطأ: $e'),
+            data: (appointments) {
+              if (appointments.isEmpty) {
+                return Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(24),
+                  decoration: BoxDecoration(
+                    color: theme.colorScheme.surfaceContainerLowest,
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(
+                      color: theme.colorScheme.outlineVariant,
+                    ),
+                  ),
+                  child: Column(
+                    children: [
+                      Icon(
+                        Icons.event_available_outlined,
+                        size: 44,
                         color: theme.colorScheme.outlineVariant,
                       ),
-                    ),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.event_available_outlined,
-                          size: 44,
-                          color: theme.colorScheme.outlineVariant,
+                      const SizedBox(height: 10),
+                      Text(
+                        'لا توجد مواعيد اليوم',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: theme.colorScheme.outline,
                         ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'لا توجد مواعيد اليوم',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: theme.colorScheme.outline,
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-
-                return Column(
-                  children: appointments
-                      .take(5)
-                      .map((appt) => _DashboardAppointmentRow(appt: appt))
-                      .toList(),
+                      ),
+                    ],
+                  ),
                 );
-              },
-            ),
-          ],
-        ),
+              }
+
+              return Column(
+                children: appointments
+                    .take(5)
+                    .map((appt) => _DashboardAppointmentRow(appt: appt))
+                    .toList(),
+              );
+            },
+          ),
+        ],
       ),
     );
   }

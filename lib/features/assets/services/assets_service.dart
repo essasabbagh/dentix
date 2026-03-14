@@ -3,9 +3,8 @@ import '../data/assets_repository.dart';
 import '../models/asset_model.dart';
 
 class AssetsService {
-  final AssetsRepository _repository;
-
   AssetsService(this._repository);
+  final AssetsRepository _repository;
 
   // ─── Streams ───────────────────────────────────────────────
 
@@ -21,30 +20,27 @@ class AssetsService {
     required int patientId,
     required File file,
     String? label,
-  }) =>
-      _repository.addAsset(
-        patientId: patientId,
-        sourceFile: file,
-        mimeType: _detectMime(file.path),
-        label: label,
-      );
+  }) => _repository.addAsset(
+    patientId: patientId,
+    sourceFile: file,
+    mimeType: _detectMime(file.path),
+    label: label,
+  );
 
   Future<AssetModel> addTreatmentAsset({
     required int treatmentId,
     required File file,
     String? label,
-  }) =>
-      _repository.addAsset(
-        treatmentId: treatmentId,
-        sourceFile: file,
-        mimeType: _detectMime(file.path),
-        label: label,
-      );
+  }) => _repository.addAsset(
+    treatmentId: treatmentId,
+    sourceFile: file,
+    mimeType: _detectMime(file.path),
+    label: label,
+  );
 
   // ─── Delete ────────────────────────────────────────────────
 
-  Future<void> deleteAsset(AssetModel asset) =>
-      _repository.deleteAsset(asset);
+  Future<void> deleteAsset(AssetModel asset) => _repository.deleteAsset(asset);
 
   Future<void> deleteAllPatientAssets(int patientId) =>
       _repository.deleteAllPatientAssets(patientId);

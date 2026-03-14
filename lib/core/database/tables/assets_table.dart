@@ -40,9 +40,13 @@ class AssetsTable extends Table {
 
   @override
   List<Index> get indexes => [
-        Index('assets_patient_idx',
-            'CREATE INDEX assets_patient_idx ON assets(patient_id)'),
-        Index('assets_treatment_idx',
-            'CREATE INDEX assets_treatment_idx ON assets(treatment_id)'),
-      ];
+    Index(
+      'assets_patient_idx',
+      'CREATE INDEX assets_patient_idx ON assets(patient_id)',
+    ),
+    Index(
+      'assets_treatment_idx',
+      'CREATE INDEX assets_treatment_idx ON assets(treatment_id)',
+    ),
+  ];
 }
