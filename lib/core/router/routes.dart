@@ -6,6 +6,7 @@ import 'package:template/features/dashboard/dashboard_page.dart';
 import 'package:template/features/odontogram/pages/odontogram_page.dart';
 import 'package:template/features/patients/pages/patients_page.dart';
 import 'package:template/features/payments/pages/payments_page.dart';
+import 'package:template/features/reports/pages/reports_page.dart';
 import 'package:template/features/root/root_page.dart';
 import 'package:template/features/settings/pages/settings_screen.dart';
 import 'package:template/features/splash/splash_screen.dart';
@@ -81,13 +82,5 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const SplashScreen();
-  }
-}
-
-class ReportsPage extends StatelessWidget {
-  const ReportsPage({super.key});
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Reports'));
   }
 }

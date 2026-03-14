@@ -70,6 +70,7 @@ dependencies:
 
   webview_flutter_android: any
   webview_flutter_wkwebview: any
+  open_file: ^3.5.11
 
 dev_dependencies:
   flutter_test:

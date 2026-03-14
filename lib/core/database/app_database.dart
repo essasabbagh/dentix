@@ -10,6 +10,7 @@ import 'tables/treatments_table.dart';
 import 'tables/payments_table.dart';
 import 'tables/odontogram_table.dart';
 import 'tables/settings_table.dart';
+import 'tables/assets_table.dart';
 
 import 'daos/patients_dao.dart';
 import 'daos/appointments_dao.dart';
@@ -17,6 +18,8 @@ import 'daos/treatments_dao.dart';
 import 'daos/payments_dao.dart';
 import 'daos/odontogram_dao.dart';
 import 'daos/settings_dao.dart';
+import 'daos/assets_dao.dart';
+import 'daos/reports_dao.dart';
 
 part 'app_database.g.dart';
 
@@ -28,6 +31,7 @@ part 'app_database.g.dart';
     PaymentsTable,
     OdontogramTable,
     SettingsTable,
+    AssetsTable,
   ],
   daos: [
     PatientsDao,
@@ -36,27 +40,30 @@ part 'app_database.g.dart';
     PaymentsDao,
     OdontogramDao,
     SettingsDao,
+    AssetsDao,
+    ReportsDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
-  AppDatabase.forTesting(DatabaseConnection super.connection);
+  AppDatabase.forTesting(DatabaseConnection connection) : super(connection);
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-    onCreate: (Migrator m) async {
-      await m.createAll();
-      // Seed default settings
-      await _seedDefaultSettings();
-    },
-    onUpgrade: (Migrator m, int from, int to) async {
-      // Future migrations here
-    },
-  );
+        onCreate: (Migrator m) async {
+          await m.createAll();
+          await _seedDefaultSettings();
+        },
+        onUpgrade: (Migrator m, int from, int to) async {
+          if (from < 2) {
+            await m.createTable(assetsTable);
+          }
+        },
+      );
 
   Future<void> _seedDefaultSettings() async {
     final defaultSettings = {
@@ -68,13 +75,9 @@ class AppDatabase extends _$AppDatabase {
       'language': 'ar',
       'doctor_name': 'الدكتور',
     };
-
     for (final entry in defaultSettings.entries) {
       await into(settingsTable).insertOnConflictUpdate(
-        SettingsTableCompanion.insert(
-          key: entry.key,
-          value: entry.value,
-        ),
+        SettingsTableCompanion.insert(key: entry.key, value: entry.value),
       );
     }
   }

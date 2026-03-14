@@ -1,23 +1,28 @@
 import 'package:flutter/material.dart';
 
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
 import 'package:template/features/appointments/models/appointment_model.dart';
 import 'package:template/features/appointments/pages/add_appointment_page.dart';
 import 'package:template/features/appointments/providers/appointments_providers.dart';
-import 'package:template/features/patients/providers/patients_providers.dart';
+import 'package:template/features/assets/widgets/assets_section.dart';
 import 'package:template/features/payments/models/payment_model.dart';
 import 'package:template/features/payments/providers/payments_providers.dart';
 import 'package:template/features/treatments/models/treatment_model.dart';
 import 'package:template/features/treatments/providers/treatments_providers.dart';
 
 import '../models/patient_model.dart';
+import '../providers/patients_providers.dart';
 
 import 'add_edit_patient_page.dart';
 
 class PatientDetailPage extends ConsumerWidget {
-  const PatientDetailPage({super.key, required this.patientId});
+  const PatientDetailPage({
+    super.key,
+    required this.patientId,
+  });
+  
   final int patientId;
 
   @override
@@ -47,7 +52,6 @@ class PatientDetailPage extends ConsumerWidget {
 
 class _PatientDetailScaffold extends ConsumerWidget {
   const _PatientDetailScaffold({required this.patient});
-
   final PatientModel patient;
 
   @override
@@ -195,16 +199,16 @@ class _PatientHeader extends StatelessWidget {
                     Icon(
                       Icons.phone_outlined,
                       size: 13,
-                      color: theme.colorScheme.onPrimaryContainer.withValues(
-                        alpha: 0.7,
+                      color: theme.colorScheme.onPrimaryContainer.withOpacity(
+                        0.7,
                       ),
                     ),
                     const SizedBox(width: 4),
                     Text(
                       patient.phone,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onPrimaryContainer.withValues(
-                          alpha: 0.8,
+                        color: theme.colorScheme.onPrimaryContainer.withOpacity(
+                          0.8,
                         ),
                       ),
                     ),
@@ -214,7 +218,7 @@ class _PatientHeader extends StatelessWidget {
                         '${patient.age} سنة',
                         style: theme.textTheme.bodySmall?.copyWith(
                           color: theme.colorScheme.onPrimaryContainer
-                              .withValues(alpha: 0.8),
+                              .withOpacity(0.8),
                         ),
                       ),
                     ],
@@ -262,8 +266,7 @@ class _InfoTab extends StatelessWidget {
                 icon: Icons.cake_outlined,
                 label: 'تاريخ الميلاد',
                 value:
-                    '${DateFormat('yyyy/MM/dd').format(patient.birthDate!)} — '
-                    '${patient.age} سنة',
+                    '${DateFormat('yyyy/MM/dd').format(patient.birthDate!)} — ${patient.age} سنة',
               ),
             if (patient.email?.isNotEmpty == true)
               _InfoRow(
@@ -289,6 +292,11 @@ class _InfoTab extends StatelessWidget {
               value: DateFormat('yyyy/MM/dd').format(patient.createdAt),
             ),
           ],
+        ),
+        const SizedBox(height: 16),
+        AssetsSection(
+          assetContext: AssetContext.patient,
+          ownerId: patient.id,
         ),
       ],
     );
@@ -331,7 +339,7 @@ class _AppointmentsTab extends ConsumerWidget {
                 : ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: appointments.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 8),
+                    separatorBuilder: (_, __) => const SizedBox(height: 8),
                     itemBuilder: (_, i) =>
                         _AppointmentTile(appointment: appointments[i]),
                   ),
@@ -355,10 +363,7 @@ class _AppointmentTile extends ConsumerWidget {
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: statusColor.withValues(alpha: 0.35),
-          width: 1.5,
-        ),
+        side: BorderSide(color: statusColor.withOpacity(0.35), width: 1.5),
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
@@ -368,7 +373,7 @@ class _AppointmentTile extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
               decoration: BoxDecoration(
-                color: statusColor.withValues(alpha: 0.1),
+                color: statusColor.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Column(
@@ -481,7 +486,7 @@ class _TreatmentsTab extends ConsumerWidget {
                 : ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: treatments.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 8),
+                    separatorBuilder: (_, __) => const SizedBox(height: 8),
                     itemBuilder: (_, i) =>
                         _TreatmentTile(treatment: treatments[i]),
                   ),
@@ -702,11 +707,11 @@ class _PaymentsTab extends ConsumerWidget {
           ),
           if (payments.isNotEmpty)
             totalPaid.maybeWhen(
-              orElse: () => const SizedBox.shrink(),
               data: (total) => _PaymentsTotalBar(
                 payments: payments,
                 totalPaid: total,
               ),
+              orElse: () => const SizedBox.shrink(),
             ),
           Expanded(
             child: payments.isEmpty
@@ -716,7 +721,7 @@ class _PaymentsTab extends ConsumerWidget {
                 : ListView.separated(
                     padding: const EdgeInsets.all(16),
                     itemCount: payments.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 8),
+                    separatorBuilder: (_, __) => const SizedBox(height: 8),
                     itemBuilder: (_, i) => _PaymentTile(payment: payments[i]),
                   ),
           ),
@@ -936,9 +941,8 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
                           keyboard: TextInputType.number,
                           validator: (v) {
                             if (v?.isEmpty == true) return 'مطلوب';
-                            if (double.tryParse(v!) == null) {
+                            if (double.tryParse(v!) == null)
                               return 'أدخل رقماً';
-                            }
                             return null;
                           },
                         ),
@@ -1094,9 +1098,8 @@ class _AddPaymentDialogState extends ConsumerState<_AddPaymentDialog> {
                           ),
                           validator: (v) {
                             if (v?.isEmpty == true) return 'مطلوب';
-                            if (double.tryParse(v!) == null) {
+                            if (double.tryParse(v!) == null)
                               return 'أدخل رقماً';
-                            }
                             return null;
                           },
                         ),
@@ -1364,9 +1367,9 @@ class _StatusBadge extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
+        color: color.withOpacity(0.12),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withValues(alpha: 0.4)),
+        border: Border.all(color: color.withOpacity(0.4)),
       ),
       child: Text(
         label,

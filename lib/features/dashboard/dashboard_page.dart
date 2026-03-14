@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:template/features/appointments/providers/appointments_providers.dart';
-import 'package:template/features/patients/providers/patients_providers.dart';
+import '../appointments/providers/appointments_providers.dart';
+import '../patients/providers/patients_providers.dart';
+import '../settings/providers/settings_providers.dart';
 
 class DashboardPage extends ConsumerWidget {
   const DashboardPage({super.key});
@@ -14,6 +15,7 @@ class DashboardPage extends ConsumerWidget {
     final todayAppts = ref.watch(todayAppointmentsCountProvider);
     final totalPatients = ref.watch(patientsCountProvider);
     final todayList = ref.watch(appointmentsForDateProvider);
+    final clinicName = ref.watch(clinicNameProvider);
     final now = DateTime.now();
 
     return Directionality(
@@ -23,22 +25,39 @@ class DashboardPage extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Greeting ─────────────────────────────────────
+            // ── Greeting ──────────────────────────────────────
             Text(
               _greeting(),
               style: theme.textTheme.headlineMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Text(
-              _formatToday(now),
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.outline,
-              ),
+            Row(
+              children: [
+                Text(
+                  _formatToday(now),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.outline,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                clinicName.maybeWhen(
+                  data: (name) => name.isNotEmpty
+                      ? Text(
+                          '— $name',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      : const SizedBox.shrink(),
+                  orElse: () => const SizedBox.shrink(),
+                ),
+              ],
             ),
             const SizedBox(height: 28),
 
-            // ── Stats row ─────────────────────────────────────
+            // ── Stats row ──────────────────────────────────────
             Row(
               children: [
                 Expanded(
@@ -144,8 +163,6 @@ class DashboardPage extends ConsumerWidget {
   }
 }
 
-// ── Stat card ─────────────────────────────────────────────────────────────
-
 class _StatCard extends StatelessWidget {
   const _StatCard({
     required this.icon,
@@ -161,13 +178,12 @@ class _StatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.08),
+        color: color.withOpacity(0.08),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: color.withValues(alpha: 0.2)),
+        border: Border.all(color: color.withOpacity(0.2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,7 +200,7 @@ class _StatCard extends StatelessWidget {
             ),
             loading: () =>
                 const SizedBox(height: 36, child: CircularProgressIndicator()),
-            error: (_, _) => const Text('—'),
+            error: (_, __) => const Text('—'),
           ),
           const SizedBox(height: 4),
           Text(
@@ -198,8 +214,6 @@ class _StatCard extends StatelessWidget {
     );
   }
 }
-
-// ── Dashboard appointment row ─────────────────────────────────────────────
 
 class _DashboardAppointmentRow extends StatelessWidget {
   const _DashboardAppointmentRow({required this.appt});
