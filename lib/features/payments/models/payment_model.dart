@@ -1,33 +1,3 @@
-enum PaymentMethod {
-  cash,
-  card,
-  transfer;
-
-  String get arabicLabel {
-    return switch (this) {
-      PaymentMethod.cash => 'نقد',
-      PaymentMethod.card => 'بطاقة',
-      PaymentMethod.transfer => 'تحويل',
-    };
-  }
-
-  String get dbValue {
-    return switch (this) {
-      PaymentMethod.cash => 'cash',
-      PaymentMethod.card => 'card',
-      PaymentMethod.transfer => 'transfer',
-    };
-  }
-
-  static PaymentMethod fromDb(String value) {
-    return switch (value) {
-      'card' => PaymentMethod.card,
-      'transfer' => PaymentMethod.transfer,
-      _ => PaymentMethod.cash,
-    };
-  }
-}
-
 enum PaymentStatus {
   paid,
   pending,
@@ -64,7 +34,6 @@ class PaymentModel {
     required this.patientId,
     this.treatmentId,
     required this.amount,
-    required this.paymentMethod,
     required this.paymentStatus,
     required this.paymentDate,
     this.notes,
@@ -74,7 +43,6 @@ class PaymentModel {
   final int patientId;
   final int? treatmentId;
   final double amount;
-  final PaymentMethod paymentMethod;
   final PaymentStatus paymentStatus;
   final DateTime paymentDate;
   final String? notes;

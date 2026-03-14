@@ -43,26 +43,22 @@ class PaymentsFilter {
   const PaymentsFilter({
     this.query = '',
     this.status,
-    this.method,
     this.dateFrom,
     this.dateTo,
   });
   final String query;
   final PaymentStatus? status;
-  final PaymentMethod? method;
   final DateTime? dateFrom;
   final DateTime? dateTo;
 
   PaymentsFilter copyWith({
     String? query,
     Object? status = _sentinel,
-    Object? method = _sentinel,
     Object? dateFrom = _sentinel,
     Object? dateTo = _sentinel,
   }) => PaymentsFilter(
     query: query ?? this.query,
     status: status == _sentinel ? this.status : status as PaymentStatus?,
-    method: method == _sentinel ? this.method : method as PaymentMethod?,
     dateFrom: dateFrom == _sentinel ? this.dateFrom : dateFrom as DateTime?,
     dateTo: dateTo == _sentinel ? this.dateTo : dateTo as DateTime?,
   );
@@ -70,7 +66,6 @@ class PaymentsFilter {
   bool get hasActiveFilters =>
       query.isNotEmpty ||
       status != null ||
-      method != null ||
       dateFrom != null ||
       dateTo != null;
 }
@@ -103,16 +98,6 @@ final filteredPaymentsProvider = Provider<AsyncValue<List<PaymentWithPatient>>>(
               (p) =>
                   PaymentStatus.fromDb(p.payment.paymentStatus) ==
                   filter.status,
-            )
-            .toList();
-      }
-
-      if (filter.method != null) {
-        result = result
-            .where(
-              (p) =>
-                  PaymentMethod.fromDb(p.payment.paymentMethod) ==
-                  filter.method,
             )
             .toList();
       }
@@ -182,7 +167,6 @@ class PaymentFormNotifier extends StateNotifier<AsyncValue<void>> {
     required int patientId,
     int? treatmentId,
     required double amount,
-    required PaymentMethod method,
     required PaymentStatus status,
     String? notes,
   }) async {
@@ -192,7 +176,6 @@ class PaymentFormNotifier extends StateNotifier<AsyncValue<void>> {
         patientId: patientId,
         treatmentId: treatmentId,
         amount: amount,
-        method: method,
         status: status,
         notes: notes,
       );

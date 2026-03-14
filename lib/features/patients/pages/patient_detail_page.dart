@@ -790,14 +790,14 @@ class _PaymentTile extends ConsumerWidget {
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: theme.colorScheme.primaryContainer,
+                color: theme.colorScheme.primaryContainer.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(10),
               ),
               alignment: Alignment.center,
               child: Icon(
-                _methodIcon(payment.paymentMethod),
+                Icons.payments_outlined,
                 size: 20,
-                color: theme.colorScheme.onPrimaryContainer,
+                color: theme.colorScheme.primary,
               ),
             ),
             const SizedBox(width: 12),
@@ -806,15 +806,9 @@ class _PaymentTile extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    payment.paymentMethod.arabicLabel,
+                    DateFormat('yyyy/MM/dd').format(payment.paymentDate),
                     style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    DateFormat('yyyy/MM/dd').format(payment.paymentDate),
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: theme.colorScheme.outline,
                     ),
                   ),
                   if (payment.notes?.isNotEmpty == true)
@@ -865,14 +859,6 @@ class _PaymentTile extends ConsumerWidget {
       PaymentStatus.paid => Colors.green,
       PaymentStatus.pending => Colors.orange,
       PaymentStatus.partial => t.colorScheme.primary,
-    };
-  }
-
-  IconData _methodIcon(PaymentMethod m) {
-    return switch (m) {
-      PaymentMethod.cash => Icons.money_outlined,
-      PaymentMethod.card => Icons.credit_card_outlined,
-      PaymentMethod.transfer => Icons.account_balance_outlined,
     };
   }
 }
@@ -1039,7 +1025,6 @@ class _AddPaymentDialogState extends ConsumerState<_AddPaymentDialog> {
   final _formKey = GlobalKey<FormState>();
   final _amountController = TextEditingController();
   final _notesController = TextEditingController();
-  PaymentMethod _method = PaymentMethod.cash;
   PaymentStatus _status = PaymentStatus.paid;
 
   @override
@@ -1057,7 +1042,7 @@ class _AddPaymentDialogState extends ConsumerState<_AddPaymentDialog> {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 460, maxHeight: 520),
+        constraints: const BoxConstraints(maxWidth: 460, maxHeight: 420),
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: Column(
@@ -1098,30 +1083,6 @@ class _AddPaymentDialogState extends ConsumerState<_AddPaymentDialog> {
                             }
                             return null;
                           },
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'طريقة الدفع',
-                          style: theme.textTheme.labelMedium?.copyWith(
-                            color: theme.colorScheme.outline,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: PaymentMethod.values
-                              .map(
-                                (m) => Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 6),
-                                    child: _ChoiceChip(
-                                      label: m.arabicLabel,
-                                      selected: _method == m,
-                                      onTap: () => setState(() => _method = m),
-                                    ),
-                                  ),
-                                ),
-                              )
-                              .toList(),
                         ),
                         const SizedBox(height: 16),
                         Text(
@@ -1191,7 +1152,6 @@ class _AddPaymentDialogState extends ConsumerState<_AddPaymentDialog> {
         .create(
           patientId: widget.patientId,
           amount: double.parse(_amountController.text.trim()),
-          method: _method,
           status: _status,
           notes: _notesController.text.trim().isEmpty
               ? null

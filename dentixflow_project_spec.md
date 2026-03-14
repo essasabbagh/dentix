@@ -191,10 +191,12 @@ Fields:
 
 -   id
 -   patient_id
--   invoice_id
+-   treatment_id
 -   amount
--   payment_type
--   date
+-   payment_status
+-   payment_date
+-   notes
+-   created_at
 
 ------------------------------------------------------------------------
 

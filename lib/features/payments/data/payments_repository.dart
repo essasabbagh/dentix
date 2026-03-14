@@ -1,5 +1,7 @@
 import 'package:drift/drift.dart';
-import '../../../core/database/app_database.dart';
+
+import 'package:template/core/database/app_database.dart';
+
 import '../models/payment_model.dart';
 
 class PaymentsRepository {
@@ -11,7 +13,6 @@ class PaymentsRepository {
     patientId: d.patientId,
     treatmentId: d.treatmentId,
     amount: d.amount,
-    paymentMethod: PaymentMethod.fromDb(d.paymentMethod),
     paymentStatus: PaymentStatus.fromDb(d.paymentStatus),
     paymentDate: d.paymentDate,
     notes: d.notes,
@@ -27,7 +28,6 @@ class PaymentsRepository {
     required int patientId,
     int? treatmentId,
     required double amount,
-    required PaymentMethod method,
     required PaymentStatus status,
     String? notes,
   }) => _db.paymentsDao.insertPayment(
@@ -35,7 +35,6 @@ class PaymentsRepository {
       patientId: patientId,
       treatmentId: Value(treatmentId),
       amount: amount,
-      paymentMethod: Value(method.dbValue),
       paymentStatus: Value(status.dbValue),
       notes: Value(notes),
     ),

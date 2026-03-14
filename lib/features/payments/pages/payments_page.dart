@@ -145,7 +145,6 @@ class _PaymentsSearchAndFilterBarState
           _FilterIconButton(
             active:
                 filter.status != null ||
-                filter.method != null ||
                 filter.dateFrom != null ||
                 filter.dateTo != null,
             onTap: () => showModalBottomSheet(
@@ -178,16 +177,6 @@ class _PaymentsActiveFilterChips extends ConsumerWidget {
           onRemove: () => ref
               .read(paymentsFilterProvider.notifier)
               .update((f) => f.copyWith(status: null)),
-        ),
-      );
-    }
-    if (filter.method != null) {
-      chips.add(
-        _RemovableChip(
-          label: filter.method!.arabicLabel,
-          onRemove: () => ref
-              .read(paymentsFilterProvider.notifier)
-              .update((f) => f.copyWith(method: null)),
         ),
       );
     }
@@ -255,9 +244,6 @@ class _PaymentsSummaryBar extends ConsumerWidget {
               value: '${s.totalPending.toStringAsFixed(0)} ر.س',
               color: Colors.orange,
             ),
-            const Spacer(),
-            // Method breakdown chips
-            _MethodBreakdown(),
           ],
         ),
       ),
@@ -265,94 +251,6 @@ class _PaymentsSummaryBar extends ConsumerWidget {
     );
   }
 }
-
-class _MethodBreakdown extends ConsumerWidget {
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final dataAsync = ref.watch(filteredPaymentsProvider);
-    return dataAsync.maybeWhen(
-      data: (list) {
-        final cash = list
-            .where((p) => p.payment.paymentMethod == 'cash')
-            .fold<double>(0, (s, p) => s + p.payment.amount);
-        final card = list
-            .where((p) => p.payment.paymentMethod == 'card')
-            .fold<double>(0, (s, p) => s + p.payment.amount);
-        final transfer = list
-            .where((p) => p.payment.paymentMethod == 'transfer')
-            .fold<double>(0, (s, p) => s + p.payment.amount);
-
-        return Row(
-          children: [
-            if (cash > 0)
-              _MiniMethodPill(
-                icon: Icons.money_outlined,
-                value: cash.toStringAsFixed(0),
-                color: Colors.teal,
-              ),
-            if (card > 0) ...[
-              const SizedBox(width: 6),
-              _MiniMethodPill(
-                icon: Icons.credit_card_outlined,
-                value: card.toStringAsFixed(0),
-                color: Colors.blue,
-              ),
-            ],
-            if (transfer > 0) ...[
-              const SizedBox(width: 6),
-              _MiniMethodPill(
-                icon: Icons.account_balance_outlined,
-                value: transfer.toStringAsFixed(0),
-                color: Colors.purple,
-              ),
-            ],
-          ],
-        );
-      },
-      orElse: () => const SizedBox.shrink(),
-    );
-  }
-}
-
-class _MiniMethodPill extends StatelessWidget {
-  const _MiniMethodPill({
-    required this.icon,
-    required this.value,
-    required this.color,
-  });
-  final IconData icon;
-  final String value;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withValues(alpha: 0.3)),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, size: 12, color: color),
-          const SizedBox(width: 4),
-          Text(
-            value,
-            style: TextStyle(
-              color: color,
-              fontSize: 11,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ── Payments list ──────────────────────────────────────────────────────────
 
 class _PaymentsList extends ConsumerWidget {
   const _PaymentsList();
@@ -406,10 +304,8 @@ class _PaymentCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final method = PaymentMethod.fromDb(item.payment.paymentMethod);
     final status = PaymentStatus.fromDb(item.payment.paymentStatus);
     final statusColor = _statusColor(status, theme);
-    final methodColor = _methodColor(method);
 
     return Card(
       elevation: 0,
@@ -421,17 +317,17 @@ class _PaymentCard extends ConsumerWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         child: Row(
           children: [
-            // Method icon container
+            // Icon container
             Container(
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: methodColor.withValues(alpha: 0.12),
+                color: theme.colorScheme.primaryContainer.withValues(alpha: 0.12),
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: methodColor.withValues(alpha: 0.3)),
+                border: Border.all(color: theme.colorScheme.primary.withValues(alpha: 0.3)),
               ),
               alignment: Alignment.center,
-              child: Icon(_methodIcon(method), size: 20, color: methodColor),
+              child: Icon(Icons.payments_outlined, size: 20, color: theme.colorScheme.primary),
             ),
             const SizedBox(width: 14),
             // Main info
@@ -464,11 +360,6 @@ class _PaymentCard extends ConsumerWidget {
                   const SizedBox(height: 5),
                   Row(
                     children: [
-                      _MethodBadge(
-                        label: method.arabicLabel,
-                        color: methodColor,
-                      ),
-                      const SizedBox(width: 8),
                       _StatusBadge(
                         label: status.arabicLabel,
                         color: statusColor,
@@ -527,22 +418,6 @@ class _PaymentCard extends ConsumerWidget {
       PaymentStatus.partial => t.colorScheme.primary,
     };
   }
-
-  Color _methodColor(PaymentMethod m) {
-    return switch (m) {
-      PaymentMethod.cash => Colors.teal,
-      PaymentMethod.card => Colors.blue,
-      PaymentMethod.transfer => Colors.purple,
-    };
-  }
-
-  IconData _methodIcon(PaymentMethod m) {
-    return switch (m) {
-      PaymentMethod.cash => Icons.money_outlined,
-      PaymentMethod.card => Icons.credit_card_outlined,
-      PaymentMethod.transfer => Icons.account_balance_outlined,
-    };
-  }
 }
 
 // ── Filter bottom sheet ────────────────────────────────────────────────────
@@ -557,7 +432,6 @@ class _PaymentsFilterSheet extends ConsumerStatefulWidget {
 
 class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
   late PaymentStatus? _status;
-  late PaymentMethod? _method;
   late DateTime? _dateFrom;
   late DateTime? _dateTo;
 
@@ -566,7 +440,6 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
     super.initState();
     final f = ref.read(paymentsFilterProvider);
     _status = f.status;
-    _method = f.method;
     _dateFrom = f.dateFrom;
     _dateTo = f.dateTo;
   }
@@ -627,34 +500,6 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
                     selected: _status == s,
                     onTap: () => setState(() => _status = s),
                     color: _payStatusColor(s),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
-
-            // Payment method
-            Text(
-              'طريقة الدفع',
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: theme.colorScheme.outline,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 8,
-              children: [
-                _SheetChip(
-                  label: 'الكل',
-                  selected: _method == null,
-                  onTap: () => setState(() => _method = null),
-                ),
-                ...PaymentMethod.values.map(
-                  (m) => _SheetChip(
-                    label: m.arabicLabel,
-                    selected: _method == m,
-                    onTap: () => setState(() => _method = m),
-                    color: _methodColor(m),
                   ),
                 ),
               ],
@@ -727,7 +572,6 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
                           .update(
                             (f) => f.copyWith(
                               status: null,
-                              method: null,
                               dateFrom: null,
                               dateTo: null,
                             ),
@@ -746,7 +590,6 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
                           .update(
                             (f) => f.copyWith(
                               status: _status,
-                              method: _method,
                               dateFrom: _dateFrom,
                               dateTo: _dateTo,
                             ),
@@ -769,14 +612,6 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
       PaymentStatus.paid => Colors.green,
       PaymentStatus.pending => Colors.orange,
       PaymentStatus.partial => Colors.blue
-    };
-  }
-
-  Color _methodColor(PaymentMethod m) {
-    return switch (m) {
-      PaymentMethod.cash => Colors.teal,
-      PaymentMethod.card => Colors.blue,
-      PaymentMethod.transfer => Colors.purple
     };
   }
 }
@@ -882,31 +717,6 @@ class _StatusBadge extends StatelessWidget {
           color: color,
           fontSize: 10,
           fontWeight: FontWeight.w600,
-        ),
-      ),
-    );
-  }
-}
-
-class _MethodBadge extends StatelessWidget {
-  const _MethodBadge({required this.label, required this.color});
-  final String label;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: color,
-          fontSize: 10,
-          fontWeight: FontWeight.w500,
         ),
       ),
     );

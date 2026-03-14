@@ -11,9 +11,6 @@ class PaymentsTable extends Table {
       .references(TreatmentsTable, #id)
       .nullable()();
   RealColumn get amount => real()();
-  TextColumn get paymentMethod =>
-      text().named('payment_method').withDefault(const Constant('cash'))();
-  // cash | card | transfer
   TextColumn get paymentStatus =>
       text().named('payment_status').withDefault(const Constant('paid'))();
   // paid | pending | partial
