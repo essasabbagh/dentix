@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:template/components/loading/loading_widget.dart';
+import 'package:template/core/utils/date_helper.dart';
 
 import '../models/appointment_model.dart';
 import '../providers/appointments_providers.dart';
@@ -23,12 +24,9 @@ class AppointmentsPage extends ConsumerWidget {
       backgroundColor: theme.colorScheme.surface,
       body: Column(
         children: [
-          // ── Header + date navigator ──────────────────────
           _DateNavigator(selectedDate: selectedDate),
-          // ── Week strip ───────────────────────────────────
           _WeekStrip(selectedDate: selectedDate),
           const Divider(height: 1),
-          // ── Appointments list ────────────────────────────
           Expanded(
             child: appointmentsAsync.when(
               loading: LoadingWidget.new,
@@ -62,15 +60,10 @@ class AppointmentsPage extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _openAdd(context, ref),
-        icon: const Icon(
-          Icons.add,
-          color: Colors.white,
-        ),
+        icon: const Icon(Icons.add, color: Colors.white),
         label: const Text(
           'موعد جديد',
-          style: TextStyle(
-            color: Colors.white,
-          ),
+          style: TextStyle(color: Colors.white),
         ),
       ),
     );
@@ -89,12 +82,14 @@ class AppointmentsPage extends ConsumerWidget {
     WidgetRef ref,
     AppointmentModel appt,
   ) async {
+    // Use DateHelper.time for the appointment time label in the dialog
+    final timeLabel = DateHelper.time(appt.appointmentDate);
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('حذف الموعد'),
         content: Text(
-          'هل تريد حذف موعد ${appt.patient?.fullName ?? ''} في ${appt.timeLabel}؟',
+          'هل تريد حذف موعد ${appt.patient?.fullName ?? ''} في $timeLabel؟',
         ),
         actions: [
           TextButton(
@@ -151,8 +146,12 @@ class _DateNavigator extends ConsumerWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
+              // DateHelper.format with full weekday + Syrian month + day/month/year
               Text(
-                _formatDate(selectedDate),
+                DateHelper.format(
+                  selectedDate,
+                  pattern: 'EEEE، dd MMMM yyyy',
+                ),
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.outline,
                 ),
@@ -170,10 +169,7 @@ class _DateNavigator extends ConsumerWidget {
                   now.day,
                 );
               },
-              child: Text(
-                'اليوم',
-                style: theme.textTheme.bodyMedium,
-              ),
+              child: Text('اليوم', style: theme.textTheme.bodyMedium),
             ),
           IconButton(
             icon: const Icon(Icons.chevron_left),
@@ -194,35 +190,6 @@ class _DateNavigator extends ConsumerWidget {
       ),
     );
   }
-
-  String _formatDate(DateTime d) {
-    const arabicMonths = [
-      'يناير',
-      'فبراير',
-      'مارس',
-      'أبريل',
-      'مايو',
-      'يونيو',
-      'يوليو',
-      'أغسطس',
-      'سبتمبر',
-      'أكتوبر',
-      'نوفمبر',
-      'ديسمبر',
-    ];
-    const arabicDays = [
-      'الاثنين',
-      'الثلاثاء',
-      'الأربعاء',
-      'الخميس',
-      'الجمعة',
-      'السبت',
-      'الأحد',
-    ];
-    final weekday = arabicDays[d.weekday - 1];
-    final month = arabicMonths[d.month - 1];
-    return '$weekday، ${d.day} $month ${d.year}';
-  }
 }
 
 // ── 7-day week strip ──────────────────────────────────────────────────────
@@ -236,12 +203,10 @@ class _WeekStrip extends ConsumerWidget {
     final theme = Theme.of(context);
     final today = DateTime.now();
 
-    // Generate 7 days centered around selected
-    final days = List.generate(7, (i) {
-      return selectedDate.subtract(Duration(days: 3 - i));
-    });
-
-    const arabicDayShort = ['ن', 'ث', 'ر', 'خ', 'ج', 'س', 'ح'];
+    final days = List.generate(
+      7,
+      (i) => selectedDate.subtract(Duration(days: 3 - i)),
+    );
 
     return Container(
       height: 76,
@@ -258,6 +223,19 @@ class _WeekStrip extends ConsumerWidget {
               day.month == today.month &&
               day.day == today.day;
 
+          // DateHelper.format with 'EEE' gives the short weekday in Arabic
+          // useEnglishNumbers: true so the day number stays as "3" not "٣"
+          final shortDay = DateHelper.format(
+            day,
+            pattern: 'EEE',
+            useEnglishNumbers: true,
+          );
+          final dayNumber = DateHelper.format(
+            day,
+            pattern: 'd',
+            useEnglishNumbers: true,
+          );
+
           return GestureDetector(
             onTap: () => ref.read(selectedDateProvider.notifier).state = day,
             child: AnimatedContainer(
@@ -273,20 +251,18 @@ class _WeekStrip extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    arabicDayShort[day.weekday - 1],
+                    shortDay,
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: isSelected
-                          ? theme.colorScheme.outline
-                          : theme.colorScheme.outline,
+                      color: theme.colorScheme.outline,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    '${day.day}',
+                    dayNumber,
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: isSelected
-                          ? theme.colorScheme.outline
+                          ? Colors.white
                           : isToday
                           ? theme.colorScheme.primary
                           : theme.colorScheme.onSurface,
@@ -347,8 +323,16 @@ class _EmptyDay extends StatelessWidget {
           const SizedBox(height: 20),
           FilledButton.icon(
             onPressed: onAdd,
-            icon: const Icon(Icons.add),
-            label: const Text('إضافة موعد'),
+            icon: const Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            label: Text(
+              'إضافة موعد',
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: Colors.white,
+              ),
+            ),
           ),
         ],
       ),
