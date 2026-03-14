@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+
 import 'package:template/core/locale/generated/l10n.dart';
 
 class DateHelper {
@@ -8,7 +9,7 @@ class DateHelper {
   static String format(
     DateTime? date, {
     String pattern = 'EEE, MMMM - dd/MM/y',
-    bool useEnglishNumbers = false,
+    bool useEnglishNumbers = true,
   }) {
     if (date == null) return 'No Date';
     // Replace with S.current.noDate if using localization
