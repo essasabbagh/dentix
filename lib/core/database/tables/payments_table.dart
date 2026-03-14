@@ -11,8 +11,6 @@ class PaymentsTable extends Table {
       .references(TreatmentsTable, #id)
       .nullable()();
   RealColumn get amount => real()();
-  TextColumn get paymentStatus =>
-      text().named('payment_status').withDefault(const Constant('paid'))();
   // paid | pending | partial
   DateTimeColumn get paymentDate =>
       dateTime().named('payment_date').withDefault(currentDateAndTime)();

@@ -13,7 +13,6 @@ class PaymentsRepository {
     patientId: d.patientId,
     treatmentId: d.treatmentId,
     amount: d.amount,
-    paymentStatus: PaymentStatus.fromDb(d.paymentStatus),
     paymentDate: d.paymentDate,
     notes: d.notes,
     createdAt: d.createdAt,
@@ -28,14 +27,12 @@ class PaymentsRepository {
     required int patientId,
     int? treatmentId,
     required double amount,
-    required PaymentStatus status,
     String? notes,
   }) => _db.paymentsDao.insertPayment(
     PaymentsTableCompanion.insert(
       patientId: patientId,
       treatmentId: Value(treatmentId),
       amount: amount,
-      paymentStatus: Value(status.dbValue),
       notes: Value(notes),
     ),
   );

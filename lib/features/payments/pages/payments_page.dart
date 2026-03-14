@@ -144,7 +144,6 @@ class _PaymentsSearchAndFilterBarState
           const SizedBox(width: 8),
           _FilterIconButton(
             active:
-                filter.status != null ||
                 filter.dateFrom != null ||
                 filter.dateTo != null,
             onTap: () => showModalBottomSheet(
@@ -170,16 +169,6 @@ class _PaymentsActiveFilterChips extends ConsumerWidget {
     final filter = ref.watch(paymentsFilterProvider);
     final chips = <Widget>[];
 
-    if (filter.status != null) {
-      chips.add(
-        _RemovableChip(
-          label: filter.status!.arabicLabel,
-          onRemove: () => ref
-              .read(paymentsFilterProvider.notifier)
-              .update((f) => f.copyWith(status: null)),
-        ),
-      );
-    }
     if (filter.dateFrom != null) {
       chips.add(
         _RemovableChip(
@@ -237,12 +226,6 @@ class _PaymentsSummaryBar extends ConsumerWidget {
               label: 'إجمالي المدفوع',
               value: '${s.totalPaid.toStringAsFixed(0)} ر.س',
               color: Colors.green,
-            ),
-            const SizedBox(width: 24),
-            _StatPill(
-              label: 'معلق',
-              value: '${s.totalPending.toStringAsFixed(0)} ر.س',
-              color: Colors.orange,
             ),
           ],
         ),
@@ -304,8 +287,6 @@ class _PaymentCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final status = PaymentStatus.fromDb(item.payment.paymentStatus);
-    final statusColor = _statusColor(status, theme);
 
     return Card(
       elevation: 0,
@@ -350,9 +331,7 @@ class _PaymentCard extends ConsumerWidget {
                         '${item.payment.amount.toStringAsFixed(0)} ر.س',
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
-                          color: status == PaymentStatus.paid
-                              ? Colors.green.shade700
-                              : Colors.orange.shade700,
+                          color: Colors.green.shade700,
                         ),
                       ),
                     ],
@@ -360,11 +339,6 @@ class _PaymentCard extends ConsumerWidget {
                   const SizedBox(height: 5),
                   Row(
                     children: [
-                      _StatusBadge(
-                        label: status.arabicLabel,
-                        color: statusColor,
-                      ),
-                      const Spacer(),
                       Icon(
                         Icons.access_time,
                         size: 12,
@@ -410,14 +384,6 @@ class _PaymentCard extends ConsumerWidget {
       ),
     );
   }
-
-  Color _statusColor(PaymentStatus s, ThemeData t) {
-    return switch (s) {
-      PaymentStatus.paid => Colors.green,
-      PaymentStatus.pending => Colors.orange,
-      PaymentStatus.partial => t.colorScheme.primary,
-    };
-  }
 }
 
 // ── Filter bottom sheet ────────────────────────────────────────────────────
@@ -431,7 +397,6 @@ class _PaymentsFilterSheet extends ConsumerStatefulWidget {
 }
 
 class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
-  late PaymentStatus? _status;
   late DateTime? _dateFrom;
   late DateTime? _dateTo;
 
@@ -439,7 +404,6 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
   void initState() {
     super.initState();
     final f = ref.read(paymentsFilterProvider);
-    _status = f.status;
     _dateFrom = f.dateFrom;
     _dateTo = f.dateTo;
   }
@@ -477,34 +441,6 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
               ),
             ),
             const SizedBox(height: 20),
-
-            // Payment status
-            Text(
-              'حالة الدفع',
-              style: theme.textTheme.labelMedium?.copyWith(
-                color: theme.colorScheme.outline,
-              ),
-            ),
-            const SizedBox(height: 10),
-            Wrap(
-              spacing: 8,
-              children: [
-                _SheetChip(
-                  label: 'الكل',
-                  selected: _status == null,
-                  onTap: () => setState(() => _status = null),
-                ),
-                ...PaymentStatus.values.map(
-                  (s) => _SheetChip(
-                    label: s.arabicLabel,
-                    selected: _status == s,
-                    onTap: () => setState(() => _status = s),
-                    color: _payStatusColor(s),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 16),
 
             // Date range
             Text(
@@ -571,7 +507,6 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
                           .read(paymentsFilterProvider.notifier)
                           .update(
                             (f) => f.copyWith(
-                              status: null,
                               dateFrom: null,
                               dateTo: null,
                             ),
@@ -589,7 +524,6 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
                           .read(paymentsFilterProvider.notifier)
                           .update(
                             (f) => f.copyWith(
-                              status: _status,
                               dateFrom: _dateFrom,
                               dateTo: _dateTo,
                             ),
@@ -605,14 +539,6 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
         ),
       ),
     );
-  }
-
-  Color _payStatusColor(PaymentStatus s) {
-    return switch (s) {
-      PaymentStatus.paid => Colors.green,
-      PaymentStatus.pending => Colors.orange,
-      PaymentStatus.partial => Colors.blue
-    };
   }
 }
 
@@ -692,32 +618,6 @@ class _RemovableChip extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _StatusBadge extends StatelessWidget {
-  const _StatusBadge({required this.label, required this.color});
-  final String label;
-  final Color color;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: color.withValues(alpha: 0.4)),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: color,
-          fontSize: 10,
-          fontWeight: FontWeight.w600,
-        ),
       ),
     );
   }

@@ -33,7 +33,6 @@ final patientTotalPaidProvider = Provider.family<AsyncValue<double>, int>((
       .watch(patientPaymentsProvider(patientId))
       .whenData(
         (payments) => payments
-            .where((p) => p.paymentStatus == PaymentStatus.paid)
             .fold(0.0, (sum, p) => sum + p.amount),
       );
 });
@@ -42,30 +41,25 @@ final patientTotalPaidProvider = Provider.family<AsyncValue<double>, int>((
 class PaymentsFilter {
   const PaymentsFilter({
     this.query = '',
-    this.status,
     this.dateFrom,
     this.dateTo,
   });
   final String query;
-  final PaymentStatus? status;
   final DateTime? dateFrom;
   final DateTime? dateTo;
 
   PaymentsFilter copyWith({
     String? query,
-    Object? status = _sentinel,
     Object? dateFrom = _sentinel,
     Object? dateTo = _sentinel,
   }) => PaymentsFilter(
     query: query ?? this.query,
-    status: status == _sentinel ? this.status : status as PaymentStatus?,
     dateFrom: dateFrom == _sentinel ? this.dateFrom : dateFrom as DateTime?,
     dateTo: dateTo == _sentinel ? this.dateTo : dateTo as DateTime?,
   );
 
   bool get hasActiveFilters =>
       query.isNotEmpty ||
-      status != null ||
       dateFrom != null ||
       dateTo != null;
 }
@@ -89,16 +83,6 @@ final filteredPaymentsProvider = Provider<AsyncValue<List<PaymentWithPatient>>>(
         final q = filter.query.toLowerCase();
         result = result
             .where((p) => p.patientFullName.toLowerCase().contains(q))
-            .toList();
-      }
-
-      if (filter.status != null) {
-        result = result
-            .where(
-              (p) =>
-                  PaymentStatus.fromDb(p.payment.paymentStatus) ==
-                  filter.status,
-            )
             .toList();
       }
 
@@ -133,15 +117,10 @@ final paymentsSummaryProvider = Provider<AsyncValue<_PaymentsSummary>>(
     final filtered = ref.watch(filteredPaymentsProvider);
     return filtered.whenData((list) {
       final totalPaid = list
-          .where((p) => p.payment.paymentStatus == 'paid')
-          .fold<double>(0, (s, p) => s + p.payment.amount);
-      final totalPending = list
-          .where((p) => p.payment.paymentStatus == 'pending')
           .fold<double>(0, (s, p) => s + p.payment.amount);
       return _PaymentsSummary(
         count: list.length,
         totalPaid: totalPaid,
-        totalPending: totalPending,
       );
     });
   },
@@ -151,11 +130,9 @@ class _PaymentsSummary {
   const _PaymentsSummary({
     required this.count,
     required this.totalPaid,
-    required this.totalPending,
   });
   final int count;
   final double totalPaid;
-  final double totalPending;
 }
 
 // ─── Payment form notifier ────────────────────────────────────────────────
@@ -167,7 +144,6 @@ class PaymentFormNotifier extends StateNotifier<AsyncValue<void>> {
     required int patientId,
     int? treatmentId,
     required double amount,
-    required PaymentStatus status,
     String? notes,
   }) async {
     state = const AsyncValue.loading();
@@ -176,7 +152,6 @@ class PaymentFormNotifier extends StateNotifier<AsyncValue<void>> {
         patientId: patientId,
         treatmentId: treatmentId,
         amount: amount,
-        status: status,
         notes: notes,
       );
       state = const AsyncValue.data(null);

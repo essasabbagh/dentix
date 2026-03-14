@@ -217,16 +217,9 @@ Fields:
 -   patient_id
 -   treatment_id
 -   amount
--   payment_status
 -   payment_date
 -   notes
 -   created_at
-
-Status:
-
--   paid
--   pending
--   partial
 
 ------------------------------------------------------------------------
 

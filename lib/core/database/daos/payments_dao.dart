@@ -64,8 +64,7 @@ class PaymentsDao extends DatabaseAccessor<AppDatabase>
     final query = selectOnly(paymentsTable)
       ..addColumns([sum])
       ..where(
-        paymentsTable.paymentStatus.equals('paid') &
-            paymentsTable.paymentDate.isBiggerOrEqualValue(start) &
+        paymentsTable.paymentDate.isBiggerOrEqualValue(start) &
             paymentsTable.paymentDate.isSmallerThanValue(end),
       );
     final result = await query.getSingle();

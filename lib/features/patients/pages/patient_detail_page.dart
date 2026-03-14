@@ -745,9 +745,6 @@ class _PaymentsTotalBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pending = payments
-        .where((p) => p.paymentStatus == PaymentStatus.pending)
-        .fold<double>(0, (s, p) => s + p.amount);
     final theme = Theme.of(context);
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
@@ -759,8 +756,6 @@ class _PaymentsTotalBar extends StatelessWidget {
             value: totalPaid,
             color: Colors.green,
           ),
-          const SizedBox(width: 24),
-          _MiniStat(label: 'معلق', value: pending, color: Colors.orange),
         ],
       ),
     );
@@ -774,7 +769,6 @@ class _PaymentTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final statusColor = _statusColor(payment.paymentStatus, theme);
 
     return Card(
       elevation: 0,
@@ -833,10 +827,6 @@ class _PaymentTile extends ConsumerWidget {
                     color: Colors.green.shade700,
                   ),
                 ),
-                _StatusBadge(
-                  label: payment.paymentStatus.arabicLabel,
-                  color: statusColor,
-                ),
               ],
             ),
             IconButton(
@@ -852,14 +842,6 @@ class _PaymentTile extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  Color _statusColor(PaymentStatus s, ThemeData t) {
-    return switch (s) {
-      PaymentStatus.paid => Colors.green,
-      PaymentStatus.pending => Colors.orange,
-      PaymentStatus.partial => t.colorScheme.primary,
-    };
   }
 }
 
@@ -1025,7 +1007,6 @@ class _AddPaymentDialogState extends ConsumerState<_AddPaymentDialog> {
   final _formKey = GlobalKey<FormState>();
   final _amountController = TextEditingController();
   final _notesController = TextEditingController();
-  PaymentStatus _status = PaymentStatus.paid;
 
   @override
   void dispose() {
@@ -1037,12 +1018,11 @@ class _AddPaymentDialogState extends ConsumerState<_AddPaymentDialog> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(paymentFormProvider).isLoading;
-    final theme = Theme.of(context);
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 460, maxHeight: 420),
+        constraints: const BoxConstraints(maxWidth: 460, maxHeight: 320),
         child: Directionality(
           textDirection: TextDirection.rtl,
           child: Column(
@@ -1083,30 +1063,6 @@ class _AddPaymentDialogState extends ConsumerState<_AddPaymentDialog> {
                             }
                             return null;
                           },
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'حالة الدفع',
-                          style: theme.textTheme.labelMedium?.copyWith(
-                            color: theme.colorScheme.outline,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: PaymentStatus.values
-                              .map(
-                                (s) => Expanded(
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: 6),
-                                    child: _ChoiceChip(
-                                      label: s.arabicLabel,
-                                      selected: _status == s,
-                                      onTap: () => setState(() => _status = s),
-                                    ),
-                                  ),
-                                ),
-                              )
-                              .toList(),
                         ),
                         const SizedBox(height: 14),
                         TextFormField(
@@ -1152,7 +1108,6 @@ class _AddPaymentDialogState extends ConsumerState<_AddPaymentDialog> {
         .create(
           patientId: widget.patientId,
           amount: double.parse(_amountController.text.trim()),
-          status: _status,
           notes: _notesController.text.trim().isEmpty
               ? null
               : _notesController.text.trim(),

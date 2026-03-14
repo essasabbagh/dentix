@@ -37,8 +37,7 @@ class ReportsDao extends DatabaseAccessor<AppDatabase> with _$ReportsDaoMixin {
     final q = selectOnly(paymentsTable)
       ..addColumns([sum])
       ..where(
-        paymentsTable.paymentStatus.equals('paid') &
-            paymentsTable.paymentDate.isBiggerOrEqualValue(start) &
+        paymentsTable.paymentDate.isBiggerOrEqualValue(start) &
             paymentsTable.paymentDate.isSmallerThanValue(end),
       );
     final result = await q.getSingle();
@@ -53,8 +52,7 @@ class ReportsDao extends DatabaseAccessor<AppDatabase> with _$ReportsDaoMixin {
     final q = selectOnly(paymentsTable)
       ..addColumns([sum])
       ..where(
-        paymentsTable.paymentStatus.equals('paid') &
-            paymentsTable.paymentDate.isBiggerOrEqualValue(start) &
+        paymentsTable.paymentDate.isBiggerOrEqualValue(start) &
             paymentsTable.paymentDate.isSmallerThanValue(end),
       );
     final result = await q.getSingle();
