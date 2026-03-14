@@ -170,17 +170,20 @@ class _DateNavigator extends ConsumerWidget {
                   now.day,
                 );
               },
-              child: const Text('اليوم'),
+              child: Text(
+                'اليوم',
+                style: theme.textTheme.bodyMedium,
+              ),
             ),
           IconButton(
-            icon: const Icon(Icons.chevron_right),
+            icon: const Icon(Icons.chevron_left),
             onPressed: () {
               ref.read(selectedDateProvider.notifier).state = selectedDate
                   .subtract(const Duration(days: 1));
             },
           ),
           IconButton(
-            icon: const Icon(Icons.chevron_left),
+            icon: const Icon(Icons.chevron_right),
             onPressed: () {
               ref.read(selectedDateProvider.notifier).state = selectedDate.add(
                 const Duration(days: 1),
@@ -273,7 +276,7 @@ class _WeekStrip extends ConsumerWidget {
                     arabicDayShort[day.weekday - 1],
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: isSelected
-                          ? theme.colorScheme.onPrimary
+                          ? theme.colorScheme.outline
                           : theme.colorScheme.outline,
                     ),
                   ),
@@ -283,7 +286,7 @@ class _WeekStrip extends ConsumerWidget {
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: isSelected
-                          ? theme.colorScheme.onPrimary
+                          ? theme.colorScheme.outline
                           : isToday
                           ? theme.colorScheme.primary
                           : theme.colorScheme.onSurface,
