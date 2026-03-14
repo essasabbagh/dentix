@@ -4,36 +4,27 @@ enum PaymentMethod {
   transfer;
 
   String get arabicLabel {
-    switch (this) {
-      case PaymentMethod.cash:
-        return 'نقد';
-      case PaymentMethod.card:
-        return 'بطاقة';
-      case PaymentMethod.transfer:
-        return 'تحويل';
-    }
+    return switch (this) {
+      PaymentMethod.cash => 'نقد',
+      PaymentMethod.card => 'بطاقة',
+      PaymentMethod.transfer => 'تحويل',
+    };
   }
 
   String get dbValue {
-    switch (this) {
-      case PaymentMethod.cash:
-        return 'cash';
-      case PaymentMethod.card:
-        return 'card';
-      case PaymentMethod.transfer:
-        return 'transfer';
-    }
+    return switch (this) {
+      PaymentMethod.cash => 'cash',
+      PaymentMethod.card => 'card',
+      PaymentMethod.transfer => 'transfer',
+    };
   }
 
   static PaymentMethod fromDb(String value) {
-    switch (value) {
-      case 'card':
-        return PaymentMethod.card;
-      case 'transfer':
-        return PaymentMethod.transfer;
-      default:
-        return PaymentMethod.cash;
-    }
+    return switch (value) {
+      'card' => PaymentMethod.card,
+      'transfer' => PaymentMethod.transfer,
+      _ => PaymentMethod.cash,
+    };
   }
 }
 
@@ -43,36 +34,27 @@ enum PaymentStatus {
   partial;
 
   String get arabicLabel {
-    switch (this) {
-      case PaymentStatus.paid:
-        return 'مدفوع';
-      case PaymentStatus.pending:
-        return 'معلق';
-      case PaymentStatus.partial:
-        return 'جزئي';
-    }
+    return switch (this) {
+      PaymentStatus.paid => 'مدفوع',
+      PaymentStatus.pending => 'معلق',
+      PaymentStatus.partial => 'جزئي',
+    };
   }
 
   String get dbValue {
-    switch (this) {
-      case PaymentStatus.paid:
-        return 'paid';
-      case PaymentStatus.pending:
-        return 'pending';
-      case PaymentStatus.partial:
-        return 'partial';
-    }
+    return switch (this) {
+      PaymentStatus.paid => 'paid',
+      PaymentStatus.pending => 'pending',
+      PaymentStatus.partial => 'partial',
+    };
   }
 
   static PaymentStatus fromDb(String value) {
-    switch (value) {
-      case 'pending':
-        return PaymentStatus.pending;
-      case 'partial':
-        return PaymentStatus.partial;
-      default:
-        return PaymentStatus.paid;
-    }
+    return switch (value) {
+      'pending' => PaymentStatus.pending,
+      'partial' => PaymentStatus.partial,
+      _ => PaymentStatus.paid,
+    };
   }
 }
 

@@ -256,7 +256,7 @@ class _DashboardAppointmentRow extends StatelessWidget {
             child: Text(
               appt.status.arabicLabel,
               style: theme.textTheme.labelSmall?.copyWith(
-                color: theme.colorScheme.onPrimaryContainer,
+                color: Colors.white,
               ),
             ),
           ),

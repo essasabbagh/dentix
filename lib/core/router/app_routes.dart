@@ -9,7 +9,7 @@ enum AppRoutes {
   dashboard('/dashboard', 'dashboard'),
   patients('/patients', 'patients'),
 
-  patientDetails('/patients/:id', 'patientDetails'),
+  patientDetails('/patients/:patientId', 'patientDetails'),
 
   appointments('/appointments', 'appointments'),
   treatments('/treatments', 'treatments'),

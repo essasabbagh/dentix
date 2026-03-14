@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:template/components/loading/loading_widget.dart';
+import 'package:template/core/extensions/context_ext.dart';
+import 'package:template/core/router/app_routes.dart';
 
 import '../providers/patients_providers.dart';
 import '../widgets/patient_card.dart';
@@ -59,18 +62,27 @@ class PatientsPage extends ConsumerWidget {
                     onAdd: () => _openAddPatient(context, ref),
                   );
                 }
-                return ListView.separated(
+                return GridView.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: context.isTablet ? 3 : 2,
+                    childAspectRatio: 2,
+                  ),
                   padding: const EdgeInsets.symmetric(
                     horizontal: 24,
                     vertical: 4,
                   ),
                   itemCount: patients.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 8),
                   itemBuilder: (context, index) {
                     final patient = patients[index];
                     return PatientCard(
                       patient: patient,
-                      onTap: () => _openPatientDetail(context, patient.id),
+                      // onTap: () => _openPatientDetail(context, patient.id),
+                      onTap: () => context.pushNamed(
+                        AppRoutes.patientDetails.name,
+                        pathParameters: {
+                          'patientId': patient.id.toString(),
+                        },
+                      ),
                     );
                   },
                 );
@@ -81,8 +93,11 @@ class PatientsPage extends ConsumerWidget {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _openAddPatient(context, ref),
-        icon: const Icon(Icons.person_add_outlined),
-        label: const Text('مريض جديد'),
+        icon: const Icon(Icons.person_add_outlined, color: Colors.white),
+        label: const Text(
+          'مريض جديد',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
     );
   }
@@ -94,13 +109,13 @@ class PatientsPage extends ConsumerWidget {
     );
   }
 
-  void _openPatientDetail(BuildContext context, int patientId) {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => PatientDetailPage(patientId: patientId),
-      ),
-    );
-  }
+  // void _openPatientDetail(BuildContext context, int patientId) {
+  //   Navigator.of(context).push(
+  //     MaterialPageRoute(
+  //       builder: (_) => PatientDetailPage(patientId: patientId),
+  //     ),
+  //   );
+  // }
 }
 
 // ── Header ────────────────────────────────────────────────────────────────

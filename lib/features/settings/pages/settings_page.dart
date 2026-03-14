@@ -116,8 +116,19 @@ class _SettingsBodyState extends ConsumerState<_SettingsBody> {
                             color: Colors.white,
                           ),
                         )
-                      : const Icon(Icons.save_outlined, size: 18),
-                  label: const Text('حفظ'),
+                      : const Icon(
+                          Icons.save_outlined,
+                          size: 18,
+                          color: Colors.white,
+                        ),
+                  label: const Text(
+                    'حفظ',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
           ],

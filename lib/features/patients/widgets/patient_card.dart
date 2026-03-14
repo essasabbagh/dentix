@@ -26,32 +26,36 @@ class PatientCard extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          child: Row(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Avatar
-              CircleAvatar(
-                radius: 22,
-                backgroundColor: theme.colorScheme.primaryContainer,
-                child: Text(
-                  _initials,
-                  style: TextStyle(
-                    color: theme.colorScheme.onPrimaryContainer,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 14),
+              // CircleAvatar(
+              //   radius: 22,
+              //   backgroundColor: theme.colorScheme.primaryContainer,
+              //   child: Text(
+              //     _initials,
+              //     style: const TextStyle(
+              //       color: Colors.white,
+              //       fontWeight: FontWeight.bold,
+              //       fontSize: 14,
+              //     ),
+              //   ),
+              // ),
+              // const SizedBox(width: 14),
               // Info
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       patient.fullName,
                       style: theme.textTheme.titleSmall?.copyWith(
                         fontWeight: FontWeight.w600,
+                        fontSize: 16,
                       ),
                     ),
                     const SizedBox(height: 3),
@@ -90,12 +94,8 @@ class PatientCard extends StatelessWidget {
                 ),
               ),
               // Gender chip
-              if (patient.gender != null)
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: _GenderChip(gender: patient.gender!),
-                ),
-              const Icon(Icons.chevron_right, size: 20),
+              if (patient.gender != null) _GenderChip(gender: patient.gender!),
+              const SizedBox(height: 8),
             ],
           ),
         ),
@@ -121,17 +121,13 @@ class _GenderChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: isMale
-            ? theme.colorScheme.primaryContainer
-            : Colors.pink.shade50,
+        color: isMale ? Colors.blue.shade100 : Colors.pink.shade100,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
         isMale ? 'ذكر' : 'أنثى',
         style: theme.textTheme.labelSmall?.copyWith(
-          color: isMale
-              ? theme.colorScheme.onPrimaryContainer
-              : Colors.pink.shade700,
+          color: isMale ? Colors.blue.shade700 : Colors.pink.shade700,
         ),
       ),
     );

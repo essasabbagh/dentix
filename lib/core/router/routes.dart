@@ -4,6 +4,7 @@ import 'package:template/core/router/app_routes.dart';
 import 'package:template/features/appointments/pages/appointments_page.dart';
 import 'package:template/features/dashboard/dashboard_page.dart';
 import 'package:template/features/odontogram/pages/odontogram_page.dart';
+import 'package:template/features/patients/pages/patient_detail_page.dart';
 import 'package:template/features/patients/pages/patients_page.dart';
 import 'package:template/features/payments/pages/payments_page.dart';
 import 'package:template/features/reports/pages/reports_page.dart';
@@ -33,12 +34,26 @@ final routes = [
         path: AppRoutes.patients.path,
         name: AppRoutes.patients.name,
         builder: (context, state) => const PatientsPage(),
+        routes: [
+          GoRoute(
+            path: AppRoutes.patientDetails.path,
+            name: AppRoutes.patientDetails.name,
+            builder: (context, state) {
+              final patientId = state.pathParameters['patientId'] ?? '0';
+              final patientIdInt = int.parse(patientId);
+
+              return PatientDetailPage(patientId: patientIdInt);
+            },
+          ),
+        ],
       ),
+
       GoRoute(
         path: AppRoutes.appointments.path,
         name: AppRoutes.appointments.name,
         builder: (context, state) => const AppointmentsPage(),
       ),
+
       GoRoute(
         path: AppRoutes.treatments.path,
         name: AppRoutes.treatments.name,

@@ -4,6 +4,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:intl/intl.dart' show DateFormat;
 
 import 'package:template/components/loading/loading_widget.dart';
+import 'package:template/core/extensions/context_ext.dart';
 import 'package:template/core/utils/snackbars.dart';
 import 'package:template/features/appointments/models/appointment_model.dart';
 import 'package:template/features/appointments/pages/add_appointment_page.dart';
@@ -51,6 +52,7 @@ class PatientDetailPage extends ConsumerWidget {
 
 class _PatientDetailScaffold extends ConsumerWidget {
   const _PatientDetailScaffold({required this.patient});
+
   final PatientModel patient;
 
   @override
@@ -68,7 +70,10 @@ class _PatientDetailScaffold extends ConsumerWidget {
               forceElevated: innerBoxIsScrolled,
               actions: [
                 IconButton(
-                  icon: const Icon(Icons.edit_outlined),
+                  icon: const Icon(
+                    Icons.edit_outlined,
+                    color: Colors.white,
+                  ),
                   tooltip: 'تعديل',
                   onPressed: () => showDialog(
                     context: context,
@@ -134,14 +139,20 @@ class _PatientDetailScaffold extends ConsumerWidget {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('إلغاء'),
+            child: const Text(
+              'إلغاء',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
           FilledButton(
             style: FilledButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.error,
             ),
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('حذف'),
+            child: const Text(
+              'حذف',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),
@@ -352,6 +363,7 @@ class _AppointmentsTab extends ConsumerWidget {
 
 class _AppointmentTile extends ConsumerWidget {
   const _AppointmentTile({required this.appointment});
+
   final AppointmentModel appointment;
 
   @override
@@ -665,16 +677,12 @@ class _TreatmentTile extends ConsumerWidget {
   }
 
   Color _statusColor(TreatmentStatus s, ThemeData t) {
-    switch (s) {
-      case TreatmentStatus.planned:
-        return t.colorScheme.primary;
-      case TreatmentStatus.inProgress:
-        return Colors.orange;
-      case TreatmentStatus.completed:
-        return Colors.green;
-      case TreatmentStatus.cancelled:
-        return Colors.red;
-    }
+    return switch (s) {
+      TreatmentStatus.planned => t.colorScheme.primary,
+      TreatmentStatus.inProgress => Colors.orange,
+      TreatmentStatus.completed => Colors.green,
+      TreatmentStatus.cancelled => Colors.red,
+    };
   }
 }
 
@@ -853,25 +861,19 @@ class _PaymentTile extends ConsumerWidget {
   }
 
   Color _statusColor(PaymentStatus s, ThemeData t) {
-    switch (s) {
-      case PaymentStatus.paid:
-        return Colors.green;
-      case PaymentStatus.pending:
-        return Colors.orange;
-      case PaymentStatus.partial:
-        return t.colorScheme.primary;
-    }
+    return switch (s) {
+      PaymentStatus.paid => Colors.green,
+      PaymentStatus.pending => Colors.orange,
+      PaymentStatus.partial => t.colorScheme.primary,
+    };
   }
 
   IconData _methodIcon(PaymentMethod m) {
-    switch (m) {
-      case PaymentMethod.cash:
-        return Icons.money_outlined;
-      case PaymentMethod.card:
-        return Icons.credit_card_outlined;
-      case PaymentMethod.transfer:
-        return Icons.account_balance_outlined;
-    }
+    return switch (m) {
+      PaymentMethod.cash => Icons.money_outlined,
+      PaymentMethod.card => Icons.credit_card_outlined,
+      PaymentMethod.transfer => Icons.account_balance_outlined,
+    };
   }
 }
 
@@ -911,70 +913,67 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 460, maxHeight: 520),
-        child: Directionality(
-          textDirection: TextDirection.rtl,
-          child: Column(
-            children: [
-              const _DialogHeader(
-                title: 'إضافة علاج',
-                icon: Icons.healing_outlined,
-              ),
-              Expanded(
-                child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(24),
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        _field(
-                          controller: _typeController,
-                          label: 'نوع العلاج *',
-                          icon: Icons.medical_services_outlined,
-                          validator: (v) => v?.isEmpty == true ? 'مطلوب' : null,
+        child: Column(
+          children: [
+            const _DialogHeader(
+              title: 'إضافة علاج',
+              icon: Icons.healing_outlined,
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(24),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      _field(
+                        controller: _typeController,
+                        label: 'نوع العلاج *',
+                        icon: Icons.medical_services_outlined,
+                        validator: (v) => v?.isEmpty == true ? 'مطلوب' : null,
+                      ),
+                      const SizedBox(height: 14),
+                      _field(
+                        controller: _priceController,
+                        label: 'السعر (ر.س) *',
+                        icon: Icons.attach_money,
+                        keyboard: TextInputType.number,
+                        validator: (v) {
+                          if (v?.isEmpty == true) return 'مطلوب';
+                          if (double.tryParse(v!) == null) {
+                            return 'أدخل رقماً';
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 14),
+                      TextFormField(
+                        keyboardType: TextInputType.number,
+                        textDirection: TextDirection.rtl,
+                        decoration: _dec(
+                          'رقم السن (اختياري)',
+                          Icons.circle_outlined,
                         ),
-                        const SizedBox(height: 14),
-                        _field(
-                          controller: _priceController,
-                          label: 'السعر (ر.س) *',
-                          icon: Icons.attach_money,
-                          keyboard: TextInputType.number,
-                          validator: (v) {
-                            if (v?.isEmpty == true) return 'مطلوب';
-                            if (double.tryParse(v!) == null) {
-                              return 'أدخل رقماً';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 14),
-                        TextFormField(
-                          keyboardType: TextInputType.number,
-                          textDirection: TextDirection.rtl,
-                          decoration: _dec(
-                            'رقم السن (اختياري)',
-                            Icons.circle_outlined,
-                          ),
-                          onChanged: (v) => _toothNumber = int.tryParse(v),
-                        ),
-                        const SizedBox(height: 14),
-                        _field(
-                          controller: _notesController,
-                          label: 'ملاحظات',
-                          icon: Icons.notes_outlined,
-                          maxLines: 3,
-                        ),
-                      ],
-                    ),
+                        onChanged: (v) => _toothNumber = int.tryParse(v),
+                      ),
+                      const SizedBox(height: 14),
+                      _field(
+                        controller: _notesController,
+                        label: 'ملاحظات',
+                        icon: Icons.notes_outlined,
+                        maxLines: 3,
+                      ),
+                    ],
                   ),
                 ),
               ),
-              _DialogFooter(
-                isLoading: isLoading,
-                onCancel: () => Navigator.pop(context),
-                onSave: _submit,
-              ),
-            ],
-          ),
+            ),
+            _DialogFooter(
+              isLoading: isLoading,
+              onCancel: () => Navigator.pop(context),
+              onSave: _submit,
+            ),
+          ],
         ),
       ),
     );
@@ -1029,6 +1028,7 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
 
 class _AddPaymentDialog extends ConsumerStatefulWidget {
   const _AddPaymentDialog({required this.patientId});
+
   final int patientId;
 
   @override
@@ -1270,7 +1270,11 @@ class _InfoRow extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 6),
       child: Row(
         children: [
-          Icon(icon, size: 17, color: theme.colorScheme.primary),
+          Icon(
+            icon,
+            size: 17,
+            color: theme.colorScheme.primary,
+          ),
           const SizedBox(width: 10),
           Text(
             '$label: ',
@@ -1278,7 +1282,9 @@ class _InfoRow extends StatelessWidget {
               color: theme.colorScheme.outline,
             ),
           ),
-          Expanded(child: Text(value, style: theme.textTheme.bodyMedium)),
+          Expanded(
+            child: Text(value, style: theme.textTheme.bodyMedium),
+          ),
         ],
       ),
     );
@@ -1310,8 +1316,17 @@ class _ActionBar extends StatelessWidget {
         children: [
           FilledButton.icon(
             onPressed: onTap,
-            icon: Icon(icon, size: 16),
-            label: Text(label),
+            icon: Icon(
+              icon,
+              size: 16,
+              color: Colors.white,
+            ),
+            label: Text(
+              label,
+              style: theme.textTheme.labelMedium?.copyWith(
+                color: Colors.white,
+              ),
+            ),
           ),
         ],
       ),
@@ -1423,19 +1438,22 @@ class _DialogHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, color: theme.colorScheme.onPrimaryContainer),
+          Icon(
+            icon,
+            color: Colors.white,
+          ),
           const SizedBox(width: 10),
           Text(
             title,
             style: theme.textTheme.titleMedium?.copyWith(
               fontWeight: FontWeight.bold,
-              color: theme.colorScheme.onPrimaryContainer,
+              color: Colors.white,
             ),
           ),
           const Spacer(),
           IconButton(
             icon: const Icon(Icons.close),
-            color: theme.colorScheme.onPrimaryContainer,
+            color: Colors.white,
             onPressed: () => Navigator.pop(context),
           ),
         ],
@@ -1463,7 +1481,12 @@ class _DialogFooter extends StatelessWidget {
         children: [
           OutlinedButton(
             onPressed: isLoading ? null : onCancel,
-            child: const Text('إلغاء'),
+            child: Text(
+              'إلغاء',
+              style: context.theme.textTheme.bodyMedium?.copyWith(
+                color: Colors.white,
+              ),
+            ),
           ),
           const SizedBox(width: 10),
           FilledButton.icon(
@@ -1477,8 +1500,15 @@ class _DialogFooter extends StatelessWidget {
                       color: Colors.white,
                     ),
                   )
-                : const Icon(Icons.save_outlined, size: 16),
-            label: const Text('حفظ'),
+                : const Icon(
+                    Icons.save_outlined,
+                    size: 16,
+                    color: Colors.white,
+                  ),
+            label: const Text(
+              'حفظ',
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ],
       ),

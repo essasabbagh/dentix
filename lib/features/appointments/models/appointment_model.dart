@@ -1,4 +1,4 @@
-import '../../patients/models/patient_model.dart';
+import 'package:template/features/patients/models/patient_model.dart';
 
 enum AppointmentStatus {
   scheduled,

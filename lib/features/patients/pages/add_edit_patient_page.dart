@@ -96,21 +96,21 @@ class _AddEditPatientPageState extends ConsumerState<AddEditPatientPage> {
                       _isEditMode
                           ? Icons.edit_outlined
                           : Icons.person_add_outlined,
-                      color: theme.colorScheme.onPrimaryContainer,
+                      color: Colors.white,
                     ),
                     const SizedBox(width: 10),
                     Text(
                       _isEditMode ? 'تعديل بيانات المريض' : 'إضافة مريض جديد',
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: theme.colorScheme.onPrimaryContainer,
+                        color: Colors.white,
                       ),
                     ),
                     const Spacer(),
                     IconButton(
                       icon: const Icon(Icons.close),
                       onPressed: () => Navigator.of(context).pop(),
-                      color: theme.colorScheme.onPrimaryContainer,
+                      color: Colors.white,
                     ),
                   ],
                 ),
@@ -234,7 +234,12 @@ class _AddEditPatientPageState extends ConsumerState<AddEditPatientPage> {
                       onPressed: isLoading
                           ? null
                           : () => Navigator.of(context).pop(),
-                      child: const Text('إلغاء'),
+                      child: Text(
+                        'إلغاء',
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                     const SizedBox(width: 12),
                     FilledButton.icon(
@@ -245,8 +250,15 @@ class _AddEditPatientPageState extends ConsumerState<AddEditPatientPage> {
                               height: 16,
                               child: CircularProgressIndicator(strokeWidth: 2),
                             )
-                          : Icon(_isEditMode ? Icons.save_outlined : Icons.add),
-                      label: Text(_isEditMode ? 'حفظ التعديلات' : 'إضافة'),
+                          : Icon(
+                              _isEditMode ? Icons.save_outlined : Icons.add,
+
+                              color: Colors.white,
+                            ),
+                      label: Text(
+                        _isEditMode ? 'حفظ التعديلات' : 'إضافة',
+                        style: const TextStyle(color: Colors.white),
+                      ),
                     ),
                   ],
                 ),
