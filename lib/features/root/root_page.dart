@@ -18,7 +18,6 @@ class RootPage extends StatelessWidget {
     AppRoutes.treatments,
     AppRoutes.payments,
     AppRoutes.reports,
-    AppRoutes.odontogram,
     AppRoutes.settings,
   ];
 
@@ -98,14 +97,6 @@ class RootPage extends StatelessWidget {
                   color: Colors.white,
                 ),
                 label: Text(S.of(context).reports),
-              ),
-              const NavigationRailDestination(
-                icon: Icon(Icons.face_outlined),
-                selectedIcon: Icon(
-                  Icons.face_6,
-                  color: Colors.white,
-                ),
-                label: Text('Odontogram'),
               ),
 
               NavigationRailDestination(

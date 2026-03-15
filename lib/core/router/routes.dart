@@ -82,19 +82,6 @@ final routes = [
         builder: (context, state) => const ReportsPage(),
       ),
       GoRoute(
-        path: AppRoutes.odontogram.path,
-        name: AppRoutes.odontogram.name,
-        builder: (context, state) {
-          final patientId = state.pathParameters['id'] ?? '0';
-          final name = state.uri.queryParameters['name'] ?? '';
-
-          return OdontogramPage(
-            patientId: int.parse(patientId),
-            patientName: name,
-          );
-        },
-      ),
-      GoRoute(
         path: AppRoutes.settings.path,
         name: AppRoutes.settings.name,
         builder: (context, state) => const SettingsScreen(),
