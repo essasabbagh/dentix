@@ -323,7 +323,7 @@ class _TreatmentCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final status = TreatmentStatus.fromDb(item.treatment.status);
-    final statusColor = status.statusColor(theme);
+    final statusColor = status.statusColor;
 
     return Card(
       elevation: 0,
@@ -535,30 +535,19 @@ class _TreatmentsFilterSheetState
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Container(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Sheet handle + title
-            Center(
-              child: Container(
-                width: 36,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.outlineVariant,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
+            // title
             Text(
               'تصفية العلاجات',
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 4),
 
             // Status filter
             Text(
@@ -567,7 +556,7 @@ class _TreatmentsFilterSheetState
                 color: theme.colorScheme.outline,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             Wrap(
               spacing: 8,
               children: [
@@ -581,12 +570,12 @@ class _TreatmentsFilterSheetState
                     label: s.arabicLabel,
                     selected: _status == s,
                     onTap: () => setState(() => _status = s),
-                    color: _statusColor(s),
+                    color: s.statusColor,
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 12),
 
             // Date range
             Text(
@@ -595,7 +584,7 @@ class _TreatmentsFilterSheetState
                 color: theme.colorScheme.outline,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             Row(
               children: [
                 Expanded(
@@ -680,7 +669,12 @@ class _TreatmentsFilterSheetState
                           );
                       Navigator.pop(context);
                     },
-                    child: const Text('تطبيق'),
+                    child: const Text(
+                      'تطبيق',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ],
@@ -689,15 +683,6 @@ class _TreatmentsFilterSheetState
         ),
       ),
     );
-  }
-
-  Color _statusColor(TreatmentStatus s) {
-    return switch (s) {
-      TreatmentStatus.planned => Colors.blue,
-      TreatmentStatus.inProgress => Colors.orange,
-      TreatmentStatus.completed => Colors.green,
-      TreatmentStatus.cancelled => Colors.red,
-    };
   }
 }
 
@@ -772,16 +757,18 @@ class _FilterChip extends StatelessWidget {
           Text(
             label,
             style: theme.textTheme.labelSmall?.copyWith(
-              color: theme.colorScheme.onPrimaryContainer,
+              // color: theme.colorScheme.onPrimaryContainer,
+              color: Colors.white,
             ),
           ),
           const SizedBox(width: 4),
           GestureDetector(
             onTap: onRemove,
-            child: Icon(
+            child: const Icon(
               Icons.close,
               size: 14,
-              color: theme.colorScheme.onPrimaryContainer,
+              // color: theme.colorScheme.onPrimaryContainer,
+              color: Colors.white,
             ),
           ),
         ],
@@ -910,15 +897,21 @@ class _DatePickerButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final hasValue = onClear != null;
+
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 10,
+          vertical: 10,
+        ),
         side: BorderSide(
           color: hasValue
               ? theme.colorScheme.primary
               : theme.colorScheme.outlineVariant,
         ),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
       ),
       onPressed: onTap,
       child: Row(

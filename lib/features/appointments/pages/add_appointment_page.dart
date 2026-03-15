@@ -263,7 +263,9 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                     ),
                     if (!isDesktop) ...[
                       const SizedBox(height: 32),
-                      const Divider(),
+                      Divider(
+                        color: Colors.grey.shade300,
+                      ),
                       const SizedBox(height: 16),
                       _buildTreatmentSection(theme),
                     ],
@@ -310,8 +312,8 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
     final filteredTreatments = _filterToothNumber == null
         ? _pendingTreatments
         : _pendingTreatments
-            .where((t) => t.toothNumber == _filterToothNumber)
-            .toList();
+              .where((t) => t.toothNumber == _filterToothNumber)
+              .toList();
 
     final teethWithTreatments = {
       for (final t in _pendingTreatments)
@@ -362,8 +364,9 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                   // unselectedColor: theme.colorScheme.surfaceContainerHighest,
                   onChange: (selected) {
                     setState(() {
-                      _filterToothNumber =
-                          selected.isEmpty ? null : int.tryParse(selected.last);
+                      _filterToothNumber = selected.isEmpty
+                          ? null
+                          : int.tryParse(selected.last);
                     });
                   },
                 ),

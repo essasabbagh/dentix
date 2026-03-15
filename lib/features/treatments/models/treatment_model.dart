@@ -15,9 +15,9 @@ enum TreatmentStatus {
     };
   }
 
-  Color statusColor(ThemeData t) {
+  Color get statusColor {
     return switch (this) {
-      TreatmentStatus.planned => t.colorScheme.primary,
+      TreatmentStatus.planned => Colors.blue,
       TreatmentStatus.inProgress => Colors.orange,
       TreatmentStatus.completed => Colors.green,
       TreatmentStatus.cancelled => Colors.red,

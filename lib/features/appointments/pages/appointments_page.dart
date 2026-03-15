@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:template/components/loading/loading_widget.dart';
-import 'package:template/core/utils/date_helper.dart';
-
 import 'package:template/core/router/app_routes.dart';
+import 'package:template/core/utils/date_helper.dart';
 import 'package:template/features/appointments/models/appointment_model.dart';
+
 import '../providers/appointments_providers.dart';
 import '../widgets/appointment_card.dart';
 
@@ -48,7 +48,9 @@ class AppointmentsPage extends ConsumerWidget {
                       appointment: appointments[index],
                       onTap: () => context.goNamed(
                         AppRoutes.appointmentDetails.name,
-                        pathParameters: {'id': appointments[index].id.toString()},
+                        pathParameters: {
+                          'id': appointments[index].id.toString(),
+                        },
                       ),
                       onStatusChange: (status) => ref
                           .read(appointmentFormProvider.notifier)
@@ -269,7 +271,10 @@ class _WeekStrip extends ConsumerWidget {
                   Text(
                     shortDay,
                     style: theme.textTheme.labelSmall?.copyWith(
-                      color: theme.colorScheme.outline,
+                      // color:
+                      color: isSelected
+                          ? Colors.white
+                          : theme.colorScheme.outline,
                     ),
                   ),
                   const SizedBox(height: 4),

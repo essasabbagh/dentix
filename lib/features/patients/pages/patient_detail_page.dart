@@ -33,8 +33,9 @@ class PatientDetailPage extends ConsumerWidget {
     final patientAsync = ref.watch(patientByIdProvider(patientId));
 
     return patientAsync.when(
-      loading: () =>
-          const Scaffold(body: Center(child: CircularProgressIndicator())),
+      loading: () => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ),
       error: (e, _) => Scaffold(body: Center(child: Text('خطأ: $e'))),
       data: (patient) {
         if (patient == null) {
@@ -93,6 +94,9 @@ class _PatientDetailScaffold extends ConsumerWidget {
                 background: _PatientHeader(patient: patient),
               ),
               bottom: TabBar(
+                labelColor: theme.colorScheme.secondary,
+                unselectedLabelColor: Colors.white,
+                indicatorColor: theme.colorScheme.secondary,
                 tabs: const [
                   Tab(
                     icon: Icon(Icons.info_outline, size: 18),
@@ -135,7 +139,9 @@ class _PatientDetailScaffold extends ConsumerWidget {
       context: context,
       builder: (_) => AlertDialog(
         title: const Text('حذف المريض'),
-        content: Text('هل تريد حذف المريض "${patient.fullName}" نهائياً؟'),
+        content: Text(
+          'هل تريد حذف المريض "${patient.fullName}" نهائياً؟',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -168,6 +174,7 @@ class _PatientDetailScaffold extends ConsumerWidget {
 
 class _PatientHeader extends StatelessWidget {
   const _PatientHeader({required this.patient});
+
   final PatientModel patient;
 
   @override
@@ -255,6 +262,7 @@ class _PatientHeader extends StatelessWidget {
 
 class _InfoTab extends StatelessWidget {
   const _InfoTab({required this.patient});
+
   final PatientModel patient;
 
   @override
@@ -327,6 +335,7 @@ class _InfoTab extends StatelessWidget {
 
 class _AppointmentsTab extends ConsumerWidget {
   const _AppointmentsTab({required this.patient});
+
   final PatientModel patient;
 
   @override
@@ -376,7 +385,7 @@ class _AppointmentTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final statusColor = _statusColor(appointment.status, theme);
+    final statusColor = appointment.status.statusColor;
 
     return Card(
       elevation: 0,
@@ -424,15 +433,9 @@ class _AppointmentTile extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Text(
-                  //   appointment.doctorName,
-                  //   style: theme.textTheme.titleSmall?.copyWith(
-                  //     fontWeight: FontWeight.w600,
-                  //   ),
-                  // ),
                   if (appointment.notes?.isNotEmpty == true)
                     Text(
-                      appointment.notes!,
+                      appointment.notes ?? '',
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: theme.colorScheme.outline,
                       ),
@@ -461,15 +464,6 @@ class _AppointmentTile extends ConsumerWidget {
       ),
     );
   }
-
-  Color _statusColor(AppointmentStatus s, ThemeData t) {
-    return switch (s) {
-      AppointmentStatus.scheduled => t.colorScheme.primary,
-      AppointmentStatus.completed => Colors.green,
-      AppointmentStatus.cancelled => Colors.red,
-      AppointmentStatus.noShow => Colors.orange,
-    };
-  }
 }
 
 // ═════════════════════════════════════════════════════════════════════════════
@@ -478,6 +472,7 @@ class _AppointmentTile extends ConsumerWidget {
 
 class _TreatmentsTab extends ConsumerWidget {
   const _TreatmentsTab({required this.patient});
+
   final PatientModel patient;
 
   @override
@@ -561,7 +556,9 @@ class _TreatmentTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final statusColor = _statusColor(treatment.status, theme);
+    // final statusColor = _statusColor(treatment.status, theme);
+    final statusColor = treatment.status.statusColor;
+
 
     return Card(
       elevation: 0,
@@ -687,15 +684,6 @@ class _TreatmentTile extends ConsumerWidget {
         ),
       ),
     );
-  }
-
-  Color _statusColor(TreatmentStatus s, ThemeData t) {
-    return switch (s) {
-      TreatmentStatus.planned => t.colorScheme.primary,
-      TreatmentStatus.inProgress => Colors.orange,
-      TreatmentStatus.completed => Colors.green,
-      TreatmentStatus.cancelled => Colors.red,
-    };
   }
 }
 

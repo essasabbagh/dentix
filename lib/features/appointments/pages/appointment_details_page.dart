@@ -60,14 +60,27 @@ class _AppointmentDetailsPageState
               Card(
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 child: ListTile(
-                  leading: const CircleAvatar(child: Icon(Icons.person)),
+                  leading: CircleAvatar(
+                    child: Icon(
+                      appointment.patient?.gender == 'male'
+                          ? Icons.person
+                          : Icons.person_2,
+                      color: Colors.white,
+                    ),
+                  ),
                   title: Text(
                     appointment.patient?.fullName ?? 'مريض غير معروف',
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  subtitle: Text(appointment.patient?.phone ?? ''),
+                  subtitle: Row(
+                    children: [
+                      const Icon(Icons.phone, size: 16),
+                      const SizedBox(width: 4),
+                      Text(appointment.patient?.phone ?? ''),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -89,14 +102,21 @@ class _AppointmentDetailsPageState
                           pattern: 'EEEE، dd MMMM yyyy',
                         ),
                       ),
-                      const Divider(),
+                      Divider(
+                        color: Colors.grey.shade300,
+                      ),
                       _buildInfoRow(
                         theme,
                         Icons.access_time,
                         'الوقت',
-                        DateHelper.time(appointment.appointmentDate),
+                        DateHelper.time(
+                          appointment.appointmentDate,
+                          locale: 'en',
+                        ),
                       ),
-                      const Divider(),
+                      Divider(
+                        color: Colors.grey.shade300,
+                      ),
                       _buildInfoRow(
                         theme,
                         Icons.info_outline,
@@ -194,7 +214,9 @@ class _AppointmentDetailsPageState
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: appointment.treatments.length,
-              separatorBuilder: (context, index) => const Divider(),
+              separatorBuilder: (context, index) => Divider(
+                color: Colors.grey.shade300,
+              ),
               itemBuilder: (context, index) {
                 final t = appointment.treatments[index];
                 return MouseRegion(
@@ -217,7 +239,9 @@ class _AppointmentDetailsPageState
                 );
               },
             ),
-          const Divider(thickness: 2),
+          Divider(
+            color: Colors.grey.shade300,
+          ),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Row(

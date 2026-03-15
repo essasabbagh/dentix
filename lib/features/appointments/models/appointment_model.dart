@@ -44,6 +44,9 @@ enum AppointmentStatus {
       AppointmentStatus.noShow => Colors.orange,
     };
   }
+
+
+ 
 }
 
 class AppointmentModel {

@@ -33,6 +33,8 @@ class AppThemes {
       ),
     ),
 
+    dividerColor: Colors.grey.shade100,
+
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         elevation: 8.0,

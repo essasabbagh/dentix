@@ -427,30 +427,19 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
       child: Container(
-        padding: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Handle
-            Center(
-              child: Container(
-                width: 36,
-                height: 4,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.outlineVariant,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
             Text(
               'تصفية المدفوعات',
               style: theme.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 16),
 
             // Date range
             Text(
@@ -459,7 +448,7 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
                 color: theme.colorScheme.outline,
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             Row(
               children: [
                 Expanded(
@@ -505,7 +494,7 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 16),
 
             // Buttons
             Row(
@@ -540,7 +529,12 @@ class _PaymentsFilterSheetState extends ConsumerState<_PaymentsFilterSheet> {
                           );
                       Navigator.pop(context);
                     },
-                    child: const Text('تطبيق'),
+                    child: const Text(
+                      'تطبيق',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
               ],

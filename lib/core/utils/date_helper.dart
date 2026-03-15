@@ -59,9 +59,13 @@ class DateHelper {
     return formattedDate;
   }
 
-  static String time(DateTime? date) {
+  static String time(
+    DateTime? date, {
+    String pattern = 'HH:mm',
+    String locale = 'ar',
+  }) {
     if (date == null) return '-'; // default to the current time
-    return DateFormat('hh:mm a').format(date.toLocal());
+    return DateFormat(pattern, locale).format(date.toLocal());
   }
 
   /// Provides a human-readable representation of
