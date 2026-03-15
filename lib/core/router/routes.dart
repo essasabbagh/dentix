@@ -10,6 +10,7 @@ import 'package:template/features/payments/pages/payments_page.dart';
 import 'package:template/features/reports/pages/reports_page.dart';
 import 'package:template/features/root/root_page.dart';
 import 'package:template/features/settings/pages/settings_page.dart';
+import 'package:template/features/settings/pages/settings_screen.dart';
 import 'package:template/features/splash/splash_screen.dart';
 import 'package:template/features/treatments/pages/treatments_page.dart';
 
@@ -85,8 +86,8 @@ final routes = [
       GoRoute(
         path: AppRoutes.settings.path,
         name: AppRoutes.settings.name,
-        // builder: (context, state) => const SettingsScreen(),
-        builder: (context, state) => const SettingsPage(),
+        builder: (context, state) => const SettingsScreen(),
+        // builder: (context, state) => const SettingsPage(),
       ),
     ],
   ),

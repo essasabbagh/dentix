@@ -1,5 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:template/core/database/app_database.dart';
 import 'package:template/core/database/app_database_provider.dart';
 
 import '../data/appointments_repository.dart';
@@ -61,6 +62,28 @@ class AppointmentFormNotifier extends StateNotifier<AsyncValue<void>> {
         patientId: patientId,
         date: date,
         notes: notes,
+      );
+      state = const AsyncValue.data(null);
+      return true;
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+      return false;
+    }
+  }
+
+  Future<bool> createAppointmentWithTreatments({
+    required int patientId,
+    required DateTime date,
+    String? notes,
+    required List<TreatmentsTableCompanion> treatments,
+  }) async {
+    state = const AsyncValue.loading();
+    try {
+      await _service.createAppointmentWithTreatments(
+        patientId: patientId,
+        date: date,
+        notes: notes,
+        treatments: treatments,
       );
       state = const AsyncValue.data(null);
       return true;

@@ -321,8 +321,9 @@ class _SearchableDropdownState extends State<_SearchableDropdown> {
                 padding: const EdgeInsets.only(top: 6, right: 12),
                 child: Text(
                   state.errorText!,
-                  style: theme.textTheme.labelSmall
-                      ?.copyWith(color: theme.colorScheme.error),
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: theme.colorScheme.error,
+                  ),
                 ),
               ),
           ],
@@ -410,7 +411,7 @@ class _DropdownContent extends StatelessWidget {
                   shrinkWrap: true,
                   padding: const EdgeInsets.symmetric(vertical: 4),
                   itemCount: patients.length,
-                  separatorBuilder: (_, __) =>
+                  separatorBuilder: (_, _) =>
                       const Divider(height: 1, indent: 52),
                   itemBuilder: (_, i) {
                     final patient = patients[i];
@@ -418,8 +419,8 @@ class _DropdownContent extends StatelessWidget {
                     return ListTile(
                       dense: true,
                       selected: isSelected,
-                      selectedTileColor:
-                          theme.colorScheme.primaryContainer.withOpacity(0.4),
+                      selectedTileColor: theme.colorScheme.primaryContainer
+                          .withOpacity(0.4),
                       leading: CircleAvatar(
                         radius: 16,
                         backgroundColor: isSelected
@@ -453,8 +454,11 @@ class _DropdownContent extends StatelessWidget {
                         ),
                       ),
                       trailing: isSelected
-                          ? Icon(Icons.check,
-                              size: 16, color: theme.colorScheme.primary)
+                          ? Icon(
+                              Icons.check,
+                              size: 16,
+                              color: theme.colorScheme.primary,
+                            )
                           : null,
                       onTap: () => onSelect(patient),
                     );
@@ -503,14 +507,16 @@ class _PatientTile extends StatelessWidget {
             children: [
               Text(
                 patient.fullName,
-                style: theme.textTheme.bodyMedium
-                    ?.copyWith(fontWeight: FontWeight.w600),
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
                 patient.phone,
-                style: theme.textTheme.labelSmall
-                    ?.copyWith(color: theme.colorScheme.outline),
+                style: theme.textTheme.labelSmall?.copyWith(
+                  color: theme.colorScheme.outline,
+                ),
               ),
             ],
           ),
@@ -556,8 +562,9 @@ class _LoadingField extends StatelessWidget {
           const SizedBox(width: 10),
           Text(
             'جاري التحميل...',
-            style: theme.textTheme.bodyMedium
-                ?.copyWith(color: theme.colorScheme.outline),
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.outline,
+            ),
           ),
         ],
       ),

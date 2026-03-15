@@ -87,6 +87,31 @@ class AppointmentsRepository {
     ),
   );
 
+  Future<int> createAppointmentWithTreatments({
+    required int patientId,
+    required DateTime date,
+    String? notes,
+    required List<TreatmentsTableCompanion> treatments,
+  }) async {
+    return _db.transaction(() async {
+      final appointmentId = await _db.appointmentsDao.insertAppointment(
+        AppointmentsTableCompanion.insert(
+          patientId: patientId,
+          appointmentDate: date,
+          notes: Value(notes),
+        ),
+      );
+
+      for (var t in treatments) {
+        await _db.treatmentsDao.insertTreatment(
+          t.copyWith(appointmentId: Value(appointmentId)),
+        );
+      }
+
+      return appointmentId;
+    });
+  }
+
   Future<bool> updateAppointment(AppointmentModel appt) =>
       _db.appointmentsDao.updateAppointment(
         AppointmentsTableCompanion(

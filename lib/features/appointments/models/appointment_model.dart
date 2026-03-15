@@ -1,4 +1,5 @@
 import 'package:template/features/patients/models/patient_model.dart';
+import 'package:template/features/treatments/models/treatment_model.dart';
 
 enum AppointmentStatus {
   scheduled,
@@ -44,6 +45,7 @@ class AppointmentModel {
     required this.createdAt,
     required this.updatedAt,
     this.patient,
+    this.treatments = const [],
   });
   final int id;
   final int patientId;
@@ -55,6 +57,9 @@ class AppointmentModel {
 
   // Optionally joined patient
   final PatientModel? patient;
+
+  // List of associated treatments
+  final List<TreatmentModel> treatments;
 
   String get timeLabel {
     final h = appointmentDate.hour.toString().padLeft(2, '0');
@@ -71,6 +76,7 @@ class AppointmentModel {
     DateTime? createdAt,
     DateTime? updatedAt,
     PatientModel? patient,
+    List<TreatmentModel>? treatments,
   }) {
     return AppointmentModel(
       id: id ?? this.id,
@@ -81,6 +87,7 @@ class AppointmentModel {
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
       patient: patient ?? this.patient,
+      treatments: treatments ?? this.treatments,
     );
   }
 }

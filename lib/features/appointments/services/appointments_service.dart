@@ -1,3 +1,4 @@
+import '../../../core/database/app_database.dart';
 import '../data/appointments_repository.dart';
 import '../models/appointment_model.dart';
 
@@ -25,6 +26,20 @@ class AppointmentsService {
       patientId: patientId,
       date: date,
       notes: notes,
+    );
+  }
+
+  Future<int> createAppointmentWithTreatments({
+    required int patientId,
+    required DateTime date,
+    String? notes,
+    required List<TreatmentsTableCompanion> treatments,
+  }) {
+    return _repository.createAppointmentWithTreatments(
+      patientId: patientId,
+      date: date,
+      notes: notes,
+      treatments: treatments,
     );
   }
 
