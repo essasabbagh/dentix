@@ -36,7 +36,7 @@ class RootPage extends StatelessWidget {
             leading: const Padding(
               padding: EdgeInsets.all(16),
               child: Text(
-                'DentixFlow',
+                'Dentix Flow',
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -83,13 +83,13 @@ class RootPage extends StatelessWidget {
                 ),
                 label: Text(S.of(context).treatments),
               ),
-              NavigationRailDestination(
-                icon: const Icon(Icons.list_alt_outlined),
-                selectedIcon: const Icon(
+              const NavigationRailDestination(
+                icon: Icon(Icons.list_alt_outlined),
+                selectedIcon: Icon(
                   Icons.list_alt,
                   color: Colors.white,
                 ),
-                label: const Text('قوالب العلاجات'),
+                label: Text('قوالب العلاجات'),
               ),
               NavigationRailDestination(
                 icon: const Icon(Icons.payments_outlined),

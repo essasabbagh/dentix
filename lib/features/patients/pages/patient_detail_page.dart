@@ -395,19 +395,6 @@ class _AppointmentTile extends ConsumerWidget {
     final theme = Theme.of(context);
     final statusColor = appointment.status.statusColor;
 
-    final appointmentDate = DateHelper.format(
-      appointment.appointmentDate,
-      pattern: 'EEEE، MMMM dd / MM / yyyy',
-    );
-
-    final whatsappMessage =
-        'مرحباً ${patient.fullName}،\n'
-        'نود تذكيرك بموعدك القادم في عيادة الدكتور محمد مهند محسون:\n'
-        'التاريخ: $appointmentDate\n'
-        'الوقت: ${appointment.timeLabel}\n'
-        'يرجى الحضور قبل الموعد بنصف ساعة \n'
-        'نتمنى لك يوماً سعيداً.';
-
     return Card(
       elevation: 0,
       shape: RoundedRectangleBorder(
@@ -468,11 +455,26 @@ class _AppointmentTile extends ConsumerWidget {
             ),
             WhatsAppButton(
               phone: patient.phone,
-              message: whatsappMessage,
+              message: appointment
+                  .copyWith(patient: patient)
+                  .generateWhatsAppMessage(),
             ),
-            _StatusBadge(
-              label: appointment.status.arabicLabel,
-              color: statusColor,
+            PopupMenuButton<String>(
+              child: _StatusBadge(
+                label: appointment.status.arabicLabel,
+                color: statusColor,
+              ),
+              itemBuilder: (_) => [
+                ..._statusActions(appointment.status),
+              ],
+              onSelected: (value) {
+                ref
+                    .read(appointmentFormProvider.notifier)
+                    .updateStatus(
+                      appointment.id,
+                      AppointmentStatus.fromDb(value),
+                    );
+              },
             ),
             IconButton(
               icon: Icon(
@@ -488,6 +490,51 @@ class _AppointmentTile extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  List<PopupMenuItem<String>> _statusActions(AppointmentStatus current) {
+    const all = AppointmentStatus.values;
+    return all
+        .where((s) => s != current)
+        .map(
+          (s) => PopupMenuItem(
+            value: s.dbValue,
+            child: Row(
+              children: [
+                Icon(_statusIcon(s), size: 18, color: _rawStatusColor(s)),
+                const SizedBox(width: 8),
+                Text(s.arabicLabel),
+              ],
+            ),
+          ),
+        )
+        .toList();
+  }
+
+  Color _rawStatusColor(AppointmentStatus status) {
+    switch (status) {
+      case AppointmentStatus.scheduled:
+        return Colors.blue;
+      case AppointmentStatus.completed:
+        return Colors.green;
+      case AppointmentStatus.cancelled:
+        return Colors.red;
+      case AppointmentStatus.noShow:
+        return Colors.orange;
+    }
+  }
+
+  IconData _statusIcon(AppointmentStatus status) {
+    switch (status) {
+      case AppointmentStatus.scheduled:
+        return Icons.schedule;
+      case AppointmentStatus.completed:
+        return Icons.check_circle_outline;
+      case AppointmentStatus.cancelled:
+        return Icons.cancel_outlined;
+      case AppointmentStatus.noShow:
+        return Icons.person_off_outlined;
+    }
   }
 }
 

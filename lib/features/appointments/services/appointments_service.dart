@@ -1,6 +1,5 @@
 import '../data/appointments_repository.dart';
 import '../models/appointment_model.dart';
-import 'package:drift/drift.dart';
 import '../../../core/database/app_database.dart';
 
 class AppointmentsService {

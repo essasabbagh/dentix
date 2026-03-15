@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+
 import 'package:template/core/teeth_selector/teeth_selector.dart';
 import 'package:template/core/utils/date_helper.dart';
 import 'package:template/features/appointments/models/appointment_model.dart';
@@ -14,13 +16,15 @@ class AppointmentDetailsPage extends ConsumerStatefulWidget {
       _AppointmentDetailsPageState();
 }
 
-class _AppointmentDetailsPageState extends ConsumerState<AppointmentDetailsPage> {
+class _AppointmentDetailsPageState
+    extends ConsumerState<AppointmentDetailsPage> {
   int? _hoveredToothNumber;
 
   @override
   Widget build(BuildContext context) {
-    final appointmentAsync =
-        ref.watch(appointmentWithTreatmentsProvider(widget.id));
+    final appointmentAsync = ref.watch(
+      appointmentWithTreatmentsProvider(widget.id),
+    );
     final theme = Theme.of(context);
     final isDesktop = MediaQuery.of(context).size.width > 900;
 
@@ -53,14 +57,27 @@ class _AppointmentDetailsPageState extends ConsumerState<AppointmentDetailsPage>
               Card(
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 child: ListTile(
-                  leading: const CircleAvatar(child: Icon(Icons.person)),
+                  leading: const CircleAvatar(
+                    child: Icon(
+                      Icons.person,
+                      color: Colors.white,
+                    ),
+                  ),
                   title: Text(
                     appointment.patient?.fullName ?? 'مريض غير معروف',
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  subtitle: Text(appointment.patient?.phone ?? ''),
+                  subtitle: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        appointment.patient?.phone ?? '',
+                        textDirection: TextDirection.ltr,
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -87,7 +104,10 @@ class _AppointmentDetailsPageState extends ConsumerState<AppointmentDetailsPage>
                         theme,
                         Icons.access_time,
                         'الوقت',
-                        DateHelper.time(appointment.appointmentDate),
+                        DateHelper.time(
+                          appointment.appointmentDate,
+                          locale: 'en',
+                        ),
                       ),
                       const Divider(),
                       _buildInfoRow(
@@ -128,13 +148,20 @@ class _AppointmentDetailsPageState extends ConsumerState<AppointmentDetailsPage>
                   children: [
                     Expanded(
                       flex: 3,
-                      child: _buildTreatmentsTable(appointment, totalPrice, theme),
+                      child: _buildTreatmentsTable(
+                        appointment,
+                        totalPrice,
+                        theme,
+                      ),
                     ),
                     const SizedBox(width: 24),
                     Expanded(
                       flex: 2,
                       child: _buildOdontogramSide(
-                          theme, teethWithTreatments, _hoveredToothNumber),
+                        theme,
+                        teethWithTreatments,
+                        _hoveredToothNumber,
+                      ),
                     ),
                   ],
                 )
@@ -142,7 +169,10 @@ class _AppointmentDetailsPageState extends ConsumerState<AppointmentDetailsPage>
                 _buildTreatmentsTable(appointment, totalPrice, theme),
                 const SizedBox(height: 16),
                 _buildOdontogramSide(
-                    theme, teethWithTreatments, _hoveredToothNumber),
+                  theme,
+                  teethWithTreatments,
+                  _hoveredToothNumber,
+                ),
               ],
             ],
           );
@@ -159,7 +189,10 @@ class _AppointmentDetailsPageState extends ConsumerState<AppointmentDetailsPage>
   }
 
   Widget _buildTreatmentsTable(
-      AppointmentModel appointment, double totalPrice, ThemeData theme) {
+    AppointmentModel appointment,
+    double totalPrice,
+    ThemeData theme,
+  ) {
     return Card(
       margin: EdgeInsets.zero,
       child: Column(
@@ -178,7 +211,8 @@ class _AppointmentDetailsPageState extends ConsumerState<AppointmentDetailsPage>
               itemBuilder: (context, index) {
                 final t = appointment.treatments[index];
                 return MouseRegion(
-                  onEnter: (_) => setState(() => _hoveredToothNumber = t.toothNumber),
+                  onEnter: (_) =>
+                      setState(() => _hoveredToothNumber = t.toothNumber),
                   onExit: (_) => setState(() => _hoveredToothNumber = null),
                   child: ListTile(
                     title: Text(t.treatmentType),
@@ -223,8 +257,11 @@ class _AppointmentDetailsPageState extends ConsumerState<AppointmentDetailsPage>
     );
   }
 
-  Widget _buildOdontogramSide(ThemeData theme, Map<String, Color> colorized,
-      int? highlightedTooth) {
+  Widget _buildOdontogramSide(
+    ThemeData theme,
+    Map<String, Color> colorized,
+    int? highlightedTooth,
+  ) {
     final effectiveColorized = Map<String, Color>.from(colorized);
     if (highlightedTooth != null) {
       effectiveColorized[highlightedTooth.toString()] =

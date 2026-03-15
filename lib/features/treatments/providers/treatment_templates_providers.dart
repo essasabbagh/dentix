@@ -5,8 +5,11 @@ import 'package:template/core/database/app_database_provider.dart';
 
 final treatmentTemplatesProvider =
     StreamProvider<List<TreatmentTemplatesTableData>>((ref) {
-  return ref.watch(appDatabaseProvider).treatmentTemplatesDao.watchAllTemplates();
-});
+      return ref
+          .watch(appDatabaseProvider)
+          .treatmentTemplatesDao
+          .watchAllTemplates();
+    });
 
 class TreatmentTemplateNotifier extends StateNotifier<AsyncValue<void>> {
   TreatmentTemplateNotifier(this._db) : super(const AsyncValue.data(null));
@@ -57,5 +60,5 @@ class TreatmentTemplateNotifier extends StateNotifier<AsyncValue<void>> {
 
 final treatmentTemplateFormProvider =
     StateNotifierProvider<TreatmentTemplateNotifier, AsyncValue<void>>((ref) {
-  return TreatmentTemplateNotifier(ref.watch(appDatabaseProvider));
-});
+      return TreatmentTemplateNotifier(ref.watch(appDatabaseProvider));
+    });

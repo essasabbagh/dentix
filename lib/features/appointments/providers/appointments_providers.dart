@@ -1,4 +1,3 @@
-import 'package:drift/drift.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:template/core/database/app_database.dart';

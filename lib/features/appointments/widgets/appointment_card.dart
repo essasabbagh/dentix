@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:template/components/ui/whatsapp_button.dart';
 
 import '../models/appointment_model.dart';
 
@@ -91,6 +92,13 @@ class AppointmentCard extends StatelessWidget {
                   ],
                 ),
               ),
+              // WhatsApp
+              if (appointment.patient?.phone != null &&
+                  appointment.patient!.phone.isNotEmpty)
+                WhatsAppButton(
+                  phone: appointment.patient!.phone,
+                  message: appointment.generateWhatsAppMessage(),
+                ),
               // Actions
               PopupMenuButton<String>(
                 icon: const Icon(Icons.more_vert, size: 20),

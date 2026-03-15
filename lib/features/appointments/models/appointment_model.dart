@@ -44,9 +44,6 @@ enum AppointmentStatus {
       AppointmentStatus.noShow => Colors.orange,
     };
   }
-
-
- 
 }
 
 class AppointmentModel {
@@ -79,6 +76,34 @@ class AppointmentModel {
     final h = appointmentDate.hour.toString().padLeft(2, '0');
     final m = appointmentDate.minute.toString().padLeft(2, '0');
     return '$h:$m';
+  }
+
+  String generateWhatsAppMessage() {
+    final patientName = patient?.fullName ?? 'عزيزي المريض';
+    final dateStr =
+        '${appointmentDate.year}/${appointmentDate.month}/${appointmentDate.day}';
+    final timeStr = timeLabel;
+
+    return switch (status) {
+      AppointmentStatus.scheduled =>
+        'مرحباً $patientName،\n'
+            'نود تذكيرك بموعدك القادم في عيادة الأسنان:\n'
+            'التاريخ: $dateStr\n'
+            'الوقت: $timeStr\n'
+            'نتمنى لك يوماً سعيداً.',
+      AppointmentStatus.completed =>
+        'مرحباً $patientName،\n'
+            'شكراً لزيارتك لنا اليوم. نتمنى أن تكون راضياً عن الخدمة المقدمة.\n'
+            'في حال وجود أي استفسار، لا تتردد في التواصل معنا.',
+      AppointmentStatus.cancelled =>
+        'مرحباً $patientName،\n'
+            'تم إلغاء موعدك المحدد بتاريخ $dateStr الساعة $timeStr.\n'
+            'إذا كنت ترغب في تحديد موعد جديد، يرجى التواصل معنا.',
+      AppointmentStatus.noShow =>
+        'مرحباً $patientName،\n'
+            'لقد فاتك موعدك اليوم ($dateStr الساعة $timeStr).\n'
+            'يرجى التواصل معنا لإعادة جدولة الموعد إذا كنت لا تزال بحاجة للخدمة.',
+    };
   }
 
   AppointmentModel copyWith({

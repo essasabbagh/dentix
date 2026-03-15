@@ -129,23 +129,26 @@ class AppointmentsRepository {
     final appointmentRow = await _db.appointmentsDao.getAppointmentById(id);
     if (appointmentRow == null) return null;
 
-    final patientRow =
-        await _db.patientsDao.getPatientById(appointmentRow.patientId);
+    final patientRow = await _db.patientsDao.getPatientById(
+      appointmentRow.patientId,
+    );
     final treatmentsRows = await _db.treatmentsDao.getAppointmentTreatments(id);
 
     final treatments = treatmentsRows
-        .map((t) => TreatmentModel(
-              id: t.id,
-              patientId: t.patientId,
-              appointmentId: t.appointmentId,
-              treatmentType: t.treatmentType,
-              toothNumber: t.toothNumber,
-              price: t.price,
-              status: TreatmentStatus.fromDb(t.status),
-              notes: t.notes,
-              createdAt: t.createdAt,
-              updatedAt: t.updatedAt,
-            ))
+        .map(
+          (t) => TreatmentModel(
+            id: t.id,
+            patientId: t.patientId,
+            appointmentId: t.appointmentId,
+            treatmentType: t.treatmentType,
+            toothNumber: t.toothNumber,
+            price: t.price,
+            status: TreatmentStatus.fromDb(t.status),
+            notes: t.notes,
+            createdAt: t.createdAt,
+            updatedAt: t.updatedAt,
+          ),
+        )
         .toList();
 
     return _fromData(

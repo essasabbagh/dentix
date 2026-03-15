@@ -183,7 +183,9 @@ class _AddEditPatientPageState extends ConsumerState<AddEditPatientPage> {
                           ),
                           ignoreBlank: false,
                           autoValidateMode: AutovalidateMode.onUserInteraction,
-                          selectorTextStyle: const TextStyle(color: Colors.black),
+                          selectorTextStyle: const TextStyle(
+                            color: Colors.black,
+                          ),
                           initialValue: _phoneNumber,
                           textFieldController: _phone,
                           formatInput: true,
@@ -193,7 +195,10 @@ class _AddEditPatientPageState extends ConsumerState<AddEditPatientPage> {
                           ),
                           inputDecoration: InputDecoration(
                             hintText: 'رقم الهاتف',
-                            prefixIcon: const Icon(Icons.phone_outlined, size: 20),
+                            prefixIcon: const Icon(
+                              Icons.phone_outlined,
+                              size: 20,
+                            ),
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),

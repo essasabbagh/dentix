@@ -99,7 +99,11 @@ class _DateRangePicker extends ConsumerWidget {
           children: [
             Row(
               children: [
-                Icon(Icons.date_range, size: 18, color: theme.colorScheme.primary),
+                Icon(
+                  Icons.date_range,
+                  size: 18,
+                  color: theme.colorScheme.primary,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   'تحديد الفترة الزمنيّة',
@@ -190,24 +194,30 @@ class _DateRangePicker extends ConsumerWidget {
     final now = DateTime.now();
     final start = DateTime(now.year, now.month, 1);
     final end = DateTime(now.year, now.month + 1, 1);
-    ref.read(reportPeriodProvider.notifier).state =
-        ReportPeriod(start: start, end: end);
+    ref.read(reportPeriodProvider.notifier).state = ReportPeriod(
+      start: start,
+      end: end,
+    );
   }
 
   void _setLastMonth(WidgetRef ref) {
     final now = DateTime.now();
     final start = DateTime(now.year, now.month - 1, 1);
     final end = DateTime(now.year, now.month, 1);
-    ref.read(reportPeriodProvider.notifier).state =
-        ReportPeriod(start: start, end: end);
+    ref.read(reportPeriodProvider.notifier).state = ReportPeriod(
+      start: start,
+      end: end,
+    );
   }
 
   void _setThisYear(WidgetRef ref) {
     final now = DateTime.now();
     final start = DateTime(now.year, 1, 1);
     final end = DateTime(now.year + 1, 1, 1);
-    ref.read(reportPeriodProvider.notifier).state =
-        ReportPeriod(start: start, end: end);
+    ref.read(reportPeriodProvider.notifier).state = ReportPeriod(
+      start: start,
+      end: end,
+    );
   }
 }
 
@@ -296,7 +306,8 @@ class _KpiRow extends ConsumerWidget {
                   icon: Icons.payments_outlined,
                   color: Colors.green,
                   sub: yearTotalAsync.maybeWhen(
-                    data: (t) => 'سنوي (${period.start.year}): ${t.toStringAsFixed(0)} ₺',
+                    data: (t) =>
+                        'سنوي (${period.start.year}): ${t.toStringAsFixed(0)} ₺',
                     orElse: () => '',
                   ),
                 ),
@@ -477,9 +488,10 @@ class _IncomeBarChart extends ConsumerWidget {
                 final m = entry.value;
                 final ratio = maxVal > 0 ? m.total / maxVal : 0.0;
                 // Current is defined as the month of start date IF only one month is selected
-                final isCurrent = m.month == period.start.month && 
-                                 period.start.year == period.end.year &&
-                                 period.start.month == (period.end.month - 1);
+                final isCurrent =
+                    m.month == period.start.month &&
+                    period.start.year == period.end.year &&
+                    period.start.month == (period.end.month - 1);
 
                 return Expanded(
                   child: Padding(
@@ -493,8 +505,12 @@ class _IncomeBarChart extends ConsumerWidget {
                             child: Text(
                               m.total.toStringAsFixed(0),
                               style: theme.textTheme.labelSmall?.copyWith(
-                                color: isCurrent ? theme.colorScheme.primary : theme.colorScheme.outline,
-                                fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
+                                color: isCurrent
+                                    ? theme.colorScheme.primary
+                                    : theme.colorScheme.outline,
+                                fontWeight: isCurrent
+                                    ? FontWeight.bold
+                                    : FontWeight.normal,
                                 fontSize: 8,
                               ),
                             ),
