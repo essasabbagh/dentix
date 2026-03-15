@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:template/components/loading/loading_widget.dart';
 import 'package:template/core/extensions/context_ext.dart';
+import 'package:template/core/teeth_selector/teeth_selector.dart';
 import 'package:template/core/utils/date_helper.dart';
 import 'package:template/core/utils/snackbars.dart';
 import 'package:template/features/appointments/models/appointment_model.dart';
@@ -13,7 +15,9 @@ import 'package:template/features/assets/widgets/assets_section.dart';
 import 'package:template/features/payments/models/payment_model.dart';
 import 'package:template/features/payments/providers/payments_providers.dart';
 import 'package:template/features/treatments/models/treatment_model.dart';
+import 'package:template/features/treatments/providers/treatment_templates_providers.dart';
 import 'package:template/features/treatments/providers/treatments_providers.dart';
+import 'package:template/core/database/app_database.dart';
 
 import '../models/patient_model.dart';
 import '../providers/patients_providers.dart';
@@ -880,65 +884,60 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
   @override
   Widget build(BuildContext context) {
     final isLoading = ref.watch(treatmentFormProvider).isLoading;
+    final templatesAsync = ref.watch(treatmentTemplatesProvider);
+    final theme = Theme.of(context);
+    final isDesktop = MediaQuery.of(context).size.width > 800;
 
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 460, maxHeight: 520),
+        constraints: BoxConstraints(
+          maxWidth: isDesktop ? 900 : 460,
+          maxHeight: isDesktop ? 600 : 700,
+        ),
         child: Column(
           children: [
             const _DialogHeader(
-              title: 'إضافة علاج',
+              title: 'إضافة علاج جديد',
               icon: Icons.healing_outlined,
             ),
             Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(24),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      _field(
-                        controller: _typeController,
-                        label: 'نوع العلاج *',
-                        icon: Icons.medical_services_outlined,
-                        validator: (v) => v?.isEmpty == true ? 'مطلوب' : null,
-                      ),
-                      const SizedBox(height: 14),
-                      _field(
-                        controller: _priceController,
-                        label: 'السعر (₺) *',
-                        icon: Icons.attach_money,
-                        keyboard: TextInputType.number,
-                        validator: (v) {
-                          if (v?.isEmpty == true) return 'مطلوب';
-                          if (double.tryParse(v!) == null) {
-                            return 'أدخل رقماً';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 14),
-                      TextFormField(
-                        keyboardType: TextInputType.number,
-                        textDirection: TextDirection.rtl,
-                        decoration: _dec(
-                          'رقم السن (اختياري)',
-                          Icons.circle_outlined,
+              child: isDesktop
+                  ? Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: SingleChildScrollView(
+                            padding: const EdgeInsets.all(24),
+                            child: _buildForm(templatesAsync, theme),
+                          ),
                         ),
-                        onChanged: (v) => _toothNumber = int.tryParse(v),
+                        VerticalDivider(
+                          width: 1,
+                          color: theme.colorScheme.outlineVariant,
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Padding(
+                            padding: const EdgeInsets.all(24),
+                            child: _buildOdontogramSection(theme),
+                          ),
+                        ),
+                      ],
+                    )
+                  : SingleChildScrollView(
+                      padding: const EdgeInsets.all(24),
+                      child: Column(
+                        children: [
+                          _buildForm(templatesAsync, theme),
+                          const SizedBox(height: 24),
+                          const Divider(),
+                          const SizedBox(height: 16),
+                          _buildOdontogramSection(theme),
+                        ],
                       ),
-                      const SizedBox(height: 14),
-                      _field(
-                        controller: _notesController,
-                        label: 'ملاحظات',
-                        icon: Icons.notes_outlined,
-                        maxLines: 3,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                    ),
             ),
             _DialogFooter(
               isLoading: isLoading,
@@ -951,34 +950,173 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
     );
   }
 
+  Widget _buildForm(
+      AsyncValue<List<TreatmentTemplatesTableData>> templatesAsync,
+      ThemeData theme) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('تفاصيل العلاج',
+              style: theme.textTheme.labelLarge
+                  ?.copyWith(color: theme.colorScheme.primary)),
+          const SizedBox(height: 16),
+          templatesAsync.when(
+            data: (templates) => Autocomplete<TreatmentTemplatesTableData>(
+              displayStringForOption: (option) => option.name,
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                if (textEditingValue.text == '') return templates;
+                return templates.where((option) =>
+                    option.name.contains(textEditingValue.text));
+              },
+              onSelected: (selection) {
+                _typeController.text = selection.name;
+                _priceController.text = selection.defaultPrice.toString();
+              },
+              fieldViewBuilder:
+                  (context, controller, focusNode, onFieldSubmitted) {
+                controller.addListener(() {
+                  _typeController.text = controller.text;
+                });
+                return TextFormField(
+                  controller: controller,
+                  focusNode: focusNode,
+                  textDirection: TextDirection.rtl,
+                  decoration: _dec('نوع العلاج *', Icons.medical_services_outlined),
+                  validator: (v) => v == null || v.isEmpty ? 'مطلوب' : null,
+                );
+              },
+            ),
+            loading: () => const LinearProgressIndicator(),
+            error: (e, _) => Text('Error: $e'),
+          ),
+          const SizedBox(height: 16),
+          _field(
+            controller: _priceController,
+            label: 'السعر (₺) *',
+            icon: Icons.attach_money,
+            keyboard: const TextInputType.numberWithOptions(decimal: true),
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))
+            ],
+            validator: (v) {
+              if (v == null || v.isEmpty) return 'مطلوب';
+              if (double.tryParse(v) == null) return 'أدخل رقماً صحيحاً';
+              return null;
+            },
+          ),
+          const SizedBox(height: 16),
+          Container(
+            height: 56,
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              border: Border.all(color: theme.colorScheme.outline),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Row(
+              children: [
+                const Icon(Icons.settings_suggest_outlined,
+                    size: 20, color: Colors.grey),
+                const SizedBox(width: 8),
+                Text(
+                  _toothNumber == null ? 'السن: كلي' : 'السن: $_toothNumber',
+                  style: theme.textTheme.bodyMedium,
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 16),
+          _field(
+            controller: _notesController,
+            label: 'ملاحظات',
+            icon: Icons.notes_outlined,
+            maxLines: 3,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildOdontogramSection(ThemeData theme) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('اختر السن',
+            style: theme.textTheme.labelLarge
+                ?.copyWith(color: theme.colorScheme.primary)),
+        const SizedBox(height: 16),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: theme.colorScheme.outlineVariant),
+            ),
+            child: TeethSelector(
+              multiSelect: false,
+              selectedColor: theme.colorScheme.secondary,
+              onChange: (selected) {
+                setState(() {
+                  _toothNumber =
+                      selected.isEmpty ? null : int.tryParse(selected.last);
+                });
+              },
+            ),
+          ),
+        ),
+        if (_toothNumber != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: Row(
+              children: [
+                Text('السن المحدد: $_toothNumber',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.secondary,
+                        fontWeight: FontWeight.bold)),
+                const Spacer(),
+                TextButton(
+                  onPressed: () => setState(() => _toothNumber = null),
+                  child: const Text('إلغاء التحديد',
+                      style: TextStyle(fontSize: 12)),
+                ),
+              ],
+            ),
+          ),
+      ],
+    );
+  }
+
   Widget _field({
     required TextEditingController controller,
     required String label,
     required IconData icon,
     TextInputType? keyboard,
+    List<TextInputFormatter>? inputFormatters,
     int maxLines = 1,
     String? Function(String?)? validator,
-  }) => TextFormField(
-    controller: controller,
-    keyboardType: keyboard,
-    maxLines: maxLines,
-    textDirection: TextDirection.rtl,
-    decoration: _dec(label, icon),
-    validator: validator,
-  );
+  }) =>
+      TextFormField(
+        controller: controller,
+        keyboardType: keyboard,
+        inputFormatters: inputFormatters,
+        maxLines: maxLines,
+        textDirection: TextDirection.rtl,
+        decoration: _dec(label, icon),
+        validator: validator,
+      );
 
   InputDecoration _dec(String label, IconData icon) => InputDecoration(
-    labelText: label,
-    prefixIcon: Icon(icon, size: 18),
-    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-  );
+        labelText: label,
+        prefixIcon: Icon(icon, size: 18),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      );
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
-    final ok = await ref
-        .read(treatmentFormProvider.notifier)
-        .create(
+    final ok = await ref.read(treatmentFormProvider.notifier).create(
           patientId: widget.patientId,
           treatmentType: _typeController.text.trim(),
           price: double.parse(_priceController.text.trim()),
