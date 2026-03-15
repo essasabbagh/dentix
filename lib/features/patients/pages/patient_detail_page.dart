@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:template/components/loading/loading_widget.dart';
+import 'package:template/components/ui/whatsapp_button.dart';
+import 'package:template/core/database/app_database.dart';
 import 'package:template/core/extensions/context_ext.dart';
 import 'package:template/core/teeth_selector/teeth_selector.dart';
 import 'package:template/core/utils/date_helper.dart';
@@ -17,7 +19,6 @@ import 'package:template/features/payments/providers/payments_providers.dart';
 import 'package:template/features/treatments/models/treatment_model.dart';
 import 'package:template/features/treatments/providers/treatment_templates_providers.dart';
 import 'package:template/features/treatments/providers/treatments_providers.dart';
-import 'package:template/core/database/app_database.dart';
 
 import '../models/patient_model.dart';
 import '../providers/patients_providers.dart';
@@ -371,8 +372,10 @@ class _AppointmentsTab extends ConsumerWidget {
                     padding: const EdgeInsets.all(16),
                     itemCount: appointments.length,
                     separatorBuilder: (_, _) => const SizedBox(height: 8),
-                    itemBuilder: (_, i) =>
-                        _AppointmentTile(appointment: appointments[i]),
+                    itemBuilder: (_, i) => _AppointmentTile(
+                      appointment: appointments[i],
+                      patient: patient,
+                    ),
                   ),
           ),
         ],
@@ -382,14 +385,28 @@ class _AppointmentsTab extends ConsumerWidget {
 }
 
 class _AppointmentTile extends ConsumerWidget {
-  const _AppointmentTile({required this.appointment});
+  const _AppointmentTile({required this.appointment, required this.patient});
 
   final AppointmentModel appointment;
+  final PatientModel patient;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
     final statusColor = appointment.status.statusColor;
+
+    final appointmentDate = DateHelper.format(
+      appointment.appointmentDate,
+      pattern: 'EEEE، MMMM dd / MM / yyyy',
+    );
+
+    final whatsappMessage =
+        'مرحباً ${patient.fullName}،\n'
+        'نود تذكيرك بموعدك القادم في عيادة الدكتور محمد مهند محسون:\n'
+        'التاريخ: $appointmentDate\n'
+        'الوقت: ${appointment.timeLabel}\n'
+        'يرجى الحضور قبل الموعد بنصف ساعة \n'
+        'نتمنى لك يوماً سعيداً.';
 
     return Card(
       elevation: 0,
@@ -448,6 +465,10 @@ class _AppointmentTile extends ConsumerWidget {
                     ),
                 ],
               ),
+            ),
+            WhatsAppButton(
+              phone: patient.phone,
+              message: whatsappMessage,
             ),
             _StatusBadge(
               label: appointment.status.arabicLabel,
@@ -555,6 +576,7 @@ class _TreatmentsTotalBar extends StatelessWidget {
 
 class _TreatmentTile extends ConsumerWidget {
   const _TreatmentTile({required this.treatment});
+
   final TreatmentModel treatment;
 
   @override
@@ -951,24 +973,29 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
   }
 
   Widget _buildForm(
-      AsyncValue<List<TreatmentTemplatesTableData>> templatesAsync,
-      ThemeData theme) {
+    AsyncValue<List<TreatmentTemplatesTableData>> templatesAsync,
+    ThemeData theme,
+  ) {
     return Form(
       key: _formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('تفاصيل العلاج',
-              style: theme.textTheme.labelLarge
-                  ?.copyWith(color: theme.colorScheme.primary)),
+          Text(
+            'تفاصيل العلاج',
+            style: theme.textTheme.labelLarge?.copyWith(
+              color: theme.colorScheme.primary,
+            ),
+          ),
           const SizedBox(height: 16),
           templatesAsync.when(
             data: (templates) => Autocomplete<TreatmentTemplatesTableData>(
               displayStringForOption: (option) => option.name,
               optionsBuilder: (TextEditingValue textEditingValue) {
                 if (textEditingValue.text == '') return templates;
-                return templates.where((option) =>
-                    option.name.contains(textEditingValue.text));
+                return templates.where(
+                  (option) => option.name.contains(textEditingValue.text),
+                );
               },
               onSelected: (selection) {
                 _typeController.text = selection.name;
@@ -976,17 +1003,20 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
               },
               fieldViewBuilder:
                   (context, controller, focusNode, onFieldSubmitted) {
-                controller.addListener(() {
-                  _typeController.text = controller.text;
-                });
-                return TextFormField(
-                  controller: controller,
-                  focusNode: focusNode,
-                  textDirection: TextDirection.rtl,
-                  decoration: _dec('نوع العلاج *', Icons.medical_services_outlined),
-                  validator: (v) => v == null || v.isEmpty ? 'مطلوب' : null,
-                );
-              },
+                    controller.addListener(() {
+                      _typeController.text = controller.text;
+                    });
+                    return TextFormField(
+                      controller: controller,
+                      focusNode: focusNode,
+                      textDirection: TextDirection.rtl,
+                      decoration: _dec(
+                        'نوع العلاج *',
+                        Icons.medical_services_outlined,
+                      ),
+                      validator: (v) => v == null || v.isEmpty ? 'مطلوب' : null,
+                    );
+                  },
             ),
             loading: () => const LinearProgressIndicator(),
             error: (e, _) => Text('Error: $e'),
@@ -998,7 +1028,7 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
             icon: Icons.attach_money,
             keyboard: const TextInputType.numberWithOptions(decimal: true),
             inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp(r'[0-9.]'))
+              FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
             ],
             validator: (v) {
               if (v == null || v.isEmpty) return 'مطلوب';
@@ -1016,8 +1046,11 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
             ),
             child: Row(
               children: [
-                const Icon(Icons.settings_suggest_outlined,
-                    size: 20, color: Colors.grey),
+                const Icon(
+                  Icons.settings_suggest_outlined,
+                  size: 20,
+                  color: Colors.grey,
+                ),
                 const SizedBox(width: 8),
                 Text(
                   _toothNumber == null ? 'السن: كلي' : 'السن: $_toothNumber',
@@ -1042,15 +1075,20 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('اختر السن',
-            style: theme.textTheme.labelLarge
-                ?.copyWith(color: theme.colorScheme.primary)),
+        Text(
+          'اختر السن',
+          style: theme.textTheme.labelLarge?.copyWith(
+            color: theme.colorScheme.primary,
+          ),
+        ),
         const SizedBox(height: 16),
         Expanded(
           child: Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
+              color: theme.colorScheme.surfaceContainerHighest.withValues(
+                alpha: 0.3,
+              ),
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: theme.colorScheme.outlineVariant),
             ),
@@ -1059,8 +1097,9 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
               selectedColor: theme.colorScheme.secondary,
               onChange: (selected) {
                 setState(() {
-                  _toothNumber =
-                      selected.isEmpty ? null : int.tryParse(selected.last);
+                  _toothNumber = selected.isEmpty
+                      ? null
+                      : int.tryParse(selected.last);
                 });
               },
             ),
@@ -1071,15 +1110,20 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
             padding: const EdgeInsets.only(top: 12),
             child: Row(
               children: [
-                Text('السن المحدد: $_toothNumber',
-                    style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.secondary,
-                        fontWeight: FontWeight.bold)),
+                Text(
+                  'السن المحدد: $_toothNumber',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.secondary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 const Spacer(),
                 TextButton(
                   onPressed: () => setState(() => _toothNumber = null),
-                  child: const Text('إلغاء التحديد',
-                      style: TextStyle(fontSize: 12)),
+                  child: const Text(
+                    'إلغاء التحديد',
+                    style: TextStyle(fontSize: 12),
+                  ),
                 ),
               ],
             ),
@@ -1096,27 +1140,28 @@ class _AddTreatmentDialogState extends ConsumerState<_AddTreatmentDialog> {
     List<TextInputFormatter>? inputFormatters,
     int maxLines = 1,
     String? Function(String?)? validator,
-  }) =>
-      TextFormField(
-        controller: controller,
-        keyboardType: keyboard,
-        inputFormatters: inputFormatters,
-        maxLines: maxLines,
-        textDirection: TextDirection.rtl,
-        decoration: _dec(label, icon),
-        validator: validator,
-      );
+  }) => TextFormField(
+    controller: controller,
+    keyboardType: keyboard,
+    inputFormatters: inputFormatters,
+    maxLines: maxLines,
+    textDirection: TextDirection.rtl,
+    decoration: _dec(label, icon),
+    validator: validator,
+  );
 
   InputDecoration _dec(String label, IconData icon) => InputDecoration(
-        labelText: label,
-        prefixIcon: Icon(icon, size: 18),
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-      );
+    labelText: label,
+    prefixIcon: Icon(icon, size: 18),
+    border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+  );
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
-    final ok = await ref.read(treatmentFormProvider.notifier).create(
+    final ok = await ref
+        .read(treatmentFormProvider.notifier)
+        .create(
           patientId: widget.patientId,
           treatmentType: _typeController.text.trim(),
           price: double.parse(_priceController.text.trim()),

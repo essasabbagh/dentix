@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:template/core/utils/date_helper.dart';
 import 'package:template/core/utils/snackbars.dart';
 
@@ -30,6 +31,8 @@ class _AddEditPatientPageState extends ConsumerState<AddEditPatientPage> {
 
   String? _gender;
   DateTime? _birthDate;
+  PhoneNumber _phoneNumber = PhoneNumber(isoCode: 'TR');
+  String _phoneFormatted = '';
 
   bool get _isEditMode => widget.patient != null;
 
@@ -45,6 +48,22 @@ class _AddEditPatientPageState extends ConsumerState<AddEditPatientPage> {
     _notes = TextEditingController(text: p?.notes ?? '');
     _gender = p?.gender;
     _birthDate = p?.birthDate;
+
+    if (p != null && p.phone.isNotEmpty) {
+      _phoneFormatted = p.phone;
+      _loadInitialPhone(p.phone);
+    }
+  }
+
+  Future<void> _loadInitialPhone(String phone) async {
+    try {
+      final number = await PhoneNumber.getRegionInfoFromPhoneNumber(phone);
+      if (mounted) {
+        setState(() {
+          _phoneNumber = number;
+        });
+      }
+    } catch (_) {}
   }
 
   @override
@@ -150,16 +169,52 @@ class _AddEditPatientPageState extends ConsumerState<AddEditPatientPage> {
                         ),
                         const SizedBox(height: 16),
                         // Phone
-                        _buildField(
-                          controller: _phone,
-                          label: 'رقم الهاتف *',
-                          icon: Icons.phone_outlined,
-                          keyboardType: TextInputType.phone,
-                          validator: (v) {
-                            if (v == null || v.isEmpty) return 'مطلوب';
-                            if (v.length < 9) return 'رقم غير صحيح';
-                            return null;
+                        _buildLabel('رقم الهاتف *'),
+                        const SizedBox(height: 8),
+                        InternationalPhoneNumberInput(
+                          onInputChanged: (PhoneNumber number) {
+                            _phoneNumber = number;
+                            _phoneFormatted = number.phoneNumber ?? '';
                           },
+                          selectorConfig: const SelectorConfig(
+                            selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                            setSelectorButtonAsPrefixIcon: true,
+                            leadingPadding: 12,
+                          ),
+                          ignoreBlank: false,
+                          autoValidateMode: AutovalidateMode.onUserInteraction,
+                          selectorTextStyle: const TextStyle(color: Colors.black),
+                          initialValue: _phoneNumber,
+                          textFieldController: _phone,
+                          formatInput: true,
+                          keyboardType: const TextInputType.numberWithOptions(
+                            signed: true,
+                            decimal: true,
+                          ),
+                          inputDecoration: InputDecoration(
+                            hintText: 'رقم الهاتف',
+                            prefixIcon: const Icon(Icons.phone_outlined, size: 20),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 12,
+                            ),
+                          ),
+                          textAlign: TextAlign.left,
+                          textStyle: const TextStyle(fontSize: 16),
+                          searchBoxDecoration: const InputDecoration(
+                            hintText: 'ابحث عن بلدك',
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'تأكد من وجود واتساب لهذا الرقم',
+                          style: theme.textTheme.labelSmall?.copyWith(
+                            color: theme.colorScheme.primary,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         const SizedBox(height: 16),
                         // Email
@@ -313,7 +368,7 @@ class _AddEditPatientPageState extends ConsumerState<AddEditPatientPage> {
       final updated = widget.patient!.copyWith(
         firstName: _firstName.text.trim(),
         lastName: _lastName.text.trim(),
-        phone: _phone.text.trim(),
+        phone: _phoneFormatted,
         email: _email.text.trim().isEmpty ? null : _email.text.trim(),
         gender: _gender,
         birthDate: _birthDate,
@@ -326,7 +381,7 @@ class _AddEditPatientPageState extends ConsumerState<AddEditPatientPage> {
       success = await notifier.createPatient(
         firstName: _firstName.text.trim(),
         lastName: _lastName.text.trim(),
-        phone: _phone.text.trim(),
+        phone: _phoneFormatted,
         email: _email.text.trim().isEmpty ? null : _email.text.trim(),
         gender: _gender,
         birthDate: _birthDate,

@@ -59,6 +59,10 @@
             <action android:name="android.intent.action.VIEW" />
             <data android:scheme="sms" />
         </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="whatsapp" />
+        </intent>
         <!-- If your app checks for call support -->
         <intent>
             <action android:name="android.intent.action.VIEW" />
