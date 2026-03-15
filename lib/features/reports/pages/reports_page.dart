@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:template/core/utils/date_helper.dart';
 
 import '../providers/reports_providers.dart';
 
@@ -18,7 +19,7 @@ class ReportsPage extends ConsumerWidget {
             padding: const EdgeInsets.all(20),
             sliver: SliverList(
               delegate: SliverChildListDelegate([
-                _PeriodSelector(),
+                const _DateRangePicker(),
                 const SizedBox(height: 20),
                 _KpiRow(),
                 const SizedBox(height: 20),
@@ -62,7 +63,7 @@ class _ReportsAppBar extends ConsumerWidget {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               Text(
-                '${period.monthName} ${period.year}',
+                period.label,
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.outline,
                 ),
@@ -75,88 +76,199 @@ class _ReportsAppBar extends ConsumerWidget {
   }
 }
 
-// ── Period selector ───────────────────────────────────────────────────────
+// ── Date Range Picker ─────────────────────────────────────────────────────
 
-class _PeriodSelector extends ConsumerWidget {
+class _DateRangePicker extends ConsumerWidget {
+  const _DateRangePicker();
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final period = ref.watch(reportPeriodProvider);
+    final theme = Theme.of(context);
 
-    const months = [
-      'يناير',
-      'فبراير',
-      'مارس',
-      'أبريل',
-      'مايو',
-      'يونيو',
-      'يوليو',
-      'أغسطس',
-      'سبتمبر',
-      'أكتوبر',
-      'نوفمبر',
-      'ديسمبر',
-    ];
-
-    final currentYear = DateTime.now().year;
-    final years = List.generate(5, (i) => currentYear - i); // last 5 years
-
-    return Row(
-      children: [
-        // Month dropdown
-        Expanded(
-          child: DropdownButtonFormField<int>(
-            initialValue: period.month,
-            decoration: InputDecoration(
-              labelText: 'الشهر',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 14,
-                vertical: 10,
+    return Card(
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: BorderSide(color: theme.colorScheme.outlineVariant),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.date_range, size: 18, color: theme.colorScheme.primary),
+                const SizedBox(width: 8),
+                Text(
+                  'تحديد الفترة الزمنيّة',
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: _DateButton(
+                    label: 'من تاريخ',
+                    date: period.start,
+                    onTap: () => _pickDate(context, ref, true, period.start),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _DateButton(
+                    label: 'إلى تاريخ',
+                    date: period.end,
+                    onTap: () => _pickDate(context, ref, false, period.end),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            // Common presets
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  _PresetChip(
+                    label: 'هذا الشهر',
+                    onTap: () => _setThisMonth(ref),
+                  ),
+                  const SizedBox(width: 8),
+                  _PresetChip(
+                    label: 'الشهر الماضي',
+                    onTap: () => _setLastMonth(ref),
+                  ),
+                  const SizedBox(width: 8),
+                  _PresetChip(
+                    label: 'هذه السنة',
+                    onTap: () => _setThisYear(ref),
+                  ),
+                ],
               ),
             ),
-            items: List.generate(
-              12,
-              (i) => DropdownMenuItem(value: i + 1, child: Text(months[i])),
-            ),
-            onChanged: (m) {
-              if (m != null) {
-                ref
-                    .read(reportPeriodProvider.notifier)
-                    .update((p) => p.copyWith(month: m));
-              }
-            },
-          ),
+          ],
         ),
-        const SizedBox(width: 12),
-        // Year dropdown
-        Expanded(
-          child: DropdownButtonFormField<int>(
-            initialValue: period.year,
-            decoration: InputDecoration(
-              labelText: 'السنة',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              contentPadding: const EdgeInsets.symmetric(
-                horizontal: 14,
-                vertical: 10,
+      ),
+    );
+  }
+
+  Future<void> _pickDate(
+    BuildContext context,
+    WidgetRef ref,
+    bool isStart,
+    DateTime initialDate,
+  ) async {
+    final picked = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+      initialDatePickerMode: DatePickerMode.day,
+      helpText: isStart ? 'اختر تاريخ البداية' : 'اختر تاريخ النهاية',
+    );
+
+    if (picked != null) {
+      if (isStart) {
+        ref
+            .read(reportPeriodProvider.notifier)
+            .update((p) => p.copyWith(start: picked));
+      } else {
+        ref
+            .read(reportPeriodProvider.notifier)
+            .update((p) => p.copyWith(end: picked));
+      }
+    }
+  }
+
+  void _setThisMonth(WidgetRef ref) {
+    final now = DateTime.now();
+    final start = DateTime(now.year, now.month, 1);
+    final end = DateTime(now.year, now.month + 1, 1);
+    ref.read(reportPeriodProvider.notifier).state =
+        ReportPeriod(start: start, end: end);
+  }
+
+  void _setLastMonth(WidgetRef ref) {
+    final now = DateTime.now();
+    final start = DateTime(now.year, now.month - 1, 1);
+    final end = DateTime(now.year, now.month, 1);
+    ref.read(reportPeriodProvider.notifier).state =
+        ReportPeriod(start: start, end: end);
+  }
+
+  void _setThisYear(WidgetRef ref) {
+    final now = DateTime.now();
+    final start = DateTime(now.year, 1, 1);
+    final end = DateTime(now.year + 1, 1, 1);
+    ref.read(reportPeriodProvider.notifier).state =
+        ReportPeriod(start: start, end: end);
+  }
+}
+
+class _DateButton extends StatelessWidget {
+  const _DateButton({
+    required this.label,
+    required this.date,
+    required this.onTap,
+  });
+  final String label;
+  final DateTime date;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        decoration: BoxDecoration(
+          border: Border.all(color: theme.colorScheme.outlineVariant),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: theme.colorScheme.outline,
               ),
             ),
-            items: years
-                .map((y) => DropdownMenuItem(value: y, child: Text('$y')))
-                .toList(),
-            onChanged: (y) {
-              if (y != null) {
-                ref
-                    .read(reportPeriodProvider.notifier)
-                    .update((p) => p.copyWith(year: y));
-              }
-            },
-          ),
+            const SizedBox(height: 4),
+            Text(
+              DateHelper.format(date),
+              style: theme.textTheme.bodyMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
+    );
+  }
+}
+
+class _PresetChip extends StatelessWidget {
+  const _PresetChip({required this.label, required this.onTap});
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ActionChip(
+      label: Text(label),
+      onPressed: onTap,
+      labelStyle: const TextStyle(fontSize: 12),
+      padding: EdgeInsets.zero,
+      visualDensity: VisualDensity.compact,
     );
   }
 }
@@ -179,12 +291,12 @@ class _KpiRow extends ConsumerWidget {
             children: [
               Expanded(
                 child: _KpiCard(
-                  label: 'الإيراد الشهري',
+                  label: 'الإيراد في الفترة',
                   value: '${s.income.toStringAsFixed(0)} ₺',
                   icon: Icons.payments_outlined,
                   color: Colors.green,
                   sub: yearTotalAsync.maybeWhen(
-                    data: (t) => 'سنوي: ${t.toStringAsFixed(0)} ₺',
+                    data: (t) => 'سنوي (${period.start.year}): ${t.toStringAsFixed(0)} ₺',
                     orElse: () => '',
                   ),
                 ),
@@ -196,7 +308,7 @@ class _KpiRow extends ConsumerWidget {
                   value: '${s.appointments}',
                   icon: Icons.calendar_month_outlined,
                   color: Colors.blue,
-                  sub: 'هذا الشهر',
+                  sub: 'في الفترة',
                 ),
               ),
             ],
@@ -210,7 +322,7 @@ class _KpiRow extends ConsumerWidget {
                   value: '${s.completedTreatments}',
                   icon: Icons.healing_outlined,
                   color: Colors.teal,
-                  sub: 'هذا الشهر',
+                  sub: 'في الفترة',
                 ),
               ),
               const SizedBox(width: 12),
@@ -304,7 +416,7 @@ class _KpiSkeleton extends StatelessWidget {
   }
 }
 
-// ── Income bar chart (pure Flutter, no external lib) ──────────────────────
+// ── Income bar chart ──────────────────────────────────────────────────────
 
 class _IncomeBarChart extends ConsumerWidget {
   @override
@@ -314,7 +426,7 @@ class _IncomeBarChart extends ConsumerWidget {
     final theme = Theme.of(context);
 
     return _SectionCard(
-      title: 'الإيراد الشهري — ${period.year}',
+      title: 'الإيراد الشهري — ${period.start.year}',
       icon: Icons.bar_chart_outlined,
       child: dataAsync.when(
         loading: () => const SizedBox(
@@ -341,19 +453,19 @@ class _IncomeBarChart extends ConsumerWidget {
             );
           }
 
-          const shortMonths = [
-            'ين',
-            'فب',
-            'مر',
-            'أب',
-            'مي',
-            'يو',
-            'يل',
-            'أغ',
-            'سب',
-            'أك',
-            'نو',
-            'دي',
+          const fullMonthNames = [
+            'يناير',
+            'فبراير',
+            'مارس',
+            'أبريل',
+            'مايو',
+            'يونيو',
+            'يوليو',
+            'أغسطس',
+            'سبتمبر',
+            'أكتوبر',
+            'نوفمبر',
+            'ديسمبر',
           ];
 
           return SizedBox(
@@ -364,7 +476,10 @@ class _IncomeBarChart extends ConsumerWidget {
                 final i = entry.key;
                 final m = entry.value;
                 final ratio = maxVal > 0 ? m.total / maxVal : 0.0;
-                final isCurrent = m.month == period.month;
+                // Current is defined as the month of start date IF only one month is selected
+                final isCurrent = m.month == period.start.month && 
+                                 period.start.year == period.end.year &&
+                                 period.start.month == (period.end.month - 1);
 
                 return Expanded(
                   child: Padding(
@@ -372,16 +487,15 @@ class _IncomeBarChart extends ConsumerWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        // Value label on hover / always for current
-                        if (isCurrent && m.total > 0)
+                        if (m.total > 0)
                           Padding(
                             padding: const EdgeInsets.only(bottom: 4),
                             child: Text(
                               m.total.toStringAsFixed(0),
                               style: theme.textTheme.labelSmall?.copyWith(
-                                color: theme.colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 9,
+                                color: isCurrent ? theme.colorScheme.primary : theme.colorScheme.outline,
+                                fontWeight: isCurrent ? FontWeight.bold : FontWeight.normal,
+                                fontSize: 8,
                               ),
                             ),
                           ),
@@ -404,9 +518,9 @@ class _IncomeBarChart extends ConsumerWidget {
                           ),
                         ),
                         const SizedBox(height: 4),
-                        // Month label
+                        // Month label (using first letter or short version if full is too long for bar)
                         Text(
-                          shortMonths[i],
+                          fullMonthNames[i].substring(0, 2),
                           style: theme.textTheme.labelSmall?.copyWith(
                             color: isCurrent
                                 ? theme.colorScheme.primary
@@ -456,7 +570,7 @@ class _AppointmentsBreakdown extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Center(
                 child: Text(
-                  'لا توجد مواعيد هذا الشهر',
+                  'لا توجد مواعيد في هذه الفترة',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.outline,
                   ),
@@ -560,7 +674,7 @@ class _TopTreatmentsCard extends ConsumerWidget {
               padding: const EdgeInsets.symmetric(vertical: 16),
               child: Center(
                 child: Text(
-                  'لا توجد علاجات مكتملة هذا الشهر',
+                  'لا توجد علاجات مكتملة في هذه الفترة',
                   style: theme.textTheme.bodyMedium?.copyWith(
                     color: theme.colorScheme.outline,
                   ),

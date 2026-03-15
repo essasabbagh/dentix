@@ -3,18 +3,25 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:template/core/database/app_database_provider.dart';
 import 'package:template/core/database/daos/reports_dao.dart';
 
-// ─── Selected period state ────────────────────────────────────────────────
+// ─── Selected period state (Date Range) ───────────────────────────────────
 
 class ReportPeriod {
-  // 1-12
-  const ReportPeriod({required this.year, required this.month});
-  final int year;
-  final int month;
+  const ReportPeriod({required this.start, required this.end});
+  final DateTime start;
+  final DateTime end;
 
-  ReportPeriod copyWith({int? year, int? month}) =>
-      ReportPeriod(year: year ?? this.year, month: month ?? this.month);
+  ReportPeriod copyWith({DateTime? start, DateTime? end}) =>
+      ReportPeriod(start: start ?? this.start, end: end ?? this.end);
 
-  String get monthName {
+  String get label {
+    // Simple label: "Month Year" if within same month, else "Start - End"
+    if (start.year == end.year && start.month == end.month) {
+      return '${_monthName(start.month)} ${start.year}';
+    }
+    return '${start.year}/${start.month}/${start.day} - ${end.year}/${end.month}/${end.day}';
+  }
+
+  static String _monthName(int month) {
     const names = [
       'يناير',
       'فبراير',
@@ -35,13 +42,15 @@ class ReportPeriod {
 
 final reportPeriodProvider = StateProvider<ReportPeriod>((ref) {
   final now = DateTime.now();
-  return ReportPeriod(year: now.year, month: now.month);
+  final start = DateTime(now.year, now.month, 1);
+  final end = DateTime(now.year, now.month + 1, 1);
+  return ReportPeriod(start: start, end: end);
 });
 
-// ─── Monthly summary ──────────────────────────────────────────────────────
+// ─── Summary ──────────────────────────────────────────────────────────────
 
-class MonthlySummary {
-  const MonthlySummary({
+class ReportSummary {
+  const ReportSummary({
     required this.income,
     required this.appointments,
     required this.completedTreatments,
@@ -57,20 +66,20 @@ class MonthlySummary {
   final Map<String, int> appointmentsByStatus;
 }
 
-final monthlySummaryProvider = FutureProvider<MonthlySummary>((ref) async {
+final monthlySummaryProvider = FutureProvider<ReportSummary>((ref) async {
   final period = ref.watch(reportPeriodProvider);
   final dao = ref.watch(appDatabaseProvider).reportsDao;
 
   final results = await Future.wait([
-    dao.getMonthlyIncome(period.year, period.month),
-    dao.getMonthlyAppointmentsCount(period.year, period.month),
-    dao.getCompletedTreatmentsCount(year: period.year, month: period.month),
-    dao.getNewPatientsCount(period.year, period.month),
+    dao.getIncomeInRange(period.start, period.end),
+    dao.getAppointmentsCountInRange(period.start, period.end),
+    dao.getCompletedTreatmentsCountInRange(period.start, period.end),
+    dao.getNewPatientsCountInRange(period.start, period.end),
     dao.getTotalPatients(),
-    dao.getAppointmentStatusBreakdown(period.year, period.month),
+    dao.getAppointmentStatusBreakdownInRange(period.start, period.end),
   ]);
 
-  return MonthlySummary(
+  return ReportSummary(
     income: results[0] as double,
     appointments: results[1] as int,
     completedTreatments: results[2] as int,
@@ -86,10 +95,11 @@ final yearlyIncomeBreakdownProvider = FutureProvider<List<MonthlyIncome>>((
   ref,
 ) async {
   final period = ref.watch(reportPeriodProvider);
+  // We still show breakdown by year based on the start date's year
   return ref
       .watch(appDatabaseProvider)
       .reportsDao
-      .getYearMonthlyBreakdown(period.year);
+      .getYearMonthlyBreakdown(period.start.year);
 });
 
 // ─── Top treatment types ──────────────────────────────────────────────────
@@ -101,12 +111,15 @@ final topTreatmentTypesProvider = FutureProvider<List<TreatmentTypeStat>>((
   return ref
       .watch(appDatabaseProvider)
       .reportsDao
-      .getTopTreatmentTypes(year: period.year, month: period.month);
+      .getTopTreatmentTypesInRange(period.start, period.end);
 });
 
 // ─── Yearly income total ──────────────────────────────────────────────────
 
 final yearlyIncomeTotalProvider = FutureProvider<double>((ref) async {
   final period = ref.watch(reportPeriodProvider);
-  return ref.watch(appDatabaseProvider).reportsDao.getYearlyIncome(period.year);
+  return ref
+      .watch(appDatabaseProvider)
+      .reportsDao
+      .getYearlyIncome(period.start.year);
 });

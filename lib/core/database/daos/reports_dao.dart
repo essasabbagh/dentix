@@ -29,10 +29,8 @@ class ReportsDao extends DatabaseAccessor<AppDatabase> with _$ReportsDaoMixin {
 
   // ─── Income ────────────────────────────────────────────────
 
-  /// Total paid income for a given month
-  Future<double> getMonthlyIncome(int year, int month) async {
-    final start = DateTime(year, month, 1);
-    final end = DateTime(year, month + 1, 1);
+  /// Total paid income for a given range
+  Future<double> getIncomeInRange(DateTime start, DateTime end) async {
     final sum = paymentsTable.amount.sum();
     final q = selectOnly(paymentsTable)
       ..addColumns([sum])
@@ -48,22 +46,16 @@ class ReportsDao extends DatabaseAccessor<AppDatabase> with _$ReportsDaoMixin {
   Future<double> getYearlyIncome(int year) async {
     final start = DateTime(year, 1, 1);
     final end = DateTime(year + 1, 1, 1);
-    final sum = paymentsTable.amount.sum();
-    final q = selectOnly(paymentsTable)
-      ..addColumns([sum])
-      ..where(
-        paymentsTable.paymentDate.isBiggerOrEqualValue(start) &
-            paymentsTable.paymentDate.isSmallerThanValue(end),
-      );
-    final result = await q.getSingle();
-    return result.read(sum) ?? 0.0;
+    return getIncomeInRange(start, end);
   }
 
   /// Monthly income for each month of a given year (for chart)
   Future<List<MonthlyIncome>> getYearMonthlyBreakdown(int year) async {
     final results = <MonthlyIncome>[];
     for (int m = 1; m <= 12; m++) {
-      final amount = await getMonthlyIncome(year, m);
+      final start = DateTime(year, m, 1);
+      final end = DateTime(year, m + 1, 1);
+      final amount = await getIncomeInRange(start, end);
       results.add(MonthlyIncome(year, m, amount));
     }
     return results;
@@ -72,26 +64,13 @@ class ReportsDao extends DatabaseAccessor<AppDatabase> with _$ReportsDaoMixin {
   // ─── Treatments ─────────────────────────────────────────────
 
   /// Count + revenue grouped by treatment type (top types)
-  Future<List<TreatmentTypeStat>> getTopTreatmentTypes({
+  Future<List<TreatmentTypeStat>> getTopTreatmentTypesInRange(
+    DateTime start,
+    DateTime end, {
     int limit = 8,
-    int? year,
-    int? month,
   }) async {
-    // Raw SQL via customSelect for GROUP BY
-    String where = "status = 'completed'";
-    if (year != null && month != null) {
-      final start = DateTime(year, month, 1).toIso8601String().substring(0, 10);
-      final end = DateTime(
-        year,
-        month + 1,
-        1,
-      ).toIso8601String().substring(0, 10);
-      where += " AND created_at >= '$start' AND created_at < '$end'";
-    } else if (year != null) {
-      final start = DateTime(year, 1, 1).toIso8601String().substring(0, 10);
-      final end = DateTime(year + 1, 1, 1).toIso8601String().substring(0, 10);
-      where += " AND created_at >= '$start' AND created_at < '$end'";
-    }
+    final startStr = start.toIso8601String().substring(0, 10);
+    final endStr = end.toIso8601String().substring(0, 10);
 
     final rows = await customSelect(
       '''
@@ -99,11 +78,17 @@ class ReportsDao extends DatabaseAccessor<AppDatabase> with _$ReportsDaoMixin {
              COUNT(*) AS cnt,
              SUM(price) AS rev
       FROM treatments
-      WHERE $where
+      WHERE status = 'completed' 
+        AND created_at >= ? AND created_at < ?
       GROUP BY treatment_type
       ORDER BY cnt DESC
-      LIMIT $limit
+      LIMIT ?
       ''',
+      variables: [
+        Variable.withString(startStr),
+        Variable.withString(endStr),
+        Variable.withInt(limit),
+      ],
       readsFrom: {treatmentsTable},
     ).get();
 
@@ -118,42 +103,30 @@ class ReportsDao extends DatabaseAccessor<AppDatabase> with _$ReportsDaoMixin {
         .toList();
   }
 
-  /// Total completed treatments count
-  Future<int> getCompletedTreatmentsCount({int? year, int? month}) async {
+  /// Total completed treatments count in range
+  Future<int> getCompletedTreatmentsCountInRange(
+    DateTime start,
+    DateTime end,
+  ) async {
     final count = treatmentsTable.id.count();
     final q = selectOnly(treatmentsTable)
       ..addColumns([count])
-      ..where(treatmentsTable.status.equals('completed'));
-
-    if (year != null && month != null) {
-      final start = DateTime(year, month, 1);
-      final end = DateTime(year, month + 1, 1);
-      q.where(
-        treatmentsTable.createdAt.isBiggerOrEqualValue(start) &
+      ..where(
+        treatmentsTable.status.equals('completed') &
+            treatmentsTable.createdAt.isBiggerOrEqualValue(start) &
             treatmentsTable.createdAt.isSmallerThanValue(end),
       );
-    } else if (year != null) {
-      final start = DateTime(year, 1, 1);
-      final end = DateTime(year + 1, 1, 1);
-      q.where(
-        treatmentsTable.createdAt.isBiggerOrEqualValue(start) &
-            treatmentsTable.createdAt.isSmallerThanValue(end),
-      );
-    }
 
     return (await q.getSingle()).read(count) ?? 0;
   }
 
   // ─── Appointments ───────────────────────────────────────────
 
-  /// Appointment counts by status for a given month
-  Future<Map<String, int>> getAppointmentStatusBreakdown(
-    int year,
-    int month,
+  /// Appointment counts by status for a given range
+  Future<Map<String, int>> getAppointmentStatusBreakdownInRange(
+    DateTime start,
+    DateTime end,
   ) async {
-    final start = DateTime(year, month, 1);
-    final end = DateTime(year, month + 1, 1);
-
     final rows = await customSelect(
       '''
       SELECT status, COUNT(*) AS cnt
@@ -171,10 +144,8 @@ class ReportsDao extends DatabaseAccessor<AppDatabase> with _$ReportsDaoMixin {
     return {for (final r in rows) r.read<String>('status'): r.read<int>('cnt')};
   }
 
-  /// Total appointments in a month
-  Future<int> getMonthlyAppointmentsCount(int year, int month) async {
-    final start = DateTime(year, month, 1);
-    final end = DateTime(year, month + 1, 1);
+  /// Total appointments in a range
+  Future<int> getAppointmentsCountInRange(DateTime start, DateTime end) async {
     final count = appointmentsTable.id.count();
     final q = selectOnly(appointmentsTable)
       ..addColumns([count])
@@ -187,10 +158,8 @@ class ReportsDao extends DatabaseAccessor<AppDatabase> with _$ReportsDaoMixin {
 
   // ─── Patients ───────────────────────────────────────────────
 
-  /// New patients registered this month
-  Future<int> getNewPatientsCount(int year, int month) async {
-    final start = DateTime(year, month, 1);
-    final end = DateTime(year, month + 1, 1);
+  /// New patients registered in range
+  Future<int> getNewPatientsCountInRange(DateTime start, DateTime end) async {
     final count = patientsTable.id.count();
     final q = selectOnly(patientsTable)
       ..addColumns([count])
