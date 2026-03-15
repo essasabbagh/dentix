@@ -38,15 +38,15 @@ class App extends ConsumerWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: S.delegate.supportedLocales,
-      builder: (context, child) {
-        return MediaQuery(
-          // Replace the textScaler with the calculated scale.
-          data: context.mediaQuery.copyWith(
-            textScaler: context.clampTextScaler,
-          ),
-          child: child!,
-        );
-      },
+      // builder: (context, child) {
+      //   return MediaQuery(
+      //     // Replace the textScaler with the calculated scale.
+      //     data: context.mediaQuery.copyWith(
+      //       textScaler: context.clampTextScaler,
+      //     ),
+      //     child: child!,
+      //   );
+      // },
     );
   }
 }

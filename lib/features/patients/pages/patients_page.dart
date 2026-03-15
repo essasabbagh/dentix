@@ -189,8 +189,16 @@ class _EmptyState extends StatelessWidget {
           const SizedBox(height: 24),
           FilledButton.icon(
             onPressed: onAdd,
-            icon: const Icon(Icons.add),
-            label: const Text('إضافة مريض'),
+            icon: const Icon(
+              Icons.add,
+              color: Colors.white,
+            ),
+            label: const Text(
+              'إضافة مريض',
+              style: TextStyle(
+                color: Colors.white,
+              ),
+            ),
           ),
         ],
       ),
