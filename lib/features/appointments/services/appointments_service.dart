@@ -1,6 +1,7 @@
-import '../../../core/database/app_database.dart';
 import '../data/appointments_repository.dart';
 import '../models/appointment_model.dart';
+import 'package:drift/drift.dart';
+import '../../../core/database/app_database.dart';
 
 class AppointmentsService {
   AppointmentsService(this._repository);
@@ -43,11 +44,11 @@ class AppointmentsService {
     );
   }
 
-  Future<AppointmentModel?> getAppointmentWithTreatments(int id) =>
-      _repository.getAppointmentWithTreatments(id);
-
   Future<bool> updateAppointment(AppointmentModel appt) =>
       _repository.updateAppointment(appt);
+
+  Future<AppointmentModel?> getAppointmentWithTreatments(int id) =>
+      _repository.getAppointmentWithTreatments(id);
 
   Future<void> updateStatus(int id, AppointmentStatus status) =>
       _repository.updateStatus(id, status);

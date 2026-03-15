@@ -556,9 +556,7 @@ class _TreatmentTile extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    // final statusColor = _statusColor(treatment.status, theme);
     final statusColor = treatment.status.statusColor;
-
 
     return Card(
       elevation: 0,

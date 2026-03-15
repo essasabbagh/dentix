@@ -13,6 +13,7 @@ import 'package:template/features/root/root_page.dart';
 import 'package:template/features/settings/pages/settings_page.dart';
 import 'package:template/features/settings/pages/settings_screen.dart';
 import 'package:template/features/splash/splash_screen.dart';
+import 'package:template/features/treatments/pages/treatment_templates_page.dart';
 import 'package:template/features/treatments/pages/treatments_page.dart';
 
 final routes = [
@@ -70,6 +71,11 @@ final routes = [
         path: AppRoutes.treatments.path,
         name: AppRoutes.treatments.name,
         builder: (context, state) => const TreatmentsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.treatmentTemplates.path,
+        name: AppRoutes.treatmentTemplates.name,
+        builder: (context, state) => const TreatmentTemplatesPage(),
       ),
       GoRoute(
         path: AppRoutes.payments.path,

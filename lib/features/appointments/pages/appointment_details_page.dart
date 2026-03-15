@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
-
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-
-import 'package:template/components/loading/loading_widget.dart';
 import 'package:template/core/teeth_selector/teeth_selector.dart';
 import 'package:template/core/utils/date_helper.dart';
-
-import '../models/appointment_model.dart';
-import '../providers/appointments_providers.dart';
+import 'package:template/features/appointments/models/appointment_model.dart';
+import 'package:template/features/appointments/providers/appointments_providers.dart';
 
 class AppointmentDetailsPage extends ConsumerStatefulWidget {
   const AppointmentDetailsPage({super.key, required this.id});
-
   final int id;
 
   @override
@@ -19,15 +14,13 @@ class AppointmentDetailsPage extends ConsumerStatefulWidget {
       _AppointmentDetailsPageState();
 }
 
-class _AppointmentDetailsPageState
-    extends ConsumerState<AppointmentDetailsPage> {
+class _AppointmentDetailsPageState extends ConsumerState<AppointmentDetailsPage> {
   int? _hoveredToothNumber;
 
   @override
   Widget build(BuildContext context) {
-    final appointmentAsync = ref.watch(
-      appointmentWithTreatmentsProvider(widget.id),
-    );
+    final appointmentAsync =
+        ref.watch(appointmentWithTreatmentsProvider(widget.id));
     final theme = Theme.of(context);
     final isDesktop = MediaQuery.of(context).size.width > 900;
 
@@ -60,27 +53,14 @@ class _AppointmentDetailsPageState
               Card(
                 margin: const EdgeInsets.symmetric(vertical: 8),
                 child: ListTile(
-                  leading: CircleAvatar(
-                    child: Icon(
-                      appointment.patient?.gender == 'male'
-                          ? Icons.person
-                          : Icons.person_2,
-                      color: Colors.white,
-                    ),
-                  ),
+                  leading: const CircleAvatar(child: Icon(Icons.person)),
                   title: Text(
                     appointment.patient?.fullName ?? 'مريض غير معروف',
                     style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  subtitle: Row(
-                    children: [
-                      const Icon(Icons.phone, size: 16),
-                      const SizedBox(width: 4),
-                      Text(appointment.patient?.phone ?? ''),
-                    ],
-                  ),
+                  subtitle: Text(appointment.patient?.phone ?? ''),
                 ),
               ),
               const SizedBox(height: 16),
@@ -102,27 +82,20 @@ class _AppointmentDetailsPageState
                           pattern: 'EEEE، dd MMMM yyyy',
                         ),
                       ),
-                      Divider(
-                        color: Colors.grey.shade300,
-                      ),
+                      const Divider(),
                       _buildInfoRow(
                         theme,
                         Icons.access_time,
                         'الوقت',
-                        DateHelper.time(
-                          appointment.appointmentDate,
-                          locale: 'en',
-                        ),
+                        DateHelper.time(appointment.appointmentDate),
                       ),
-                      Divider(
-                        color: Colors.grey.shade300,
-                      ),
+                      const Divider(),
                       _buildInfoRow(
                         theme,
                         Icons.info_outline,
                         'الحالة',
                         appointment.status.arabicLabel,
-                        valueColor: appointment.status.statusColor,
+                        valueColor: _getStatusColor(appointment.status),
                       ),
                     ],
                   ),
@@ -155,20 +128,13 @@ class _AppointmentDetailsPageState
                   children: [
                     Expanded(
                       flex: 3,
-                      child: _buildTreatmentsTable(
-                        appointment,
-                        totalPrice,
-                        theme,
-                      ),
+                      child: _buildTreatmentsTable(appointment, totalPrice, theme),
                     ),
                     const SizedBox(width: 24),
                     Expanded(
                       flex: 2,
                       child: _buildOdontogramSide(
-                        theme,
-                        teethWithTreatments,
-                        _hoveredToothNumber,
-                      ),
+                          theme, teethWithTreatments, _hoveredToothNumber),
                     ),
                   ],
                 )
@@ -176,10 +142,7 @@ class _AppointmentDetailsPageState
                 _buildTreatmentsTable(appointment, totalPrice, theme),
                 const SizedBox(height: 16),
                 _buildOdontogramSide(
-                  theme,
-                  teethWithTreatments,
-                  _hoveredToothNumber,
-                ),
+                    theme, teethWithTreatments, _hoveredToothNumber),
               ],
             ],
           );
@@ -189,17 +152,14 @@ class _AppointmentDetailsPageState
             child: content,
           );
         },
-        loading: LoadingWidget.new,
+        loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, st) => Center(child: Text('خطأ: $e')),
       ),
     );
   }
 
   Widget _buildTreatmentsTable(
-    AppointmentModel appointment,
-    double totalPrice,
-    ThemeData theme,
-  ) {
+      AppointmentModel appointment, double totalPrice, ThemeData theme) {
     return Card(
       margin: EdgeInsets.zero,
       child: Column(
@@ -214,14 +174,11 @@ class _AppointmentDetailsPageState
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: appointment.treatments.length,
-              separatorBuilder: (context, index) => Divider(
-                color: Colors.grey.shade300,
-              ),
+              separatorBuilder: (context, index) => const Divider(),
               itemBuilder: (context, index) {
                 final t = appointment.treatments[index];
                 return MouseRegion(
-                  onEnter: (_) =>
-                      setState(() => _hoveredToothNumber = t.toothNumber),
+                  onEnter: (_) => setState(() => _hoveredToothNumber = t.toothNumber),
                   onExit: (_) => setState(() => _hoveredToothNumber = null),
                   child: ListTile(
                     title: Text(t.treatmentType),
@@ -239,9 +196,7 @@ class _AppointmentDetailsPageState
                 );
               },
             ),
-          Divider(
-            color: Colors.grey.shade300,
-          ),
+          const Divider(thickness: 2),
           Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
@@ -268,11 +223,8 @@ class _AppointmentDetailsPageState
     );
   }
 
-  Widget _buildOdontogramSide(
-    ThemeData theme,
-    Map<String, Color> colorized,
-    int? highlightedTooth,
-  ) {
+  Widget _buildOdontogramSide(ThemeData theme, Map<String, Color> colorized,
+      int? highlightedTooth) {
     final effectiveColorized = Map<String, Color>.from(colorized);
     if (highlightedTooth != null) {
       effectiveColorized[highlightedTooth.toString()] =
@@ -353,5 +305,14 @@ class _AppointmentDetailsPageState
         ],
       ),
     );
+  }
+
+  Color _getStatusColor(AppointmentStatus status) {
+    return switch (status) {
+      AppointmentStatus.scheduled => Colors.blue,
+      AppointmentStatus.completed => Colors.green,
+      AppointmentStatus.cancelled => Colors.red,
+      AppointmentStatus.noShow => Colors.orange,
+    };
   }
 }

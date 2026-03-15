@@ -1,3 +1,4 @@
+// Rebuild trigger
 import 'dart:io';
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
@@ -11,6 +12,7 @@ import 'tables/payments_table.dart';
 import 'tables/odontogram_table.dart';
 import 'tables/settings_table.dart';
 import 'tables/assets_table.dart';
+import 'tables/treatment_templates_table.dart';
 
 import 'daos/patients_dao.dart';
 import 'daos/appointments_dao.dart';
@@ -20,6 +22,7 @@ import 'daos/odontogram_dao.dart';
 import 'daos/settings_dao.dart';
 import 'daos/assets_dao.dart';
 import 'daos/reports_dao.dart';
+import 'daos/treatment_templates_dao.dart';
 
 part 'app_database.g.dart';
 
@@ -32,6 +35,7 @@ part 'app_database.g.dart';
     OdontogramTable,
     SettingsTable,
     AssetsTable,
+    TreatmentTemplatesTable,
   ],
   daos: [
     PatientsDao,
@@ -42,6 +46,7 @@ part 'app_database.g.dart';
     SettingsDao,
     AssetsDao,
     ReportsDao,
+    TreatmentTemplatesDao,
   ],
 )
 class AppDatabase extends _$AppDatabase {
@@ -50,20 +55,48 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase.forTesting(DatabaseConnection super.connection);
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     onCreate: (Migrator m) async {
       await m.createAll();
       await _seedDefaultSettings();
+      await _seedDefaultTreatmentTemplates();
     },
     onUpgrade: (Migrator m, int from, int to) async {
       if (from < 2) {
         await m.createTable(assetsTable);
       }
+      if (from < 3) {
+        await m.createTable(treatmentTemplatesTable);
+        await _seedDefaultTreatmentTemplates();
+      }
     },
   );
+
+  Future<void> _seedDefaultTreatmentTemplates() async {
+    final commonTreatments = [
+      'فحص',
+      'تنظيف وتلميع',
+      'حشوة ضوئية',
+      'سحب عصب',
+      'قلع',
+      'تلبيسة',
+      'جسر',
+      'طقم أسنان',
+      'تقويم أسنان',
+      'زراعة أسنان',
+    ];
+    for (final name in commonTreatments) {
+      await into(treatmentTemplatesTable).insertOnConflictUpdate(
+        TreatmentTemplatesTableCompanion.insert(
+          name: name,
+          defaultPrice: const Value(0.0),
+        ),
+      );
+    }
+  }
 
   Future<void> _seedDefaultSettings() async {
     final defaultSettings = {

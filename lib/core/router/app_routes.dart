@@ -14,6 +14,7 @@ enum AppRoutes {
   appointments('/appointments', 'appointments'),
   appointmentDetails('/appointments/:id', 'appointmentDetails'),
   treatments('/treatments', 'treatments'),
+  treatmentTemplates('/treatment-templates', 'treatmentTemplates'),
   payments('/payments', 'payments'),
   reports('/reports', 'reports'),
   settings('/settings', 'settings');

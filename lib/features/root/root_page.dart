@@ -16,6 +16,7 @@ class RootPage extends StatelessWidget {
     AppRoutes.patients,
     AppRoutes.appointments,
     AppRoutes.treatments,
+    AppRoutes.treatmentTemplates,
     AppRoutes.payments,
     AppRoutes.reports,
     AppRoutes.settings,
@@ -81,6 +82,14 @@ class RootPage extends StatelessWidget {
                   color: Colors.white,
                 ),
                 label: Text(S.of(context).treatments),
+              ),
+              NavigationRailDestination(
+                icon: const Icon(Icons.list_alt_outlined),
+                selectedIcon: const Icon(
+                  Icons.list_alt,
+                  color: Colors.white,
+                ),
+                label: const Text('قوالب العلاجات'),
               ),
               NavigationRailDestination(
                 icon: const Icon(Icons.payments_outlined),

@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:template/core/database/app_database.dart';
@@ -49,7 +50,9 @@ final patientAppointmentsProvider =
 // ─── Single appointment with treatments ──────────────────────────────────
 final appointmentWithTreatmentsProvider =
     FutureProvider.family<AppointmentModel?, int>((ref, id) {
-      return ref.watch(appointmentsServiceProvider).getAppointmentWithTreatments(id);
+      return ref
+          .watch(appointmentsServiceProvider)
+          .getAppointmentWithTreatments(id);
     });
 
 // ─── Appointment form notifier ────────────────────────────────────────────

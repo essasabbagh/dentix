@@ -10,6 +10,7 @@ import 'package:template/core/utils/date_helper.dart';
 import 'package:template/core/utils/snackbars.dart';
 import 'package:template/features/patients/models/patient_model.dart';
 import 'package:template/features/patients/widgets/patient_selector_field.dart';
+import 'package:template/features/treatments/providers/treatment_templates_providers.dart';
 
 import '../providers/appointments_providers.dart';
 
@@ -69,19 +70,6 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
   final _priceController = TextEditingController();
   final _treatmentNotesController = TextEditingController();
   int? _selectedToothNumber;
-
-  final List<String> _commonTreatments = [
-    'فحص',
-    'تنظيف وتلميع',
-    'حشوة ضوئية',
-    'سحب عصب',
-    'قلع',
-    'تلبيسة',
-    'جسر',
-    'طقم أسنان',
-    'تقويم أسنان',
-    'زراعة أسنان',
-  ];
 
   @override
   void initState() {
@@ -156,7 +144,6 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                       )
                     : const Icon(
                         Icons.check,
-
                         color: Colors.white,
                       ),
                 label: const Text(
@@ -263,9 +250,7 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                     ),
                     if (!isDesktop) ...[
                       const SizedBox(height: 32),
-                      Divider(
-                        color: Colors.grey.shade300,
-                      ),
+                      const Divider(),
                       const SizedBox(height: 16),
                       _buildTreatmentSection(theme),
                     ],
@@ -296,12 +281,7 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                 onPressed: isLoading ? null : _submit,
                 child: isLoading
                     ? const CircularProgressIndicator(color: Colors.white)
-                    : const Text(
-                        'حفظ الموعد',
-                        style: TextStyle(
-                          color: Colors.white,
-                        ),
-                      ),
+                    : const Text('حفظ الموعد'),
               ),
             )
           : null,
@@ -422,6 +402,8 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
   }
 
   Widget _buildTreatmentForm(ThemeData theme) {
+    final templatesAsync = ref.watch(treatmentTemplatesProvider);
+
     return Container(
       margin: const EdgeInsets.fromLTRB(20, 0, 20, 20),
       padding: const EdgeInsets.all(16),
@@ -449,33 +431,44 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
             ),
           ),
           const SizedBox(height: 16),
-          Autocomplete<String>(
-            optionsBuilder: (TextEditingValue textEditingValue) {
-              if (textEditingValue.text == '') {
-                return _commonTreatments;
-              }
-              return _commonTreatments.where((String option) {
-                return option.contains(textEditingValue.text);
-              });
-            },
-            onSelected: (String selection) {
-              _treatmentTypeController.text = selection;
-            },
-            fieldViewBuilder:
-                (context, controller, focusNode, onFieldSubmitted) {
-                  return TextField(
-                    controller: controller,
-                    focusNode: focusNode,
-                    textDirection: TextDirection.rtl,
-                    decoration: InputDecoration(
-                      labelText: 'نوع الإجراء *',
-                      prefixIcon: const Icon(Icons.search, size: 20),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+          templatesAsync.when(
+            data: (templates) => Autocomplete<TreatmentTemplatesTableData>(
+              displayStringForOption: (option) => option.name,
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                if (textEditingValue.text == '') {
+                  return templates;
+                }
+                return templates.where((option) {
+                  return option.name.contains(textEditingValue.text);
+                });
+              },
+              onSelected: (selection) {
+                _treatmentTypeController.text = selection.name;
+                _priceController.text = selection.defaultPrice.toString();
+              },
+              fieldViewBuilder:
+                  (context, controller, focusNode, onFieldSubmitted) {
+                    // Keep _treatmentTypeController synced for custom entries
+                    controller.addListener(() {
+                      _treatmentTypeController.text = controller.text;
+                    });
+
+                    return TextField(
+                      controller: controller,
+                      focusNode: focusNode,
+                      textDirection: TextDirection.rtl,
+                      decoration: InputDecoration(
+                        labelText: 'نوع الإجراء *',
+                        prefixIcon: const Icon(Icons.search, size: 20),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+            ),
+            loading: () => const LinearProgressIndicator(),
+            error: (e, _) => Text('خطأ في تحميل القوالب: $e'),
           ),
           const SizedBox(height: 12),
           Row(
@@ -483,8 +476,12 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
               Expanded(
                 child: TextField(
                   controller: _priceController,
-                  keyboardType: TextInputType.number,
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                  ],
                   decoration: InputDecoration(
                     labelText: 'السعر',
                     prefixIcon: const Icon(Icons.attach_money, size: 20),
@@ -527,7 +524,7 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
           const Text('اختر السن (اختياري):'),
           const SizedBox(height: 8),
           SizedBox(
-            height: 333,
+            height: 300,
             child: TeethSelector(
               multiSelect: false,
               selectedColor: theme.colorScheme.primary,
