@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 
 import '../../../core/database/app_database.dart';
 import '../../patients/models/patient_model.dart';
+import '../../treatments/models/treatment_model.dart';
 import '../models/appointment_model.dart';
 
 class AppointmentsRepository {
@@ -123,6 +124,32 @@ class AppointmentsRepository {
           updatedAt: Value(DateTime.now()),
         ),
       );
+
+  Future<AppointmentModel?> getAppointmentWithTreatments(int id) async {
+    final appointmentRow = await _db.appointmentsDao.getAppointmentById(id);
+    if (appointmentRow == null) return null;
+
+    final patientRow = await _db.patientsDao.getPatientById(appointmentRow.patientId);
+    final treatmentsRows = await _db.treatmentsDao.getAppointmentTreatments(id);
+
+    final treatments = treatmentsRows.map((t) => TreatmentModel(
+      id: t.id,
+      patientId: t.patientId,
+      appointmentId: t.appointmentId,
+      treatmentType: t.treatmentType,
+      toothNumber: t.toothNumber,
+      price: t.price,
+      status: TreatmentStatus.fromDb(t.status),
+      notes: t.notes,
+      createdAt: t.createdAt,
+      updatedAt: t.updatedAt,
+    )).toList();
+
+    return _fromData(
+      appointmentRow,
+      patient: patientRow != null ? _patientFromData(patientRow) : null,
+    ).copyWith(treatments: treatments);
+  }
 
   Future<void> updateStatus(int id, AppointmentStatus status) =>
       _db.appointmentsDao.updateStatus(id, status.dbValue);

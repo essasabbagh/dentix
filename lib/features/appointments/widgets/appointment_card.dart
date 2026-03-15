@@ -8,10 +8,12 @@ class AppointmentCard extends StatelessWidget {
     required this.appointment,
     required this.onStatusChange,
     required this.onDelete,
+    this.onTap,
   });
   final AppointmentModel appointment;
   final ValueChanged<AppointmentStatus> onStatusChange;
   final VoidCallback onDelete;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,7 @@ class AppointmentCard extends StatelessWidget {
 
     return Card(
       elevation: 0,
+      clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(14),
         side: BorderSide(
@@ -27,91 +30,94 @@ class AppointmentCard extends StatelessWidget {
           width: 1.5,
         ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(14),
-        child: Row(
-          children: [
-            // Time column
-            Column(
-              children: [
-                Text(
-                  appointment.timeLabel,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: statusColor,
-                  ),
-                ),
-                Container(
-                  margin: const EdgeInsets.only(top: 4),
-                  width: 2,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: statusColor.withValues(alpha: 0.3),
-                    borderRadius: BorderRadius.circular(2),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(width: 14),
-            // Info
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(14),
+          child: Row(
+            children: [
+              // Time column
+              Column(
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        appointment.patient?.fullName ??
-                            'مريض #${appointment.patientId}',
-                        style: theme.textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                      const Spacer(),
-                      _StatusChip(status: appointment.status),
-                    ],
-                  ),
-                  if (appointment.notes != null &&
-                      appointment.notes!.isNotEmpty) ...[
-                    const SizedBox(height: 4),
-                    Text(
-                      appointment.notes!,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.outline,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                  Text(
+                    appointment.timeLabel,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: statusColor,
                     ),
-                  ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 4),
+                    width: 2,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: statusColor.withValues(alpha: 0.3),
+                      borderRadius: BorderRadius.circular(2),
+                    ),
+                  ),
                 ],
               ),
-            ),
-            // Actions
-            PopupMenuButton<String>(
-              icon: const Icon(Icons.more_vert, size: 20),
-              itemBuilder: (_) => [
-                ..._statusActions(appointment.status),
-                const PopupMenuDivider(),
-                const PopupMenuItem(
-                  value: 'delete',
-                  child: Row(
-                    children: [
-                      Icon(Icons.delete_outline, color: Colors.red, size: 18),
-                      SizedBox(width: 8),
-                      Text('حذف', style: TextStyle(color: Colors.red)),
+              const SizedBox(width: 14),
+              // Info
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          appointment.patient?.fullName ??
+                              'مريض #${appointment.patientId}',
+                          style: theme.textTheme.titleSmall?.copyWith(
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const Spacer(),
+                        _StatusChip(status: appointment.status),
+                      ],
+                    ),
+                    if (appointment.notes != null &&
+                        appointment.notes!.isNotEmpty) ...[
+                      const SizedBox(height: 4),
+                      Text(
+                        appointment.notes!,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.outline,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ],
-                  ),
+                  ],
                 ),
-              ],
-              onSelected: (value) {
-                if (value == 'delete') {
-                  onDelete();
-                } else {
-                  onStatusChange(AppointmentStatus.fromDb(value));
-                }
-              },
-            ),
-          ],
+              ),
+              // Actions
+              PopupMenuButton<String>(
+                icon: const Icon(Icons.more_vert, size: 20),
+                itemBuilder: (_) => [
+                  ..._statusActions(appointment.status),
+                  const PopupMenuDivider(),
+                  const PopupMenuItem(
+                    value: 'delete',
+                    child: Row(
+                      children: [
+                        Icon(Icons.delete_outline, color: Colors.red, size: 18),
+                        SizedBox(width: 8),
+                        Text('حذف', style: TextStyle(color: Colors.red)),
+                      ],
+                    ),
+                  ),
+                ],
+                onSelected: (value) {
+                  if (value == 'delete') {
+                    onDelete();
+                  } else {
+                    onStatusChange(AppointmentStatus.fromDb(value));
+                  }
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

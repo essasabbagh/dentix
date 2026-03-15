@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 import 'package:template/features/patients/models/patient_model.dart';
 import 'package:template/features/treatments/models/treatment_model.dart';
 
@@ -31,6 +33,15 @@ enum AppointmentStatus {
       'cancelled' => AppointmentStatus.cancelled,
       'no_show' => AppointmentStatus.noShow,
       _ => AppointmentStatus.scheduled,
+    };
+  }
+
+  Color get statusColor {
+    return switch (this) {
+      AppointmentStatus.scheduled => Colors.blue,
+      AppointmentStatus.completed => Colors.green,
+      AppointmentStatus.cancelled => Colors.red,
+      AppointmentStatus.noShow => Colors.orange,
     };
   }
 }

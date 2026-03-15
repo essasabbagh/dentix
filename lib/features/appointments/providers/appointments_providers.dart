@@ -46,6 +46,12 @@ final patientAppointmentsProvider =
           .watchPatientAppointments(patientId);
     });
 
+// ─── Single appointment with treatments ──────────────────────────────────
+final appointmentWithTreatmentsProvider =
+    FutureProvider.family<AppointmentModel?, int>((ref, id) {
+      return ref.watch(appointmentsServiceProvider).getAppointmentWithTreatments(id);
+    });
+
 // ─── Appointment form notifier ────────────────────────────────────────────
 class AppointmentFormNotifier extends StateNotifier<AsyncValue<void>> {
   AppointmentFormNotifier(this._service) : super(const AsyncValue.data(null));

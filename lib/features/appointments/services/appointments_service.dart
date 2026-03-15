@@ -43,6 +43,9 @@ class AppointmentsService {
     );
   }
 
+  Future<AppointmentModel?> getAppointmentWithTreatments(int id) =>
+      _repository.getAppointmentWithTreatments(id);
+
   Future<bool> updateAppointment(AppointmentModel appt) =>
       _repository.updateAppointment(appt);
 

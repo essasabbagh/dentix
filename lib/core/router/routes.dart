@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:template/core/router/app_routes.dart';
+import 'package:template/features/appointments/pages/appointment_details_page.dart';
 import 'package:template/features/appointments/pages/appointments_page.dart';
 import 'package:template/features/dashboard/dashboard_page.dart';
 import 'package:template/features/odontogram/pages/odontogram_page.dart';
@@ -53,6 +54,16 @@ final routes = [
         path: AppRoutes.appointments.path,
         name: AppRoutes.appointments.name,
         builder: (context, state) => const AppointmentsPage(),
+        routes: [
+          GoRoute(
+            path: AppRoutes.appointmentDetails.path,
+            name: AppRoutes.appointmentDetails.name,
+            builder: (context, state) {
+              final id = state.pathParameters['id'] ?? '0';
+              return AppointmentDetailsPage(id: int.parse(id));
+            },
+          ),
+        ],
       ),
 
       GoRoute(

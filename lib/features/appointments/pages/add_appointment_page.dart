@@ -310,8 +310,14 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
     final filteredTreatments = _filterToothNumber == null
         ? _pendingTreatments
         : _pendingTreatments
-              .where((t) => t.toothNumber == _filterToothNumber)
-              .toList();
+            .where((t) => t.toothNumber == _filterToothNumber)
+            .toList();
+
+    final teethWithTreatments = {
+      for (final t in _pendingTreatments)
+        if (t.toothNumber != null)
+          t.toothNumber.toString(): theme.colorScheme.primaryContainer,
+    };
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -352,12 +358,12 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                 child: TeethSelector(
                   multiSelect: false,
                   selectedColor: theme.colorScheme.secondary,
+                  colorized: teethWithTreatments,
                   // unselectedColor: theme.colorScheme.surfaceContainerHighest,
                   onChange: (selected) {
                     setState(() {
-                      _filterToothNumber = selected.isEmpty
-                          ? null
-                          : int.tryParse(selected.last);
+                      _filterToothNumber =
+                          selected.isEmpty ? null : int.tryParse(selected.last);
                     });
                   },
                 ),

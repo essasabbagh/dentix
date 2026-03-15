@@ -12,6 +12,7 @@ enum AppRoutes {
   patientDetails('/patients/:patientId', 'patientDetails'),
 
   appointments('/appointments', 'appointments'),
+  appointmentDetails('/appointments/:id', 'appointmentDetails'),
   treatments('/treatments', 'treatments'),
   payments('/payments', 'payments'),
   reports('/reports', 'reports'),
