@@ -84,7 +84,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
 
   rename_app: ^1.6.5
-  # fvm dart run rename_app:main all="My App Name"
+  # fvm dart run rename_app:main all="Dentix"
 
   intl_utils: ^2.8.11
   # fvm dart run intl_utils:generate
@@ -101,9 +101,7 @@ flutter:
   uses-material-design: true
 
   assets:
-    - assets/icons/
     - assets/images/
-    - assets/images/onboarding/
     - assets/images/empty_state/
 
   fonts:

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:template/components/loading/loading_widget.dart';
-import 'package:template/components/main/logo.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
@@ -15,8 +14,6 @@ class SplashScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Logo(),
-            SizedBox(height: 32),
             LoadingWidget(),
           ],
         ),

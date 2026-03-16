@@ -4,8 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:template/core/utils/app_log.dart';
 
-import 'placeholder_image.dart';
-
 class CachedImage extends StatelessWidget {
   const CachedImage(
     this.imageUrl, {
@@ -31,8 +29,7 @@ class CachedImage extends StatelessWidget {
       height: height,
       fit: BoxFit.cover,
       imageUrl: imageUrl,
-      errorWidget: (context, val, _) =>
-          PlaceHolderImage(height: height, width: width),
+      errorWidget: (context, val, _) => const SizedBox(),
       errorListener: (value) {
         AppLog.error('$value', 'Cached Image', {'imageUrl': imageUrl});
       },
