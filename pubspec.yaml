@@ -26,7 +26,6 @@ dependencies:
   flutter_svg: ^2.2.4
   path_drawing: ^1.0.1
   intl_phone_number_input: ^0.7.5
-  flutter_widget_from_html: ^0.17.1
 
   # state management
   get_it: ^9.2.1
@@ -62,12 +61,9 @@ dependencies:
   shimmer: ^3.0.0
   share_plus: ^12.0.1
   url_launcher: ^6.3.2
-  webview_flutter: ^4.13.1
 
   flutter_local_notifications: ^20.1.0
 
-  webview_flutter_android: any
-  webview_flutter_wkwebview: any
   open_file: ^3.5.11
 
 dev_dependencies:
@@ -80,6 +76,10 @@ dev_dependencies:
   # custom_lint: ^0.7.6
   # riverpod_lint: ^2.6.5
   flutter_lints: ^6.0.0
+
+  flutter_launcher_icons: ^0.14.4
+  # fvm dart run flutter_launcher_icons:generate
+  # fvm dart run flutter_launcher_icons
 
   rename_app: ^1.6.5
   # fvm dart run rename_app:main all="Dentix"
@@ -129,3 +129,4 @@ flutter_intl:
   arb_dir: lib/core/locale # Optional. Sets the directory of your ARB resource files. Provided value should be a valid path on your system. Default: lib/l10n
   output_dir: lib/core/locale/generated # Optional. Sets the directory of generated localization files. Provided value should be a valid path on your system. Default: lib/generated
   use_deferred_loading: false # Optional. Must be set to true to generate localization code that is loaded with deferred loading. Default: false
+
