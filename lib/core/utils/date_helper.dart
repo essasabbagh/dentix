@@ -1,6 +1,6 @@
 import 'package:intl/intl.dart';
 
-import 'package:template/core/locale/generated/l10n.dart';
+import 'package:dentix/core/locale/generated/l10n.dart';
 
 class DateHelper {
   /// Formats a [DateTime] object into a string based on the provided [pattern].

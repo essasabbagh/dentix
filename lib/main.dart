@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/app.dart';
-import 'package:template/core/utils/observers.dart';
-import 'package:template/core/utils/app_log.dart';
-import 'package:template/initialize_app.dart';
+import 'package:dentix/app.dart';
+import 'package:dentix/core/utils/app_log.dart';
+import 'package:dentix/core/utils/observers.dart';
+import 'package:dentix/initialize_app.dart';
 
 void main() async {
   runZonedGuarded(

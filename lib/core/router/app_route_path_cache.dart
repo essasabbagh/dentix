@@ -1,6 +1,6 @@
 // import 'package:go_router/go_router.dart';
 
-import 'package:template/core/router/app_routes.dart';
+import 'package:dentix/core/router/app_routes.dart';
 
 class AppRoutePathCache {
   AppRoutePathCache._();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:template/core/themes/app_colors.dart';
+import 'package:dentix/core/themes/app_colors.dart';
 
 class PrimaryOutlinedButton extends StatelessWidget {
   const PrimaryOutlinedButton({

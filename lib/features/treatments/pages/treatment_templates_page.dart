@@ -3,9 +3,9 @@ import 'package:flutter/services.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/components/loading/loading_widget.dart';
-import 'package:template/core/database/app_database.dart';
-import 'package:template/core/utils/snackbars.dart';
+import 'package:dentix/components/loading/loading_widget.dart';
+import 'package:dentix/core/database/app_database.dart';
+import 'package:dentix/core/utils/snackbars.dart';
 
 import '../providers/treatment_templates_providers.dart';
 

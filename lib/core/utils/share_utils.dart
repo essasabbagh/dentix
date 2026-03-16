@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 import 'package:share_plus/share_plus.dart';
 
-import 'package:template/core/constants/keys.dart';
-import 'package:template/core/utils/app_log.dart';
+import 'package:dentix/core/constants/keys.dart';
+import 'package:dentix/core/utils/app_log.dart';
 
 Future<void> shareText(String text, {String? title, String? subject}) async {
   try {

@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/core/utils/app_log.dart';
+import 'package:dentix/core/utils/app_log.dart';
 
 /// Custom [ProviderObserver] for logging provider lifecycle changes.
 class RiverpodObserver extends ProviderObserver {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:template/features/patients/models/patient_model.dart';
-import 'package:template/features/treatments/models/treatment_model.dart';
+import 'package:dentix/features/patients/models/patient_model.dart';
+import 'package:dentix/features/treatments/models/treatment_model.dart';
 
 enum AppointmentStatus {
   scheduled,

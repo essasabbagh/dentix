@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/core/database/app_database_provider.dart';
+import 'package:dentix/core/database/app_database_provider.dart';
 
 import '../data/odontogram_repository.dart';
 import '../models/tooth_record.dart';

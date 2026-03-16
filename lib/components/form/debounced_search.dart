@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/core/extensions/context_ext.dart';
-import 'package:template/core/locale/generated/l10n.dart';
-import 'package:template/core/themes/app_gradients.dart';
+import 'package:dentix/core/extensions/context_ext.dart';
+import 'package:dentix/core/locale/generated/l10n.dart';
+import 'package:dentix/core/themes/app_gradients.dart';
 
 class DebouncedSearch extends ConsumerStatefulWidget {
   const DebouncedSearch({

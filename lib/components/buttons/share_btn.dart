@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:template/configs/app_configs.dart';
-import 'package:template/core/utils/share_utils.dart';
+import 'package:dentix/configs/app_configs.dart';
+import 'package:dentix/core/utils/share_utils.dart';
 
 class ShareBtn extends StatelessWidget {
   const ShareBtn({

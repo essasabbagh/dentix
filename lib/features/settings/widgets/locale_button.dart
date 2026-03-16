@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/core/themes/app_gradients.dart';
+import 'package:dentix/core/themes/app_gradients.dart';
 
 import '../providers/locale_provider.dart';
 

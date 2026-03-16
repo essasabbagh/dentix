@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
-import 'package:template/core/utils/date_helper.dart';
-import 'package:template/core/utils/snackbars.dart';
+import 'package:dentix/core/utils/date_helper.dart';
+import 'package:dentix/core/utils/snackbars.dart';
 
 import '../models/patient_model.dart';
 import '../providers/patients_providers.dart';

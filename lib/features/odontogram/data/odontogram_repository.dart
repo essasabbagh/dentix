@@ -1,6 +1,6 @@
 import 'package:drift/drift.dart';
 
-import 'package:template/core/database/app_database.dart';
+import 'package:dentix/core/database/app_database.dart';
 
 import '../models/tooth_record.dart';
 

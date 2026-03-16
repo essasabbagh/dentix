@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:template/core/utils/validators.dart';
-import 'package:template/core/locale/generated/l10n.dart';
+import 'package:dentix/core/utils/validators.dart';
+import 'package:dentix/core/locale/generated/l10n.dart';
 
 class PhoneNumberInput extends StatelessWidget {
   const PhoneNumberInput({

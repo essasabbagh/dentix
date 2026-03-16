@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:template/core/themes/app_colors.dart';
-import 'package:template/core/themes/app_gradients.dart';
+import 'package:dentix/core/themes/app_colors.dart';
+import 'package:dentix/core/themes/app_gradients.dart';
 
 import '../loading/loading_widget.dart';
 

@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import 'package:file_picker/file_picker.dart';
 
-import 'package:template/core/locale/generated/l10n.dart';
-import 'package:template/core/utils/snackbars.dart';
+import 'package:dentix/core/locale/generated/l10n.dart';
+import 'package:dentix/core/utils/snackbars.dart';
 
 class AttachmentField extends StatefulWidget {
   const AttachmentField({

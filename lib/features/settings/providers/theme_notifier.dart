@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/core/constants/keys.dart';
-import 'package:template/core/data/storage_service.dart';
-import 'package:template/initialize_app.dart';
+import 'package:dentix/core/constants/keys.dart';
+import 'package:dentix/core/data/storage_service.dart';
+import 'package:dentix/initialize_app.dart';
 
 final storage = locator<StorageService>();
 

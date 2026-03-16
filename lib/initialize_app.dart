@@ -7,10 +7,10 @@ import 'package:drift/drift.dart';
 import 'package:get_it/get_it.dart';
 import 'package:get_storage/get_storage.dart';
 
-import 'package:template/core/data/storage_service.dart';
-import 'package:template/core/database/database_client.dart';
-import 'package:template/core/utils/app_log.dart';
-// import 'package:template/core/utils/file_utils.dart';
+import 'package:dentix/core/data/storage_service.dart';
+import 'package:dentix/core/database/database_client.dart';
+import 'package:dentix/core/utils/app_log.dart';
+// import 'package:dentix/core/utils/file_utils.dart';
 
 GetIt locator = GetIt.instance;
 

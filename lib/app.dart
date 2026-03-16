@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/core/constants/keys.dart';
-import 'package:template/core/extensions/extensions.dart';
-import 'package:template/core/locale/generated/l10n.dart';
-import 'package:template/core/router/app_router.dart';
-import 'package:template/core/themes/app_themes.dart';
-import 'package:template/features/settings/providers/locale_provider.dart';
-import 'package:template/features/settings/providers/theme_notifier.dart';
+import 'package:dentix/core/constants/keys.dart';
+import 'package:dentix/core/extensions/extensions.dart';
+import 'package:dentix/core/locale/generated/l10n.dart';
+import 'package:dentix/core/router/app_router.dart';
+import 'package:dentix/core/themes/app_themes.dart';
+import 'package:dentix/features/settings/providers/locale_provider.dart';
+import 'package:dentix/features/settings/providers/theme_notifier.dart';
 
 class App extends ConsumerWidget {
   const App({super.key});

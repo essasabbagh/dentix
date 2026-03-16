@@ -1,4 +1,4 @@
-import 'package:template/configs/app_configs.dart';
+import 'package:dentix/configs/app_configs.dart';
 
 class AppFont {
   // static final String fontFamily =

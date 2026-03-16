@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/features/patients/models/patient_model.dart';
-import 'package:template/features/patients/providers/patients_providers.dart';
+import 'package:dentix/features/patients/models/patient_model.dart';
+import 'package:dentix/features/patients/providers/patients_providers.dart';
 
 /// A searchable patient selector.
 ///

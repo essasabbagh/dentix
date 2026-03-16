@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:template/components/loading/loading_widget.dart';
+import 'package:dentix/components/loading/loading_widget.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-import 'package:template/core/enums/password_strength.dart';
-import 'package:template/core/extensions/context_ext.dart';
-import 'package:template/core/utils/validators.dart';
-import 'package:template/core/themes/app_colors.dart';
+import 'package:dentix/core/enums/password_strength.dart';
+import 'package:dentix/core/extensions/context_ext.dart';
+import 'package:dentix/core/utils/validators.dart';
+import 'package:dentix/core/themes/app_colors.dart';
 
 class PasswordStrengthChecker extends StatelessWidget {
   const PasswordStrengthChecker({

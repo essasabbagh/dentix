@@ -1,6 +1,6 @@
 import 'package:go_router/go_router.dart';
 
-import 'package:template/configs/app_configs.dart';
+import 'package:dentix/configs/app_configs.dart';
 
 /// An extension on [GoRouter] to provide additional utility methods.
 extension GoRouterExtension on GoRouter {

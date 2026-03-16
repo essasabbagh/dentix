@@ -1,4 +1,4 @@
-name: template
+name: dentix
 description: "A new Flutter project."
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
@@ -52,8 +52,6 @@ dependencies:
   drift: ^2.31.0
   sqlite3: ^2.9.4
   path: ^1.9.1
-  # hive: ^2.2.3
-  # hive_flutter: ^1.1.0
 
   # Router
   go_router: ^17.1.0

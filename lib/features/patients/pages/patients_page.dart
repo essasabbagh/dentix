@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/components/loading/loading_widget.dart';
-import 'package:template/core/extensions/context_ext.dart';
-import 'package:template/core/router/app_routes.dart';
+import 'package:dentix/components/loading/loading_widget.dart';
+import 'package:dentix/core/extensions/context_ext.dart';
+import 'package:dentix/core/router/app_routes.dart';
 
 import '../providers/patients_providers.dart';
 import '../widgets/patient_card.dart';

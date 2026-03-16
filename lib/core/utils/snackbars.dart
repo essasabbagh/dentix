@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:template/core/locale/generated/l10n.dart';
-import 'package:template/core/utils/app_log.dart';
+import 'package:dentix/core/locale/generated/l10n.dart';
+import 'package:dentix/core/utils/app_log.dart';
 
 import '../constants/keys.dart';
 

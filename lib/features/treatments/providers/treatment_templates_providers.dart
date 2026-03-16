@@ -1,7 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:template/core/database/app_database.dart';
-import 'package:template/core/database/app_database_provider.dart';
+import 'package:dentix/core/database/app_database.dart';
+import 'package:dentix/core/database/app_database_provider.dart';
 
 final treatmentTemplatesProvider =
     StreamProvider<List<TreatmentTemplatesTableData>>((ref) {

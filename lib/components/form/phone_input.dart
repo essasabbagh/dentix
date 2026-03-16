@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 
-import 'package:template/configs/app_configs.dart';
-import 'package:template/core/utils/validators.dart';
-import 'package:template/core/themes/app_colors.dart';
+import 'package:dentix/configs/app_configs.dart';
+import 'package:dentix/core/utils/validators.dart';
+import 'package:dentix/core/themes/app_colors.dart';
 
 class PhoneInput extends StatelessWidget {
   const PhoneInput({super.key});

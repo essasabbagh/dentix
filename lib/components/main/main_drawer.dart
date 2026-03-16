@@ -2,9 +2,9 @@
 
 // import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-// import 'package:template/core/locale/generated/l10n.dart';
-// import 'package:template/core/router/app_routes.dart';
-// import 'package:template/features/auth/providers/auth_provider.dart';
+// import 'package:dentix/core/locale/generated/l10n.dart';
+// import 'package:dentix/core/router/app_routes.dart';
+// import 'package:dentix/features/auth/providers/auth_provider.dart';
 
 // import 'app_divider.dart';
 

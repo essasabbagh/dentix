@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/core/database/app_database_provider.dart';
+import 'package:dentix/core/database/app_database_provider.dart';
 
 import '../data/assets_repository.dart';
 import '../models/asset_model.dart';

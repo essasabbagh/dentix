@@ -1,7 +1,7 @@
-import 'package:template/configs/app_configs.dart';
-import 'package:template/core/constants/constants.dart';
-import 'package:template/core/enums/password_strength.dart';
-import 'package:template/core/locale/generated/l10n.dart';
+import 'package:dentix/configs/app_configs.dart';
+import 'package:dentix/core/constants/constants.dart';
+import 'package:dentix/core/enums/password_strength.dart';
+import 'package:dentix/core/locale/generated/l10n.dart';
 
 /// Validates a password based on certain criteria.
 ///

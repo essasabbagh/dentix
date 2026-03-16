@@ -1,7 +1,7 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/core/database/app_database.dart';
-import 'package:template/core/database/app_database_provider.dart';
+import 'package:dentix/core/database/app_database.dart';
+import 'package:dentix/core/database/app_database_provider.dart';
 
 import '../data/appointments_repository.dart';
 import '../models/appointment_model.dart';

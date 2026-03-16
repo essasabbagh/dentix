@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/configs/app_configs.dart';
+import 'package:dentix/configs/app_configs.dart';
 
 import '../models/paginated_response.dart';
 import '../models/pagination_state.dart';

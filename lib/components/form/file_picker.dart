@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:file_picker/file_picker.dart';
 
-import 'package:template/core/themes/app_colors.dart';
+import 'package:dentix/core/themes/app_colors.dart';
 
 import '../ui/dotted_border_container.dart';
 

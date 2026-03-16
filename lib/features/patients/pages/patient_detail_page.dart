@@ -3,22 +3,22 @@ import 'package:flutter/services.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/components/loading/loading_widget.dart';
-import 'package:template/components/ui/whatsapp_button.dart';
-import 'package:template/core/database/app_database.dart';
-import 'package:template/core/extensions/context_ext.dart';
-import 'package:template/core/teeth_selector/teeth_selector.dart';
-import 'package:template/core/utils/date_helper.dart';
-import 'package:template/core/utils/snackbars.dart';
-import 'package:template/features/appointments/models/appointment_model.dart';
-import 'package:template/features/appointments/pages/add_appointment_page.dart';
-import 'package:template/features/appointments/providers/appointments_providers.dart';
-import 'package:template/features/assets/widgets/assets_section.dart';
-import 'package:template/features/payments/models/payment_model.dart';
-import 'package:template/features/payments/providers/payments_providers.dart';
-import 'package:template/features/treatments/models/treatment_model.dart';
-import 'package:template/features/treatments/providers/treatment_templates_providers.dart';
-import 'package:template/features/treatments/providers/treatments_providers.dart';
+import 'package:dentix/components/loading/loading_widget.dart';
+import 'package:dentix/components/ui/whatsapp_button.dart';
+import 'package:dentix/core/database/app_database.dart';
+import 'package:dentix/core/extensions/context_ext.dart';
+import 'package:dentix/core/teeth_selector/teeth_selector.dart';
+import 'package:dentix/core/utils/date_helper.dart';
+import 'package:dentix/core/utils/snackbars.dart';
+import 'package:dentix/features/appointments/models/appointment_model.dart';
+import 'package:dentix/features/appointments/pages/add_appointment_page.dart';
+import 'package:dentix/features/appointments/providers/appointments_providers.dart';
+import 'package:dentix/features/assets/widgets/assets_section.dart';
+import 'package:dentix/features/payments/models/payment_model.dart';
+import 'package:dentix/features/payments/providers/payments_providers.dart';
+import 'package:dentix/features/treatments/models/treatment_model.dart';
+import 'package:dentix/features/treatments/providers/treatment_templates_providers.dart';
+import 'package:dentix/features/treatments/providers/treatments_providers.dart';
 
 import '../models/patient_model.dart';
 import '../providers/patients_providers.dart';

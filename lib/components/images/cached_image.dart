@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 
-import 'package:template/core/utils/app_log.dart';
+import 'package:dentix/core/utils/app_log.dart';
 
 class CachedImage extends StatelessWidget {
   const CachedImage(

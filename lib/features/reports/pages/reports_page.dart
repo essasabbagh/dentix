@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:template/core/utils/date_helper.dart';
+import 'package:dentix/core/utils/date_helper.dart';
 
 import '../providers/reports_providers.dart';
 

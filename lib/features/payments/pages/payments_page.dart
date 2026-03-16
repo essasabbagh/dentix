@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/components/loading/loading_widget.dart';
-import 'package:template/core/database/daos/payments_dao.dart';
-import 'package:template/core/utils/date_helper.dart';
+import 'package:dentix/components/loading/loading_widget.dart';
+import 'package:dentix/core/database/daos/payments_dao.dart';
+import 'package:dentix/core/utils/date_helper.dart';
 
 import '../providers/payments_providers.dart';
 

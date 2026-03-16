@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/core/teeth_selector/teeth_selector.dart';
-import 'package:template/core/utils/date_helper.dart';
-import 'package:template/features/appointments/models/appointment_model.dart';
-import 'package:template/features/appointments/providers/appointments_providers.dart';
+import 'package:dentix/core/teeth_selector/teeth_selector.dart';
+import 'package:dentix/core/utils/date_helper.dart';
+import 'package:dentix/features/appointments/models/appointment_model.dart';
+import 'package:dentix/features/appointments/providers/appointments_providers.dart';
 
 class AppointmentDetailsPage extends ConsumerStatefulWidget {
   const AppointmentDetailsPage({super.key, required this.id});

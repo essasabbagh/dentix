@@ -1,6 +1,6 @@
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/core/database/app_database_provider.dart';
+import 'package:dentix/core/database/app_database_provider.dart';
 
 import '../data/patients_repository.dart';
 import '../models/patient_model.dart';

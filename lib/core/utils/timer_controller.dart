@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-import 'package:template/configs/app_configs.dart';
+import 'package:dentix/configs/app_configs.dart';
 
 /// A class that manages a timer for an audio player.
 /// It provides functionality to start, pause, resume,

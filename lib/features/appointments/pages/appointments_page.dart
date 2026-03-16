@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/components/loading/loading_widget.dart';
-import 'package:template/core/router/app_routes.dart';
-import 'package:template/core/utils/date_helper.dart';
-import 'package:template/features/appointments/models/appointment_model.dart';
+import 'package:dentix/components/loading/loading_widget.dart';
+import 'package:dentix/core/router/app_routes.dart';
+import 'package:dentix/core/utils/date_helper.dart';
+import 'package:dentix/features/appointments/models/appointment_model.dart';
 
 import '../providers/appointments_providers.dart';
 import '../widgets/appointment_card.dart';

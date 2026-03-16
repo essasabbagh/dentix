@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:go_transitions/go_transitions.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/core/constants/keys.dart';
-import 'package:template/features/statics/not_found.dart';
+import 'package:dentix/core/constants/keys.dart';
+import 'package:dentix/features/statics/not_found.dart';
 
 import 'app_route_path_cache.dart';
 import 'app_routes.dart';

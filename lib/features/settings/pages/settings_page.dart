@@ -2,8 +2,8 @@
 
 // import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-// import 'package:template/components/loading/loading_widget.dart';
-// import 'package:template/core/utils/snackbars.dart';
+// import 'package:dentix/components/loading/loading_widget.dart';
+// import 'package:dentix/core/utils/snackbars.dart';
 
 // import '../providers/settings_providers.dart';
 

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/core/locale/generated/l10n.dart';
+import 'package:dentix/core/locale/generated/l10n.dart';
 
 import '../widgets/locale_menu.dart';
 import '../widgets/theme_menu.dart';

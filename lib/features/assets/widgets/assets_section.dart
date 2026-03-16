@@ -6,8 +6,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:open_file/open_file.dart';
 
-import 'package:template/core/utils/date_helper.dart';
-import 'package:template/core/utils/snackbars.dart';
+import 'package:dentix/core/utils/date_helper.dart';
+import 'package:dentix/core/utils/snackbars.dart';
 
 import '../models/asset_model.dart';
 import '../providers/assets_providers.dart';

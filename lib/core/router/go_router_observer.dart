@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import 'package:template/core/utils/app_log.dart';
+import 'package:dentix/core/utils/app_log.dart';
 
 /// A custom [NavigatorObserver] for logging route changes with AppLogs.
 class GoRouterObserver extends NavigatorObserver {

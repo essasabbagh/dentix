@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:template/components/ui/whatsapp_button.dart';
+import 'package:dentix/components/ui/whatsapp_button.dart';
 
 import '../models/appointment_model.dart';
 

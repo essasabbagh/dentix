@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:url_launcher/url_launcher.dart';
 
-import 'package:template/core/utils/snackbars.dart';
+import 'package:dentix/core/utils/snackbars.dart';
 
 /// A reusable button that opens WhatsApp with a prefilled message.
 ///

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/core/teeth_selector/teeth_selector.dart';
-import 'package:template/core/utils/snackbars.dart';
+import 'package:dentix/core/teeth_selector/teeth_selector.dart';
+import 'package:dentix/core/utils/snackbars.dart';
 
 import '../models/tooth_record.dart';
 import '../providers/odontogram_providers.dart';

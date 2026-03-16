@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 
-import 'package:template/core/router/app_routes.dart';
-import 'package:template/features/appointments/pages/appointment_details_page.dart';
-import 'package:template/features/appointments/pages/appointments_page.dart';
-import 'package:template/features/dashboard/dashboard_page.dart';
-import 'package:template/features/patients/pages/patient_detail_page.dart';
-import 'package:template/features/patients/pages/patients_page.dart';
-import 'package:template/features/payments/pages/payments_page.dart';
-import 'package:template/features/reports/pages/reports_page.dart';
-import 'package:template/features/root/root_page.dart';
-import 'package:template/features/settings/pages/settings_screen.dart';
-import 'package:template/features/splash/splash_screen.dart';
-import 'package:template/features/treatments/pages/treatment_templates_page.dart';
-import 'package:template/features/treatments/pages/treatments_page.dart';
+import 'package:dentix/core/router/app_routes.dart';
+import 'package:dentix/features/appointments/pages/appointment_details_page.dart';
+import 'package:dentix/features/appointments/pages/appointments_page.dart';
+import 'package:dentix/features/dashboard/dashboard_page.dart';
+import 'package:dentix/features/patients/pages/patient_detail_page.dart';
+import 'package:dentix/features/patients/pages/patients_page.dart';
+import 'package:dentix/features/payments/pages/payments_page.dart';
+import 'package:dentix/features/reports/pages/reports_page.dart';
+import 'package:dentix/features/root/root_page.dart';
+import 'package:dentix/features/settings/pages/settings_screen.dart';
+import 'package:dentix/features/splash/splash_screen.dart';
+import 'package:dentix/features/treatments/pages/treatment_templates_page.dart';
+import 'package:dentix/features/treatments/pages/treatments_page.dart';
 
 final routes = [
   GoRoute(

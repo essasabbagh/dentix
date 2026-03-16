@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-import 'package:template/core/locale/generated/l10n.dart';
-import 'package:template/features/settings/providers/theme_notifier.dart';
+import 'package:dentix/core/locale/generated/l10n.dart';
+import 'package:dentix/features/settings/providers/theme_notifier.dart';
 
 class ThemeDropdown extends ConsumerWidget {
   const ThemeDropdown({super.key});
