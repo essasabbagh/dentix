@@ -429,29 +429,21 @@ class _AppointmentTile extends ConsumerWidget {
   }
 
   Color _rawStatusColor(AppointmentStatus status) {
-    switch (status) {
-      case AppointmentStatus.scheduled:
-        return Colors.blue;
-      case AppointmentStatus.completed:
-        return Colors.green;
-      case AppointmentStatus.cancelled:
-        return Colors.red;
-      case AppointmentStatus.noShow:
-        return Colors.orange;
-    }
+    return switch (status) {
+      AppointmentStatus.scheduled => Colors.blue,
+      AppointmentStatus.completed => Colors.green,
+      AppointmentStatus.cancelled => Colors.red,
+      AppointmentStatus.noShow => Colors.orange,
+    };
   }
 
   IconData _statusIcon(AppointmentStatus status) {
-    switch (status) {
-      case AppointmentStatus.scheduled:
-        return Icons.schedule;
-      case AppointmentStatus.completed:
-        return Icons.check_circle_outline;
-      case AppointmentStatus.cancelled:
-        return Icons.cancel_outlined;
-      case AppointmentStatus.noShow:
-        return Icons.person_off_outlined;
-    }
+    return switch (status) {
+      AppointmentStatus.scheduled => Icons.schedule,
+      AppointmentStatus.completed => Icons.check_circle_outline,
+      AppointmentStatus.cancelled => Icons.cancel_outlined,
+      AppointmentStatus.noShow => Icons.person_off_outlined,
+    };
   }
 }
 

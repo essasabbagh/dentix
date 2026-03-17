@@ -155,12 +155,6 @@ class AssetsSection extends ConsumerWidget {
 
     if (result == null || result.files.isEmpty) return;
 
-    // Show label dialog for the batch
-    String? label;
-    if (context.mounted) {
-      label = await _showLabelDialog(context);
-    }
-
     final notifier = ref.read(assetNotifierProvider.notifier);
 
     for (final picked in result.files) {
@@ -171,13 +165,13 @@ class AssetsSection extends ConsumerWidget {
         await notifier.addPatientAsset(
           patientId: ownerId,
           file: file,
-          label: label,
+          label: null, // no label anymore
         );
       } else {
         await notifier.addTreatmentAsset(
           treatmentId: ownerId,
           file: file,
-          label: label,
+          label: null, // no label anymore
         );
       }
     }
@@ -189,40 +183,6 @@ class AssetsSection extends ConsumerWidget {
             : 'تمت إضافة ${result.files.length} مرفقات',
       );
     }
-  }
-
-  Future<String?> _showLabelDialog(BuildContext context) async {
-    final controller = TextEditingController();
-    return showDialog<String>(
-      context: context,
-      builder: (_) => Directionality(
-        textDirection: TextDirection.rtl,
-        child: AlertDialog(
-          title: const Text('تسمية المرفق (اختياري)'),
-          content: TextField(
-            controller: controller,
-            textDirection: TextDirection.rtl,
-            decoration: InputDecoration(
-              hintText: 'مثال: صورة أشعة، تقرير طبي...',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-            autofocus: true,
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text('تخطي'),
-            ),
-            FilledButton(
-              onPressed: () => Navigator.pop(context, controller.text.trim()),
-              child: const Text('حفظ'),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   Future<void> _confirmDelete(
