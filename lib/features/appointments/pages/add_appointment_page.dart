@@ -115,6 +115,7 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
     _treatmentNotesController.clear();
     _selectedToothNumber = null;
     _showTreatmentForm = false;
+    setState(() {});
   }
 
   @override
@@ -128,32 +129,31 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
       appBar: AppBar(
         title: const Text('إضافة موعد جديد'),
         actions: [
-          if (isDesktop)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: FilledButton.icon(
-                onPressed: isLoading ? null : _submit,
-                icon: isLoading
-                    ? const SizedBox(
-                        width: 16,
-                        height: 16,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: Colors.white,
-                        ),
-                      )
-                    : const Icon(
-                        Icons.check,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: FilledButton.icon(
+              onPressed: isLoading ? null : _submit,
+              icon: isLoading
+                  ? const SizedBox(
+                      width: 16,
+                      height: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
                         color: Colors.white,
                       ),
-                label: const Text(
-                  'حفظ الموعد',
-                  style: TextStyle(
-                    color: Colors.white,
-                  ),
+                    )
+                  : const Icon(
+                      Icons.check,
+                      color: Colors.white,
+                    ),
+              label: const Text(
+                'حفظ الموعد',
+                style: TextStyle(
+                  color: Colors.white,
                 ),
               ),
             ),
+          ),
         ],
       ),
       body: Row(
@@ -190,10 +190,13 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                                   Icons.calendar_today_outlined,
                                   size: 18,
                                 ),
-                                label: Text(
-                                  DateHelper.format(
-                                    _selectedDate,
-                                    pattern: 'EEEE، dd MMMM yyyy',
+                                label: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    DateHelper.format(
+                                      _selectedDate,
+                                      pattern: 'EEEE، dd MMMM yyyy',
+                                    ),
                                   ),
                                 ),
                                 onPressed: _pickDate,
@@ -214,14 +217,18 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                                   Icons.access_time_outlined,
                                   size: 18,
                                 ),
-                                label: Text(
-                                  DateHelper.time(
-                                    DateTime(
-                                      0,
-                                      0,
-                                      0,
-                                      _selectedTime.hour,
-                                      _selectedTime.minute,
+                                label: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    DateHelper.time(
+                                      DateTime(
+                                        0,
+                                        0,
+                                        0,
+                                        _selectedTime.hour,
+                                        _selectedTime.minute,
+                                      ),
+                                      locale: 'en',
                                     ),
                                   ),
                                 ),
@@ -240,6 +247,7 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
                       textDirection: TextDirection.rtl,
                       maxLines: 4,
                       decoration: InputDecoration(
+                        contentPadding: const EdgeInsets.all(12),
                         hintText: 'أضف أي ملاحظات إضافية هنا...',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
@@ -301,103 +309,115 @@ class _AddAppointmentPageState extends ConsumerState<AddAppointmentPage> {
           t.toothNumber.toString(): theme.colorScheme.primaryContainer,
     };
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  Icon(
-                    Icons.medical_services_outlined,
-                    color: theme.colorScheme.primary,
-                  ),
-                  const SizedBox(width: 10),
-                  Text(
-                    'الإجراءات والعلاجات',
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Icon(
+                      Icons.medical_services_outlined,
+                      color: theme.colorScheme.primary,
                     ),
-                  ),
-                  const Spacer(),
-                  if (!_showTreatmentForm)
-                    TextButton.icon(
-                      onPressed: () =>
-                          setState(() => _showTreatmentForm = true),
-                      icon: const Icon(Icons.add),
-                      label: const Text('إضافة إجراء'),
-                    ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              const Text('تصفية حسب السن:', style: TextStyle(fontSize: 12)),
-              const SizedBox(height: 8),
-              SizedBox(
-                height: 333,
-                child: TeethSelector(
-                  multiSelect: false,
-                  selectedColor: theme.colorScheme.secondary,
-                  colorized: teethWithTreatments,
-                  // unselectedColor: theme.colorScheme.surfaceContainerHighest,
-                  onChange: (selected) {
-                    setState(() {
-                      _filterToothNumber = selected.isEmpty
-                          ? null
-                          : int.tryParse(selected.last);
-                    });
-                  },
-                ),
-              ),
-              if (_filterToothNumber != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Row(
-                    children: [
-                      Text(
-                        'عرض علاجات السن: $_filterToothNumber',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.secondary,
-                          fontWeight: FontWeight.bold,
-                        ),
+                    const SizedBox(width: 10),
+                    Text(
+                      'الإجراءات والعلاجات',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
                       ),
-                      const Spacer(),
-                      TextButton(
+                    ),
+                    const Spacer(),
+                    if (!_showTreatmentForm)
+                      TextButton.icon(
                         onPressed: () =>
-                            setState(() => _filterToothNumber = null),
-                        child: const Text(
-                          'عرض الكل',
-                          style: TextStyle(fontSize: 12),
+                            setState(() => _showTreatmentForm = true),
+                        icon: Icon(
+                          Icons.add,
+                          color: theme.colorScheme.secondary,
+                        ),
+                        label: Text(
+                          'إضافة إجراء',
+                          style: TextStyle(
+                            color: theme.colorScheme.secondary,
+                          ),
                         ),
                       ),
-                    ],
+                  ],
+                ),
+                const SizedBox(height: 16),
+                const Text('تصفية حسب السن:', style: TextStyle(fontSize: 12)),
+                const SizedBox(height: 8),
+                SizedBox(
+                  height: 300,
+                  child: TeethSelector(
+                    multiSelect: false,
+                    selectedColor: theme.colorScheme.secondary,
+                    colorized: teethWithTreatments,
+                    // unselectedColor: theme.colorScheme.surfaceContainerHighest,
+                    onChange: (selected) {
+                      setState(() {
+                        _filterToothNumber = selected.isEmpty
+                            ? null
+                            : int.tryParse(selected.last);
+                      });
+                    },
                   ),
                 ),
-            ],
+                if (_filterToothNumber != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Row(
+                      children: [
+                        Text(
+                          'عرض علاجات السن: $_filterToothNumber',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: theme.colorScheme.secondary,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const Spacer(),
+                        TextButton(
+                          onPressed: () =>
+                              setState(() => _filterToothNumber = null),
+                          child: const Text(
+                            'عرض الكل',
+                            style: TextStyle(fontSize: 12),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
           ),
-        ),
-        if (_showTreatmentForm) _buildTreatmentForm(theme),
-        Expanded(
-          child: filteredTreatments.isEmpty
-              ? _buildEmptyTreatments(theme)
-              : ListView.separated(
-                  padding: const EdgeInsets.symmetric(horizontal: 20),
-                  itemCount: filteredTreatments.length,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 10),
-                  itemBuilder: (context, index) {
-                    final t = filteredTreatments[index];
-                    return _TreatmentCard(
-                      treatment: t,
-                      onDelete: () =>
-                          setState(() => _pendingTreatments.remove(t)),
-                    );
-                  },
-                ),
-        ),
-      ],
+
+          if (_showTreatmentForm) _buildTreatmentForm(theme),
+          SizedBox(
+            height: 300,
+            child: filteredTreatments.isEmpty
+                ? _buildEmptyTreatments(theme)
+                : ListView.separated(
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    itemCount: filteredTreatments.length,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      final t = filteredTreatments[index];
+                      return _TreatmentCard(
+                        treatment: t,
+                        onDelete: () =>
+                            setState(() => _pendingTreatments.remove(t)),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
     );
   }
 

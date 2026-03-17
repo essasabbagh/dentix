@@ -71,7 +71,13 @@ class _PatientDetailScaffold extends ConsumerWidget {
         body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverAppBar(
-              expandedHeight: 170,
+              title: Text(
+                patient.fullName,
+                style: theme.textTheme.titleLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
               pinned: true,
               forceElevated: innerBoxIsScrolled,
               actions: [
@@ -95,9 +101,6 @@ class _PatientDetailScaffold extends ConsumerWidget {
                   onPressed: () => _confirmDelete(context, ref),
                 ),
               ],
-              flexibleSpace: FlexibleSpaceBar(
-                background: _PatientHeader(patient: patient),
-              ),
               bottom: TabBar(
                 labelColor: theme.colorScheme.secondary,
                 unselectedLabelColor: Colors.white,
@@ -172,92 +175,6 @@ class _PatientDetailScaffold extends ConsumerWidget {
       await ref.read(patientFormProvider.notifier).deletePatient(patient.id);
       if (context.mounted) Navigator.of(context).pop();
     }
-  }
-}
-
-// ── Patient header ─────────────────────────────────────────────────────────
-
-class _PatientHeader extends StatelessWidget {
-  const _PatientHeader({required this.patient});
-
-  final PatientModel patient;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    return Container(
-      color: theme.colorScheme.primaryContainer,
-      alignment: Alignment.bottomRight,
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 32,
-            backgroundColor: theme.colorScheme.primary,
-            child: Text(
-              _initials,
-              style: TextStyle(
-                color: theme.colorScheme.onPrimary,
-                fontSize: 22,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ),
-          const SizedBox(width: 14),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  patient.fullName,
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontWeight: FontWeight.bold,
-                    color: theme.colorScheme.onPrimaryContainer,
-                  ),
-                ),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.phone_outlined,
-                      size: 13,
-                      color: theme.colorScheme.onPrimaryContainer.withValues(
-                        alpha: 0.7,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      patient.phone,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onPrimaryContainer.withValues(
-                          alpha: 0.8,
-                        ),
-                      ),
-                    ),
-                    if (patient.age != null) ...[
-                      const SizedBox(width: 12),
-                      Text(
-                        '${patient.age} سنة',
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onPrimaryContainer
-                              .withValues(alpha: 0.8),
-                        ),
-                      ),
-                    ],
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String get _initials {
-    final f = patient.firstName.isNotEmpty ? patient.firstName[0] : '';
-    final l = patient.lastName.isNotEmpty ? patient.lastName[0] : '';
-    return '$f$l';
   }
 }
 

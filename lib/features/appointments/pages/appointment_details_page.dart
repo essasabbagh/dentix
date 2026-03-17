@@ -9,6 +9,7 @@ import 'package:dentix/features/appointments/providers/appointments_providers.da
 
 class AppointmentDetailsPage extends ConsumerStatefulWidget {
   const AppointmentDetailsPage({super.key, required this.id});
+
   final int id;
 
   @override
@@ -30,7 +31,10 @@ class _AppointmentDetailsPageState
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('تفاصيل الموعد'),
+        title: const Text(
+          'تفاصيل الموعد',
+          style: TextStyle(color: Colors.white),
+        ),
       ),
       body: appointmentAsync.when(
         data: (appointment) {

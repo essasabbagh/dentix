@@ -130,3 +130,4 @@ flutter_intl:
   output_dir: lib/core/locale/generated # Optional. Sets the directory of generated localization files. Provided value should be a valid path on your system. Default: lib/generated
   use_deferred_loading: false # Optional. Must be set to true to generate localization code that is loaded with deferred loading. Default: false
 
+# C:\Users\isa\AppData\Local\Pub\Cache\bin\fvm flutter build windows --release
