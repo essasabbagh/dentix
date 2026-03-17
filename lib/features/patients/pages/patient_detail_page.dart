@@ -8,6 +8,7 @@ import 'package:dentix/components/ui/whatsapp_button.dart';
 import 'package:dentix/core/database/app_database.dart';
 import 'package:dentix/core/extensions/context_ext.dart';
 import 'package:dentix/core/teeth_selector/teeth_selector.dart';
+import 'package:dentix/core/themes/app_colors.dart';
 import 'package:dentix/core/utils/date_helper.dart';
 import 'package:dentix/core/utils/snackbars.dart';
 import 'package:dentix/features/appointments/models/appointment_model.dart';
@@ -71,6 +72,7 @@ class _PatientDetailScaffold extends ConsumerWidget {
         body: NestedScrollView(
           headerSliverBuilder: (context, innerBoxIsScrolled) => [
             SliverAppBar(
+              backgroundColor: AppColors.primaryColor,
               title: Text(
                 patient.fullName,
                 style: theme.textTheme.titleLarge?.copyWith(
