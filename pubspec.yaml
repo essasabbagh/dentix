@@ -66,6 +66,11 @@ dependencies:
 
   open_file: ^3.5.11
 
+  # Google Drive Backup
+  google_sign_in: ^6.2.2
+  googleapis: ^16.0.0
+  http: ^1.4.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
