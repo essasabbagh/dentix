@@ -17,6 +17,7 @@ enum AppRoutes {
   treatmentTemplates('/treatment-templates', 'treatmentTemplates'),
   payments('/payments', 'payments'),
   reports('/reports', 'reports'),
+  about('/about', 'about'),
   settings('/settings', 'settings');
 
   final String path;

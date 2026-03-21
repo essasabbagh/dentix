@@ -11,6 +11,7 @@ import 'package:dentix/features/reports/pages/reports_page.dart';
 import 'package:dentix/features/root/root_page.dart';
 import 'package:dentix/features/settings/pages/settings_screen.dart';
 import 'package:dentix/features/splash/splash_screen.dart';
+import 'package:dentix/features/statics/about.dart';
 import 'package:dentix/features/treatments/pages/treatment_templates_page.dart';
 import 'package:dentix/features/treatments/pages/treatments_page.dart';
 
@@ -84,6 +85,11 @@ final routes = [
         path: AppRoutes.reports.path,
         name: AppRoutes.reports.name,
         builder: (context, state) => const ReportsPage(),
+      ),
+      GoRoute(
+        path: AppRoutes.about.path,
+        name: AppRoutes.about.name,
+        builder: (context, state) => const AboutScreen(),
       ),
       GoRoute(
         path: AppRoutes.settings.path,

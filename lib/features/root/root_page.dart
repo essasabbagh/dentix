@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:dentix/core/constants/images.dart';
 import 'package:dentix/core/locale/generated/l10n.dart';
 import 'package:dentix/core/router/app_routes.dart';
 
@@ -19,6 +20,7 @@ class RootPage extends StatelessWidget {
     AppRoutes.treatmentTemplates,
     AppRoutes.payments,
     AppRoutes.reports,
+    AppRoutes.about,
     AppRoutes.settings,
   ];
 
@@ -33,15 +35,24 @@ class RootPage extends StatelessWidget {
             extended: true,
             minExtendedWidth: 220,
 
-            leading: const Padding(
-              padding: EdgeInsets.all(16),
-              child: Text(
-                'Dentix Flow',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+            leading: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  AppImages.imagesLogo,
+                  width: 48,
                 ),
-              ),
+                const SizedBox(height: 12),
+                const Text(
+                  'Dentix Flow',
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
             ),
 
             selectedIndex: selectedIndex,
@@ -106,6 +117,14 @@ class RootPage extends StatelessWidget {
                   color: Colors.white,
                 ),
                 label: Text(S.of(context).reports),
+              ),
+              NavigationRailDestination(
+                icon: const Icon(Icons.info_outline),
+                selectedIcon: const Icon(
+                  Icons.info,
+                  color: Colors.white,
+                ),
+                label: Text(S.of(context).about),
               ),
 
               NavigationRailDestination(

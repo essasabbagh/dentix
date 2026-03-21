@@ -1,4 +1,4 @@
-# Code Expert Flutter Template
+# Dentix
 
 ![Logo](./assets/images/logo.png)
 
@@ -36,19 +36,19 @@ Features of Template app:
 
 Before you begin, ensure you have met the following requirements:
 
-- Flutter SDK (Latest stable version)
-- Dart SDK
+- Flutter SDK 3.35.7
+- Dart SDK 3.9.2
 - FVM - Flutter Version Management
 - Android Studio or VS Code with Flutter extensions
 - Simulator/Emulator or physical device for testing
 
 ## Recommended Versions
 
-- Flutter: [Specify minimum/recommended version]
-- Dart: [Specify minimum/recommended version]
+- Flutter: 3.35.7
+- Dart: 3.9.2
 
 ```bash
-fvm use [version]
+fvm use 3.35.7
 ```
 
 ## Recommended VsCode Extensions
@@ -75,23 +75,13 @@ Provide instructions on how to install your app. Include any prerequisites and s
 
 ## Clone the Repository
 
-[Github link](https://)
+[Github link](https://github.com/essasabbagh/dentix.git)
 
 ```bash
-git clone https://github.com/[your-username]/[your-repo-name].git
-cd [your-repo-name]
+git clone https://github.com/essasabbagh/dentix.git
+cd dentix
 ```
-If you haven't already, install the Firebase CLI.
-```bash
-firebase login
-```
-```bash
-fvm dart pub global activate flutterfire_cli 
-```
-### Setup Firebase Configs
-```bash
-flutterfire configure 
-```
+
 ### Install Dependencies
 
 ```bash
@@ -128,19 +118,19 @@ fvm flutter run lib/main.dart
 - Run this command
 
 ```bash
-fvm dart run rename_app:main all="My App Name"
+fvm dart run rename_app:main all="Dentix"
 ```
 
 - lib/configs/app_configs.dart
 
 ```dart
-static const String appName = 'App Name';
+static const String appName = 'Dentix';
 ```
 
 - lib/locale/intl_XX.arb
 
 ```json
-"appName": "App Name",
+"appName": "Dentix",
 ```
 
 ## Generates native splash
@@ -155,84 +145,9 @@ note: to edit configs go to: flutter_native_splash.yaml
 
 ### Prepare Release 
 
-Create JKS key 
-
-```bash
-keytool -genkey -v -keystore android/app/key.jks -storetype JKS -keyalg RSA -keysize 2048 -validity 10000 -alias upload
-```
-
-Helping to genrate random password
-
-```bash
-openssl rand -hex 12
-```
-Get all keys 
-
-```bash
-cd android
-./gradlew signingReport > signingReport.log
-```
-Update key.properties file
-
-### Build an APK
-
-```bash
-sh apk.sh
-```
-
-This command results in three APK files:
-
-    build/app/outputs/apk/release/app-armeabi-v7a-release.apk
-    build/app/outputs/apk/release/app-arm64-v8a-release.apk
-    build/app/outputs/apk/release/app-x86_64-release.apk
-
-### Build an Android Bundle
-
-You can use script to incremet app version and build a new bundle
-and hnadle all build details like upload Flutter debug symbols
-
-```bash
-sh android.sh
-```
-
-The release bundle for your app is created at
-
-    build/app/outputs/bundle/release/app.aab.
-
-### Build an IOS
-
-or to incremet app version and build a new version
-
-```bash
-sh ios.sh
-```
-
-    build/ios/archive/Runner.xcarchive
-
-Use the Firebase CLI to upload Flutter debug symbols.
-You need to upload the debug symbols before reporting a crash from an obfuscated code build.
-
-```bash
-firebase crashlytics:symbols:upload --app=1:839865712716:android:d947678144e9e5c22034e9 build/app/intermediates/stripped_native_libs/debug/out/lib
-
-ios/Pods/FirebaseCrashlytics/upload-symbols -gsp ios/GoogleService-Info.plist -p ios build/ios/archive/Runner.xcarchive/dSYMs
-```
-
----
 
 ## Deployment
 
-### Deploy to Google play
-
-- Need to create intrenal test
-- Then create open test
-- Then have to create closed test track
-  - Closed test should be created for same version to 20 tester
-  - Tester shouldnot be shared with internal tester list
-
-### Deploy to Apple
-
----
 
 # Usage
 
@@ -255,7 +170,7 @@ style: Theme.of(context).textTheme.bodyLarge
 class AppConfigs {
     ...
   // font family
-  static const String fontFamily = 'Poppins';
+  static const String fontFamily = 'Cairo';
 }
 
 class AppFont {

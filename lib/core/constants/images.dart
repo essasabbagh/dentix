@@ -27,5 +27,7 @@ class AppImages {
   static const String imagesEmptyStateTimeoutReached = "assets/images/empty_state/timeout_reached.png";
 
   static const String imagesEmptyStateUnauthorizedAccess = "assets/images/empty_state/unauthorized_access.png";
+
+  static const String imagesLogo = "assets/images/logo.png";
 }
 
