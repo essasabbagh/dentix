@@ -1,10 +1,10 @@
 # Dentix
 
-![Logo](./assets/images/logo.png)
+<img src="./assets/images/logo.png" width="100" />
 
 # Description
 
-A brief overview of your Flutter application, its purpose, and key features. Explain what makes this app template unique or valuable.
+A brief overview of Dentix, its purpose, and key features. Explain what makes this app unique or valuable.
 
 # Table of Contents
 
@@ -110,7 +110,11 @@ Compress Flutter assets
 ## Run
 
 ```bash
-fvm flutter run lib/main.dart 
+# Run on Mac
+fvm flutter run -d macos 
+
+# Run on Windows
+fvm flutter run -d windows
 ```
 
 ## Change app name
