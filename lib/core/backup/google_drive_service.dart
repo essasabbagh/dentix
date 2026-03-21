@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
+
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:googleapis/drive/v3.dart' as drive;
 import 'package:http/http.dart' as http;
@@ -10,6 +11,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:dentix/core/utils/app_log.dart';
 
 class GoogleDriveService {
+  factory GoogleDriveService() => _instance;
   GoogleDriveService._() {
     _googleSignIn.onCurrentUserChanged.listen((account) {
       _currentUser = account;
@@ -19,13 +21,14 @@ class GoogleDriveService {
 
   static final GoogleDriveService _instance = GoogleDriveService._();
 
-  factory GoogleDriveService() => _instance;
-
-  static const _scopes = [drive.DriveApi.driveFileScope];
+  static const _scopes = [
+    drive.DriveApi.driveFileScope,
+    drive.DriveApi.driveAppdataScope,
+  ];
 
   // TODO: Replace with your actual Windows Client ID from Google Cloud Console
   static const _windowsClientId =
-      '1005410756456-2lndvo8839olrtaqjc0lcpq933rm8k41'
+      '1005410756456-u4oc39fu10q2fc6jkman86are4om1u48'
       '.apps.googleusercontent.com';
 
   // macOS Client ID from Info.plist
@@ -77,11 +80,18 @@ class GoogleDriveService {
 
   Future<void> signOut() async {
     try {
+      // disconnect() revokes the token and forces a fresh consent screen on next sign-in
+      await _googleSignIn.disconnect();
+      _currentUser = null;
+      AppLog.info('Successfully disconnected and signed out', 'GoogleSignIn');
+    } catch (e) {
+      // If disconnect fails, fall back to simple signOut
       await _googleSignIn.signOut();
       _currentUser = null;
-      AppLog.info('Signed out', 'GoogleSignIn');
-    } catch (e) {
-      AppLog.error('Sign out failed: $e', 'GoogleSignIn');
+      AppLog.error(
+        'Disconnect failed, performed standard sign out: $e',
+        'GoogleSignIn',
+      );
     }
   }
 

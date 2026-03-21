@@ -5,7 +5,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 import 'package:dentix/core/constants/keys.dart';
-import 'package:dentix/core/extensions/extensions.dart';
 import 'package:dentix/core/locale/generated/l10n.dart';
 import 'package:dentix/core/router/app_router.dart';
 import 'package:dentix/core/themes/app_themes.dart';
