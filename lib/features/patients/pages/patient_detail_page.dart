@@ -147,7 +147,7 @@ class _PatientDetailScaffold extends ConsumerWidget {
   Future<void> _confirmDelete(BuildContext context, WidgetRef ref) async {
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (_) => AlertDialog(
+      builder: (context) => AlertDialog(
         title: const Text('حذف المريض'),
         content: Text(
           'هل تريد حذف المريض "${patient.fullName}" نهائياً؟',
@@ -1543,9 +1543,7 @@ class _DialogFooter extends StatelessWidget {
             onPressed: isLoading ? null : onCancel,
             child: Text(
               'إلغاء',
-              style: context.theme.textTheme.bodyMedium?.copyWith(
-                color: Colors.white,
-              ),
+              style: context.theme.textTheme.bodyMedium,
             ),
           ),
           const SizedBox(width: 10),
